@@ -1,0 +1,75 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+Contact List
+{% endblock %}
+
+{% block content %}
+{# NAV BAR #}
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">Intelligent Noti</a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+				<li><a href="#">Settings</a></li>
+				<li><a href="#">Profile</a></li>
+				<li><a href="{{ url_for('logout') }}">Log Out</a></li>
+			</ul>
+		</div>
+	</div>
+</nav>
+
+{# MAIN AREA #}
+<div class="container-fluid">
+	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+		<h2 class="sub-header">Hi, {{ name }}. please choose _ contacts</h2>
+		<div class="table-responsive">
+			<form action="/submitContacts" method="POST">
+				<table class="table table-striped">
+					<thead>
+						<th>SELECT</th>
+						<th>Name</th>
+						<th>Type</th>
+						<th>Message count</th>
+						<th>File count</th>
+						<th>Image count</th>
+						<th>First talk</th>
+						<th>Last talk</th>
+						<th>Last talk</th>
+					</thead>
+					<tbody>
+						{% for contact in contacts %}
+						<tr>
+							<td><input 
+								type="checkbox" 
+								name="select" 
+								value="{{ contact.name }}" 
+								{% if loop.index0 < 5 %}checked{% endif %} >
+							</td>
+							<td>{{ contact.name }}</td>
+							<td>{{ contact.type }}</td>
+							<td>{{ contact.msg_count }}</td>
+							<td>{{ contact.file_count }}</td>
+							<td>{{ contact.image_count }}</td>
+							<td>{{ contact.first_talk }}</td>
+							<td>{{ contact.last_talk }}</td>
+							<td>{{ contact.last_msg }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<input type="submit" name="Submit">
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -26,7 +26,6 @@ class ThreadInfo:
 	
 
 class fbMessenger:
-
 	def __init__(self, username, password):
 		self.client = None
 		self.login(username, password)
@@ -37,8 +36,9 @@ class fbMessenger:
 
 	def get_messages(self):
 		from_time = datetime.now() - timedelta(days=30) # msg records in previous 30 days
-		threads = self.client.fetchThreadList(limit=30) # find 30 candidate contacts 
+		threads = self.client.fetchThreadList(limit=10) # find 30 candidate contacts 
 		thread_index = 0
+		contact_list = []
 		
 		for thread in threads:
 			msgs = self.client.fetchThreadMessages(thread_id=str(thread.uid), limit=500)
@@ -65,15 +65,6 @@ class fbMessenger:
 						day_count += 1
 						tem_day = msg_time.day
 			
-			thread_info = ThreadInfo(
-				thread.name, 
-				"Single user" if thread.type == ThreadType.USER else "Group",
-				msg_count,
-				day_count,
-				file_count,
-				image_count,
-				first_talk.str )
-			
 			print("{}.".format(thread_index))
 			print("thread name: {}".format(thread.name))
 			print("type: {}".format("Single user" if thread.type == ThreadType.USER else "Group"))
@@ -85,6 +76,20 @@ class fbMessenger:
 			print("last talk: {}".format(last_talk.strftime("%Y/%m/%d %H:%M")))
 			print("last msg :'{}'".format(msgs[0].text))
 			print()
+			
+			thread_info = ThreadInfo(
+				thread.name, 
+				"Single user" if thread.type == ThreadType.USER else "Group",
+				msg_count,
+				day_count,
+				file_count,
+				image_count,
+				first_talk.strftime("%Y/%m/%d %H:%M"),
+				last_talk.strftime("%Y/%m/%d %H:%M"),
+				msgs[0].text)
+			
+			contact_list.append(thread_info)
+		return contact_list
 
 
 

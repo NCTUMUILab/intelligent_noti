@@ -12,3 +12,9 @@ class User(UserMixin, db.Model):
 	username = db.Column(db.String(15), unique=True)
 	password = db.Column(db.String(80))
 	email = db.Column(db.String(50), unique=True)
+	
+class Contact(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(50))
+	user_id = db.Column(db.Integer)
+	completed = db.Column(db.Boolean)
