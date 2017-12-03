@@ -7,6 +7,7 @@ from models import app, db, User, Contact
 from forms import LoginForm, RegisterForm, FacebookLoginForm
 from login import login_manager, load_user
 from get_facebook import fbMessenger, ThreadInfo
+import json
 
 
 # init bootstrap
@@ -77,16 +78,45 @@ def facebook():
 def submitContacts():
 	contact_name_list = request.form.getlist('select')
 	for name in contact_name_list:
-		new_contact = Contact(name=name, user_id=current_user.id, completed=False)
+		is_group = request.form['{}_is_group'.format(name)] == 'True'
+		new_contact = Contact(name=name, user_id=current_user.id, is_group=is_group, completed=False)
 		db.session.add(new_contact)
 		db.session.commit()
 	return redirect(url_for('dashboard'))
 
-# @app.route('/user/<user_id>/<contact_id>', methods=['GET', 'POST'])
-# @login_required
-# def questionnaire():
+def find_contact(current_user, user_id, contact_id):
+	if user_id != current_user.id:
+		return 1, "you are not this user!", None
 	
+	contacts = Contact.query.filter_by(user_id=current_user.id).all()
+	for contact in contacts:
+		if contact_id == contact.id:
+			return 0, "Found", contact
+	return 2, "you don't have THIS contact", None
 
+@app.route('/questionnaire/<user_id>/<contact_id>')
+@login_required
+def questionnaire(user_id, contact_id):
+	error, message, contact = find_contact(current_user=current_user, user_id=int(user_id), contact_id=int(contact_id))
+	if error:
+		return message
+	elif contact.is_group:
+		return render_template('group_questionnaire.html', contact=contact)
+	else:
+		return render_template('contact_questionnaire.html', contact=contact)
+
+@app.route('/submit_questionnaire/<user_id>/<contact_id>', methods=['POST'])
+@login_required
+def submit_questionnaire(user_id, contact_id):
+	error, message, contact = find_contact(current_user=current_user, user_id=int(user_id), contact_id=int(contact_id))
+	if error:
+		return message
+	else:
+		answers_dict = request.form.to_dict(flat=True)
+		contact.data = json.dumps(answers_dict, ensure_ascii=False)
+		contact.completed = True
+		db.session.commit()
+		return contact.data
 
 if __name__ == '__main__':
 	app.run(debug=True)

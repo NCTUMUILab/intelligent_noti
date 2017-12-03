@@ -13,9 +13,9 @@ log = logging.getLogger("client")
 log.setLevel(logging.INFO)
 
 class ThreadInfo:
-	def __init__(self, name, type, msg_count, day_count, file_count, image_count, first_talk, last_talk, last_msg):
+	def __init__(self, name, is_group, msg_count, day_count, file_count, image_count, first_talk, last_talk, last_msg):
 		self.name = name
-		self.type = type
+		self.is_group = is_group
 		self.msg_count = msg_count
 		self.day_count = day_count
 		self.file_count = file_count
@@ -79,7 +79,7 @@ class fbMessenger:
 			
 			thread_info = ThreadInfo(
 				thread.name, 
-				"Single user" if thread.type == ThreadType.USER else "Group",
+				False if thread.type == ThreadType.USER else True,
 				msg_count,
 				day_count,
 				file_count,

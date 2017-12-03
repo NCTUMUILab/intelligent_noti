@@ -4,7 +4,7 @@ from flask_login import UserMixin
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'im_msg_web_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/alex/Documents/HCIproject/im_msg/web/database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/alex/Documents/HCIproject/intelligent_noti/database.db'
 db = SQLAlchemy(app)
 
 class User(UserMixin, db.Model):
@@ -17,4 +17,6 @@ class Contact(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	name = db.Column(db.String(50))
 	user_id = db.Column(db.Integer)
+	is_group = db.Column(db.Boolean)
 	completed = db.Column(db.Boolean)
+	data = db.Column(db.Text)

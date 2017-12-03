@@ -49,11 +49,13 @@ Contact List
 					<tbody>
 						{% for contact in contacts %}
 						<tr>
-							<td><input 
+							<td>
+								<input 
 								type="checkbox" 
 								name="select" 
 								value="{{ contact.name }}" 
 								{% if loop.index0 < 5 %}checked{% endif %} >
+								<input type="hidden" name="{{ contact.name }}_is_group" value="{{ contact.is_group }}">
 							</td>
 							<td>{{ contact.name }}</td>
 							<td>{{ contact.type }}</td>
