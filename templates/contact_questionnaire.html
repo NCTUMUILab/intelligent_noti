@@ -1,0 +1,600 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}
+Questionnaire
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css">
+{% endblock %}
+
+{% block content %}
+
+<html lang="en">
+  <body>
+
+    <div class="container" style="margin-bottom: 100px;">
+
+      <form action="/get_contact_questionnaire" method="post">
+
+        <h1>Contact</h1>
+        <p>以下問題會針對題目中顯示之聯絡人回答</p>
+
+        <h3>1.你和他的關係是？</h3>
+        <div class="radio">
+          <label><input type="radio" name="你和他的關係是？" value="近親(父母、兄弟、兒女)">近親(父母、兄弟、兒女)</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你和他的關係是？" value="遠親">遠親</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你和他的關係是？" value="同事(上司)">同事(上司)</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你和他的關係是？" value="同事(下屬)">同事(下屬)</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你和他的關係是？" value="朋友">同事(同輩)</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你和他的關係是？" value="朋友">朋友</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你和他的關係是？" value="伴侶">伴侶</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你和他的關係是？" value="其他">其他</label>
+        </div>
+        <input class="form-control" type="text" name="你和他的關係是其他:" placeholder="其他">
+
+        <h3>2.你和他大部分的話題是哪些？</h3>
+        <div class="radio">
+          <label><input type="radio" name="你和他大部分的話題是哪些？" value="工作相關話題">工作相關話題</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你和他大部分的話題是哪些？" value="一般聊天話題">一般聊天話題</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你和他大部分的話題是哪些？" value="為了完成特定目的之話題">為了完成特定目的之話題（辦活動、舉辦慶生會、學校團體報告...）</label>
+        </div>
+
+        <h3>3.你覺得你在與他使用通訊軟體時有多積極? (1非常不積極 - 5非常積極)</h3>
+        <span id="ex18-label-1" class="hidden">Example slider label</span>
+                <input name="你覺得你在與他使用通訊軟體時有多積極?" type="text"
+                      data-provide="slider"
+                      data-slider-ticks="[1, 2, 3, 4, 5]"
+                      data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                      data-slider-min="1"
+                      data-slider-max="5"
+                      data-slider-step="1"
+                      data-slider-value="1"
+                      data-slider-tooltip="hide" />
+        <h3>4.你們認識多久了？</h3>
+        <input class="form-control" type="text" name="你們認識多久了？">
+
+        <h3>5.你們多久見面一次？</h3>
+        <div class="radio">
+          <label><input type="radio" name="你們多久見面一次？" value="一年不到一次">一年不到一次</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你們多久見面一次？" value="一年一次~一個月一次">一年一次~一個月一次</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你們多久見面一次？" value="一個月一次">一個月一次</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你們多久見面一次？" value="一個月一次~一個禮拜一次">一個月一次~一個禮拜一次</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你們多久見面一次？" value="一個禮拜一次">一個禮拜一次</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你們多久見面一次？" value="一個禮拜一次~每天">一個禮拜一次~每天</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你們多久見面一次？" value="每天">每天</label>
+        </div>
+
+        <h3>6.你們多久聯絡一次？</h3>
+        <div class="radio">
+          <label><input type="radio" name="你們多久聯絡一次？" value="一年不到一次">一年不到一次</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你們多久聯絡一次？" value="一年一次~一個月一次">一年一次~一個月一次</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你們多久聯絡一次？" value="一個月一次">一個月一次</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你們多久聯絡一次？" value="一個月一次~一個禮拜一次">一個月一次~一個禮拜一次</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你們多久聯絡一次？" value="一個禮拜一次">一個禮拜一次</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你們多久聯絡一次？" value="一個禮拜一次~每天">一個禮拜一次~每天</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" name="你們多久聯絡一次？" value="每天">每天</label>
+        </div>
+
+        <h3>7.你覺得你與他多親近 (1:非常不接近-7：非常接近)</h3>
+                <input name="你覺得你與他多親近" type="text"
+                      data-provide="slider"
+                      data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                      data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                      data-slider-min="1"
+                      data-slider-max="7"
+                      data-slider-step="1"
+                      data-slider-value="1"
+                      data-slider-tooltip="hide" />
+
+      <h3>8.我和他很親 (1:非常不同意-7：非常同意)</h3>
+              <input name="我和他/她很親" type="text"
+                    data-provide="slider"
+                    data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                    data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                    data-slider-min="1"
+                    data-slider-max="7"
+                    data-slider-step="1"
+                    data-slider-value="1"
+                    data-slider-tooltip="hide" />
+
+      <h3>9.當我們分開時，我會很想念他 (1:非常不同意-7：非常同意)</h3>
+              <input name="當我們分開時，我會很想念他" type="text"
+                    data-provide="slider"
+                    data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                    data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                    data-slider-min="1"
+                    data-slider-max="7"
+                    data-slider-step="1"
+                    data-slider-value="1"
+                    data-slider-tooltip="hide" />
+
+
+      <h3>10.我們會向對方分享自己的重要事情 (1:非常不同意-7：非常同意)</h3>
+              <input name="我們會向對方分享自己的重要事情" type="text"
+                    data-provide="slider"
+                    data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                    data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                    data-slider-min="1"
+                    data-slider-max="7"
+                    data-slider-step="1"
+                    data-slider-value="1"
+                    data-slider-tooltip="hide" />
+
+      <h3>11.我們之間的連結很強 (1:非常不同意-7：非常同意)</h3>
+              <input name="我們之間的連結很強" type="text"
+                    data-provide="slider"
+                    data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                    data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                    data-slider-min="1"
+                    data-slider-max="7"
+                    data-slider-step="1"
+                    data-slider-value="1"
+                    data-slider-tooltip="hide" />
+
+
+      <h3>12.我們會想要聚在一起 (1:非常不同意-7：非常同意)</h3>
+              <input name="我們會想要聚在一起" type="text"
+                    data-provide="slider"
+                    data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                    data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                    data-slider-min="1"
+                    data-slider-max="7"
+                    data-slider-step="1"
+                    data-slider-value="1"
+                    data-slider-tooltip="hide" />
+
+
+      <h3>13.我確定我們之間的關係 (1:非常不同意-7：非常同意)</h3>
+              <input name="我確定我們之間的關係" type="text"
+                    data-provide="slider"
+                    data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                    data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                    data-slider-min="1"
+                    data-slider-max="7"
+                    data-slider-step="1"
+                    data-slider-value="1"
+                    data-slider-tooltip="hide" />
+
+      <h3>14.他是我生活中重要的一部分 (1:非常不同意-7：非常同意)</h3>
+              <input name="他是我生活中重要的一部分" type="text"
+                    data-provide="slider"
+                    data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                    data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                    data-slider-min="1"
+                    data-slider-max="7"
+                    data-slider-step="1"
+                    data-slider-value="1"
+                    data-slider-tooltip="hide" />
+
+
+      <h3>15.我會和他一起做很多事情 (1:非常不同意-7：非常同意)</h3>
+              <input name="我會和他一起做很多事情" type="text"
+                    data-provide="slider"
+                    data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                    data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                    data-slider-min="1"
+                    data-slider-max="7"
+                    data-slider-step="1"
+                    data-slider-value="1"
+                    data-slider-tooltip="hide" />
+
+      <h3>16.當有時間時，我會想要跟他聚在一起 (1:非常不同意-7：非常同意)</h3>
+              <input name="當有時間時，我會想要跟他聚在一起" type="text"
+                    data-provide="slider"
+                    data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                    data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                    data-slider-min="1"
+                    data-slider-max="7"
+                    data-slider-step="1"
+                    data-slider-value="1"
+                    data-slider-tooltip="hide" />
+
+      <h3>17.我常常關心他 (1:非常不同意-7：非常同意)</h3>
+              <input name="我常常關心他" type="text"
+                    data-provide="slider"
+                    data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                    data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                    data-slider-min="1"
+                    data-slider-max="7"
+                    data-slider-step="1"
+                    data-slider-value="1"
+                    data-slider-tooltip="hide" />
+
+
+      <h3>18.我和他的關係，在我的生活中是重要的 (1:非常不同意-7：非常同意)</h3>
+              <input name="我和他的關係在我的生活中是重要的" type="text"
+                    data-provide="slider"
+                    data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                    data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                    data-slider-min="1"
+                    data-slider-max="7"
+                    data-slider-step="1"
+                    data-slider-value="1"
+                    data-slider-tooltip="hide" />
+
+
+      <h3>19.在做出重要決定時，我會考慮他 (1:非常不同意-7：非常同意)</h3>
+              <input name="在做出重要決定時我會考慮他" type="text"
+                    data-provide="slider"
+                    data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
+                    data-slider-ticks-labels='["1", "2", "3", "4", "5","6","7"]'
+                    data-slider-min="1"
+                    data-slider-max="7"
+                    data-slider-step="1"
+                    data-slider-value="1"
+                    data-slider-tooltip="hide" />
+
+        <h1>以下問題以1-5進行回答（1:非常不同意，5:非常同意)</h1>
+
+        <h3>20.我們彼此互相依賴</h3>
+                <input name="我們彼此互相依賴" type="text"
+                      data-provide="slider"
+                      data-slider-ticks="[1, 2, 3, 4, 5]"
+                      data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                      data-slider-min="1"
+                      data-slider-max="5"
+                      data-slider-step="1"
+                      data-slider-value="1"
+                      data-slider-tooltip="hide" />
+
+        <h3>21.之前曾經有發生過當要做一個決定時，我們等待對方的選擇以當作參考</h3>
+                <input name="之前曾經有發生過當要做一個決定時，我們等待對方的選擇以當作參考" type="text"
+                      data-provide="slider"
+                      data-slider-ticks="[1, 2, 3, 4, 5]"
+                      data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                      data-slider-min="1"
+                      data-slider-max="5"
+                      data-slider-step="1"
+                      data-slider-value="1"
+                      data-slider-tooltip="hide" />
+
+        <h3>22.我們彼此都沒有留下時間用來與對方交談</h3>
+          <input name="我們彼此都沒有留下時間用來與對方交談" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>23.我們彼此對於對方都有很大的影響</h3>
+          <input name="我們彼此對於對方都有很大的影響" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>24.我們時常影響對方對於我們目前正在處理的事情的感覺</h3>
+          <input name="我們時常影響對方對於我們目前正在處理的事情的感覺" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>25.有需要的話，我們會專程去幫忙對方的忙</h3>
+          <input name="有需要的話，我們會專程去幫忙對方的忙" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>26.我們對於對方的想法沒有什麼影響力</h3>
+          <input name="我們對於對方的想法沒有什麼影響力" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>27.對於我們規劃要一起做的事情，我的朋友期待我利用通訊工具溝通</h3>
+          <input name="對於我們規劃要一起做的事情，我的朋友期待我利用通訊工具溝通" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>28.我的朋友期待我打電話或通訊軟體確認一切安好</h3>
+          <input name="我的朋友期待我打電話或通訊軟體確認一切安好" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>29.我的朋友期待我打電話或用通訊軟體與他更新自己的近況</h3>
+          <input name="我的朋友期待我打電話或用通訊軟體與他更新自己的近況" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>30.我的朋友期待我用電話或通訊軟體噓寒問暖</h3>
+          <input name="我的朋友期待我用電話或通訊軟體噓寒問暖" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>31.我的朋友期待我在無聊時用電話或通訊軟體與他殺時間</h3>
+          <input name="我的朋友期待我在無聊時用電話或通訊軟體與他殺時間" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>32.我的朋友期待我用電話或通訊軟體告訴他我在哪裡</h3>
+          <input name="我的朋友期待我用電話或通訊軟體告訴他我在哪裡" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>33.我的朋友期待我用電話或通訊軟體告訴他我要去哪裡 </h3>
+          <input name="我的朋友期待我用電話或通訊軟體告訴他我要去哪裡 " type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>34.我的朋友期待我用電話或通訊軟體告訴他我接下來要做什麼</h3>
+          <input name="我的朋友期待我用電話或通訊軟體告訴他我接下來要做什麼" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>35.我的朋友期待我用電話或通訊軟體告訴他我現在正在做什麼</h3>
+          <input name="我的朋友期待我用電話或通訊軟體告訴他我現在正在做什麼" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h1> 你正在使用 Facebook 時收到一封訊息，而且寄送人顯示為上線中，請問下列描述最符合你真實的行為 (1:非常不符合，5:非常符合)</h1>
+
+        <h3>36.若是我以及讀取信件，我當下會立刻回復</h3>
+          <input name="若是我已經讀取信件，我當下會立刻回復" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>37.若對方寄送給我一個連結，我會盡快看連結內的內容並回復他</h3>
+          <input name="若對方寄送給我一個連結，我會盡快看連結內的內容並回復他" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>38.若與對方即將有個約會，在讀取訊息後我會盡快回復</h3>
+          <input name="若與對方即將有個約會，在讀取訊息後我會盡快回復" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>39.若對方與我打招呼，我應該要立刻回復</h3>
+          <input name="若對方與我打招呼，我應該要立刻回復" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>40.離開對話時，我應該要和對方道別</h3>
+          <input name="離開對話時，我應該要和對方道別" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>41.若我無法在十分鐘內回覆訊息，我應該需要道別 </h3>
+          <input name="若我無法在十分鐘內回覆訊息，我應該需要道別 " type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h1>以下是針對你的理想Facebook聊天體驗相關的問題。請想像你目前在Facebook上聊天的對象為上線狀態回答以下問題(1:非常不符合，5:非常符合)</h1>
+
+        <h3>42.當我發訊訊息給對方，我期待他再看到後能夠立即回復</h3>
+          <input name="當我發訊訊息給對方，我期待他再看到後能夠立即回復" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>43.當我要與對方有個小約(時間部會太長)時，我期待對方能夠立即回復 </h3>
+          <input name="當我要與對方有個小約(時間部會太長)時，我期待對方能夠立即回復 " type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>44.當我與對方問候近況時，我期待對方能夠立即回復</h3>
+          <input name="當我與對方問候近況時，我期待對方能夠立即回復" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>45.當我發送一個連結給對方時，我期待對方能夠在看到連結內容後立即回復我</h3>
+          <input name="當我發送一個連結給對方時，我期待對方能夠在看到連結內容後立即回復我" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+
+        <h3>46.當對方要來開對話時，他應該要先與我道別</h3>
+          <input name="當對方要來開對話時，他應該要先與我道別" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+        <h3>47.當對方無法在十分鐘內回覆時，他應該要與我道別</h3>
+          <input name="當對方無法在十分鐘內回覆時，他應該要與我道別" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+
+
+      <div class="row" style="margin-top: 30px">
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button>
+      </div>
+
+      </form>
+  </div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/bootstrap-slider.min.js">
+
+{% endblock %}
