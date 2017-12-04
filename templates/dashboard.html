@@ -1,47 +1,25 @@
-{% extends "bootstrap/base.html" %}
+{% extends "layout.html" %}
 
 {% block title %}
 Dashboard
 {% endblock %}
 
 {% block styles %}
-{{super()}}
+{{ super() }}
 <link rel="stylesheet" href="{{url_for('.static', filename='dashboard.css')}}">
 {% endblock %}
 
 {% block content %}
 {# NAV BAR #}
-<nav class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="#">IM MSG</a>
-		</div>
-		<div id="navbar" class="navbar-collapse collapse">
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="#">Dashboard</a></li>
-				<li><a href="#">Settings</a></li>
-				<li><a href="#">Profile</a></li>
-				<li><a href="{{ url_for('logout') }}">Log Out</a></li>
-			</ul>
-		</div>
-	</div>
-</nav>
+{{ super() }}
 
 <div class="container-fluid">
 	<div class="row">
 		{# SIDE BAR #}
 		<div class="col-sm-3 col-md-2 sidebar">
 			<ul class="nav nav-sidebar">
-				<li><a href="{{ url_for('facebook') }}">Facebook Login</a></li>
+				<li><a href="{{ url_for('user_questionnaire') }}">User Questionnaire</a></li>
 				{# <li class="active"><a href="{{ url_for('facebook') }}">Facebook Login <span class="sr-only">(current)</span></a></li>
-				<li><a href="#">Reports</a></li>
-				<li><a href="#">Analytics</a></li>
 				<li><a href="#">Export</a></li> #}
 			</ul>
 		</div>
@@ -61,12 +39,12 @@ Dashboard
 						</tr>
 					</thead>
 					<tbody>
-						{% for contact in contacts %}
+						{% for questionnaire in questionnaires %}
 						<tr>
-							<td>{{ contact.id }}</td>
-							<td><a href="/questionnaire/{{contact.user_id}}/{{contact.id}}">{{ contact.name }}</a></td>
-							<td>{{ contact.user_id }}</td>
-							<td>{{ contact.completed }}</td>
+							<td>{{ questionnaire.id }}</td>
+							<td><a href="/questionnaire/{{questionnaire.user_id}}/{{questionnaire.id}}">{{ questionnaire.contact_name }}</a></td>
+							<td>{{ questionnaire.user_id }}</td>
+							<td>{{ questionnaire.completed }}</td>
 						</tr>
 						{% endfor %}
 					</tbody>

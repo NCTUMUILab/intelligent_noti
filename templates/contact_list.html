@@ -1,4 +1,4 @@
-{% extends "bootstrap/base.html" %}
+{% extends "layout.html" %}
 
 {% block title %}
 Contact List
@@ -6,34 +6,14 @@ Contact List
 
 {% block content %}
 {# NAV BAR #}
-<nav class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="#">Intelligent Noti</a>
-		</div>
-		<div id="navbar" class="navbar-collapse collapse">
-			<ul class="nav navbar-nav navbar-right">
-				<li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-				<li><a href="#">Settings</a></li>
-				<li><a href="#">Profile</a></li>
-				<li><a href="{{ url_for('logout') }}">Log Out</a></li>
-			</ul>
-		</div>
-	</div>
-</nav>
+{{ super() }}
 
 {# MAIN AREA #}
 <div class="container-fluid">
 	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 		<h2 class="sub-header">Hi, {{ name }}. please choose _ contacts</h2>
 		<div class="table-responsive">
-			<form action="/submitContacts" method="POST">
+			<form action="{{ url_for('confirmContacts') }}" method="POST">
 				<table class="table table-striped">
 					<thead>
 						<th>SELECT</th>
@@ -58,7 +38,7 @@ Contact List
 								<input type="hidden" name="{{ contact.name }}_is_group" value="{{ contact.is_group }}">
 							</td>
 							<td>{{ contact.name }}</td>
-							<td>{{ contact.type }}</td>
+							<td>{{ "group" if contact.is_group else "single" }}</td>
 							<td>{{ contact.msg_count }}</td>
 							<td>{{ contact.file_count }}</td>
 							<td>{{ contact.image_count }}</td>

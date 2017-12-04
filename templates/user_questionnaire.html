@@ -1,7 +1,7 @@
 {% extends "bootstrap/base.html" %}
 
 {% block title %}
-Questionnaire
+User Questionnaire
 {% endblock %}
 
 {% block styles %}
@@ -17,7 +17,7 @@ Questionnaire
 
     <div class="container" style="margin-bottom: 100px;">
 
-      <form action="/get_user_questionnaire" method="post">
+      <form action="{{ url_for('user_questionnaire') }}" method="post">
 
         <h1>第一部分</h1>
         <p>以下問題，受試者會被要求回顧他/她自身，以及在使用 Line 以及Facebook Messenger 與他人溝通時之情境，每個題目皆是5-point scales (1 = 非常不認同, 5 = 非常認同)</p>
