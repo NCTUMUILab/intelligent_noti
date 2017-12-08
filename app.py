@@ -9,15 +9,18 @@ from login import login_manager, load_user
 from get_facebook import fbMessenger, ThreadInfo
 from json import dumps
 from testing import contacts_test
+from flask_debugtoolbar import DebugToolbarExtension
 
 
 # init bootstrap
 Bootstrap(app)
+app.debug = True
+# toolbar = DebugToolbarExtension(app)
 
 ### route ###
 @app.route('/')
 def index():
-	return render_template('index.html')
+	return render_template('index.html', current_user=current_user)
 
 ## User System ##
 @app.route('/login', methods=['GET', 'POST'])
@@ -60,7 +63,8 @@ def logout():
 @login_required
 def dashboard():
 	questionnaires = ContactQuestionnaire.query.filter_by(user_id=current_user.id).all()
-	return render_template('dashboard.html', name=current_user.username, questionnaires=questionnaires)
+	userQ_done = UserQuestionnaire.query.filter_by(user_id=current_user.id).first()
+	return render_template('dashboard.html', name=current_user.username, questionnaires=questionnaires, userQ_done=userQ_done)
 
 ### Facebook ###
 @app.route('/facebook', methods=['GET', 'POST'])
@@ -69,10 +73,12 @@ def facebook():
 	form = FacebookLoginForm()
 	if form.validate_on_submit():
 		print("start scanning fbMessenger")
-		# fb = fbMessenger(form.account.data, form.password.data)
-		# contacts = fb.get_messages()
-		# contacts = sorted(contacts, reverse=True, key=lambda c: c.msg_count)
-		contacts = sorted(contacts_test, reverse=True, key=lambda c: c.msg_count) ## for testing
+		# facebook login
+		fb = fbMessenger(form.account.data, form.password.data)
+		contacts = fb.get_messages()
+		contacts = sorted(contacts, reverse=True, key=lambda c: c.msg_count)
+		# for testing
+		# contacts = sorted(contacts_test, reverse=True, key=lambda c: c.msg_count) ## for testing
 		return render_template('contact_list.html', name=current_user.username, contacts=contacts)
 	
 	return render_template('facebook_login.html', form=form)
@@ -103,10 +109,10 @@ def find_questionnaire(current_user, user_id, questionnaire_id):
 			return 0, "Found", questionnaire
 	return 2, "you don't have THIS questionnaire", None
 
-@app.route('/questionnaire/<user_id>/<questionnaire_id>', methods=['GET', 'POST'])
+@app.route('/questionnaire/<int:user_id>/<int:questionnaire_id>', methods=['GET', 'POST'])
 @login_required
 def questionnaire(user_id, questionnaire_id):
-	error, message, questionnaire = find_questionnaire(current_user=current_user, user_id=int(user_id), questionnaire_id=int(questionnaire_id))
+	error, message, questionnaire = find_questionnaire(current_user=current_user, user_id=user_id, questionnaire_id=questionnaire_id)
 	if error:
 		return message
 	

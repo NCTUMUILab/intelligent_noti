@@ -19,7 +19,7 @@ Questionnaire
 
       <form action="/questionnaire/{{ questionnaire.user_id }}/{{ questionnaire.id }}" method="post">
 
-        <h1>Group</h1>
+        <h1>聯絡人關係問卷： {{ questionnaire.contact_name }}</h1>
         <p>以下問題會針對題目中顯示之群組回答</p>
 
         <h3>1.你和{{ questionnaire.contact_name }}的關係是？</h3>
