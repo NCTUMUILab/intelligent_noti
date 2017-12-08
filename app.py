@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, jsonify
 from flask_bootstrap import Bootstrap
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
@@ -26,7 +26,7 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	form = LoginForm()
-	
+
 	if form.validate_on_submit():
 		user = User.query.filter_by(username=form.username.data).first()
 		if user:
@@ -41,7 +41,7 @@ def login():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
 	form = RegisterForm()
-	
+
 	if form.validate_on_submit():
 		hashed_password = generate_password_hash(form.password.data, method='sha256')
 		new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
@@ -49,7 +49,7 @@ def signup():
 		db.session.commit()
 		login_user(new_user)
 		return redirect(url_for('facebook'))
-	
+
 	return render_template('signup.html', form=form)
 
 @app.route('/logout')
@@ -80,7 +80,7 @@ def facebook():
 		# for testing
 		# contacts = sorted(contacts_test, reverse=True, key=lambda c: c.msg_count) ## for testing
 		return render_template('contact_list.html', name=current_user.username, contacts=contacts)
-	
+
 	return render_template('facebook_login.html', form=form)
 
 @app.route('/confirmContacts', methods=['POST'])
@@ -90,9 +90,9 @@ def confirmContacts():
 	for name in contact_name_list:
 		is_group = request.form['{}_is_group'.format(name)] == 'True'
 		new_questionnaire = ContactQuestionnaire(
-			contact_name=name, 
-			user_id=current_user.id, 
-			is_group=is_group, 
+			contact_name=name,
+			user_id=current_user.id,
+			is_group=is_group,
 			completed=False)
 		db.session.add(new_questionnaire)
 		db.session.commit()
@@ -102,7 +102,7 @@ def confirmContacts():
 def find_questionnaire(current_user, user_id, questionnaire_id):
 	if user_id != current_user.id:
 		return 1, "you are not this user!", None
-	
+
 	questionnaires = ContactQuestionnaire.query.filter_by(user_id=current_user.id).all()
 	for questionnaire in questionnaires:
 		if questionnaire_id == questionnaire.id:
@@ -115,14 +115,14 @@ def questionnaire(user_id, questionnaire_id):
 	error, message, questionnaire = find_questionnaire(current_user=current_user, user_id=user_id, questionnaire_id=questionnaire_id)
 	if error:
 		return message
-	
+
 	if request.method == 'POST':
 		answers_dict = request.form.to_dict(flat=True)
 		questionnaire.data = dumps(answers_dict, ensure_ascii=False)
 		questionnaire.completed = True
 		db.session.commit()
 		return redirect(url_for('dashboard'))
-	
+
 	elif request.method == 'GET':
 		if questionnaire.is_group:
 			return render_template('group_questionnaire.html', questionnaire=questionnaire)
@@ -135,21 +135,31 @@ def user_questionnaire():
 	questionnaire_done = UserQuestionnaire.query.filter_by(user_id=current_user.id).first()
 	if questionnaire_done:
 		return "you have done the user questionnaire!"
-	
+
 	if request.method == 'GET':
 		return render_template('user_questionnaire.html')
-	
+
 	elif request.method == 'POST':
 		answers_dict = request.form.to_dict(flat=True)
 		new_user_q = UserQuestionnaire(
-			user_id=current_user.id, 
-			completed=True, 
+			user_id=current_user.id,
+			completed=True,
 			data=dumps(answers_dict, ensure_ascii=False))
 		db.session.add(new_user_q)
 		db.session.commit()
 		return redirect(url_for('dashboard'))
-		
-		
+
+@app.route('/heatmap', methods=['GET', 'POST'])
+@login_required
+def heatmap():
+	return render_template('heatmap.html')
+
+@app.route('/getLocations', methods=['POST'])
+def GetLocations():
+	
+	marks = [(121.5756283,24.9868378),(121.5757676,24.9868404)]
+	locations = {"marks": marks}
+	return jsonify(locations)
 
 if __name__ == '__main__':
 	app.run(debug=True)
