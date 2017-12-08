@@ -10,7 +10,7 @@ from get_facebook import fbMessenger, ThreadInfo
 from json import dumps
 from testing import contacts_test
 from flask_debugtoolbar import DebugToolbarExtension
-
+import csv
 
 # init bootstrap
 Bootstrap(app)
@@ -156,8 +156,13 @@ def heatmap():
 
 @app.route('/getLocations', methods=['POST'])
 def GetLocations():
-	
-	marks = [(121.5756283,24.9868378),(121.5757676,24.9868404)]
+	marks = []
+	f = open('result.csv', 'r')
+	for row in csv.DictReader(f):
+		loc = (row['raw'].split('\t')[2],row['raw'].split('\t')[3])
+		marks.append(loc)
+		print(row['raw'].split('\t')[2])
+	f.close()
 	locations = {"marks": marks}
 	return jsonify(locations)
 
