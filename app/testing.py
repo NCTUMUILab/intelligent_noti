@@ -1,4 +1,4 @@
-from get_facebook import ThreadInfo
+from .get_facebook import ThreadInfo
 from random import randint
 from datetime import datetime
 

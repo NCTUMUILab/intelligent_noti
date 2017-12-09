@@ -1,11 +1,5 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'im_msg_web_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/alex/Documents/HCIproject/intelligent_noti/database.db'
-db = SQLAlchemy(app)
+from . import db
 
 class User(UserMixin, db.Model):
 	id = db.Column(db.Integer, primary_key=True)

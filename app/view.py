@@ -1,21 +1,15 @@
-from flask import render_template, redirect, url_for, request
-from flask_bootstrap import Bootstrap
+from flask import render_template, redirect, url_for, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
-
-from models import app, db, User, ContactQuestionnaire, UserQuestionnaire
-from forms import LoginForm, RegisterForm, FacebookLoginForm
-from login import login_manager, load_user
-from get_facebook import fbMessenger, ThreadInfo
 from json import dumps
-from testing import contacts_test
-from flask_debugtoolbar import DebugToolbarExtension
 
+from . import app, db, load_user
+from .models import User, ContactQuestionnaire, UserQuestionnaire
+from .forms import LoginForm, RegisterForm, FacebookLoginForm
+from .get_facebook import fbMessenger, ThreadInfo
+from .testing import contacts_test
+import csv
 
-# init bootstrap
-Bootstrap(app)
-app.debug = True
-# toolbar = DebugToolbarExtension(app)
 
 ### route ###
 @app.route('/')
@@ -26,7 +20,7 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	form = LoginForm()
-	
+
 	if form.validate_on_submit():
 		user = User.query.filter_by(username=form.username.data).first()
 		if user:
@@ -35,13 +29,14 @@ def login():
 				return redirect(url_for('dashboard'))
 		else:
 			return 'Invalid username or password'
+
 	return render_template('login.html', form=form)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
 	form = RegisterForm()
-	
+
 	if form.validate_on_submit():
 		hashed_password = generate_password_hash(form.password.data, method='sha256')
 		new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
@@ -80,7 +75,6 @@ def facebook():
 		# for testing
 		# contacts = sorted(contacts_test, reverse=True, key=lambda c: c.msg_count) ## for testing
 		return render_template('contact_list.html', name=current_user.username, contacts=contacts)
-	
 	return render_template('facebook_login.html', form=form)
 
 @app.route('/confirmContacts', methods=['POST'])
@@ -90,9 +84,9 @@ def confirmContacts():
 	for name in contact_name_list:
 		is_group = request.form['{}_is_group'.format(name)] == 'True'
 		new_questionnaire = ContactQuestionnaire(
-			contact_name=name, 
-			user_id=current_user.id, 
-			is_group=is_group, 
+			contact_name=name,
+			user_id=current_user.id,
+			is_group=is_group,
 			completed=False)
 		db.session.add(new_questionnaire)
 		db.session.commit()
@@ -142,14 +136,26 @@ def user_questionnaire():
 	elif request.method == 'POST':
 		answers_dict = request.form.to_dict(flat=True)
 		new_user_q = UserQuestionnaire(
-			user_id=current_user.id, 
-			completed=True, 
+			user_id=current_user.id,
+			completed=True,
 			data=dumps(answers_dict, ensure_ascii=False))
 		db.session.add(new_user_q)
 		db.session.commit()
 		return redirect(url_for('dashboard'))
-		
-		
 
-if __name__ == '__main__':
-	app.run(debug=True)
+@app.route('/heatmap', methods=['GET', 'POST'])
+@login_required
+def heatmap():
+	return render_template('heatmap.html')
+
+@app.route('/getLocations', methods=['POST'])
+def getLocations():
+	marks = []
+	f = open('result.csv', 'r')
+	for row in csv.DictReader(f):
+		loc = (row['raw'].split('\t')[2], row['raw'].split('\t')[3])
+		marks.append(loc)
+		print(row['raw'].split('\t')[2])
+	f.close()
+	locations = {"marks": marks}
+	return jsonify(locations)
