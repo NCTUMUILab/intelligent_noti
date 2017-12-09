@@ -1,5 +1,4 @@
 # Intelligent_noti
----
 ## Architecture
 - app : main application
 	- __init__.py : initialize app
