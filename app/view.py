@@ -44,7 +44,7 @@ def signup():
 		db.session.commit()
 		login_user(new_user)
 		return redirect(url_for('facebook'))
-	
+
 	return render_template('signup.html', form=form)
 
 @app.route('/logout')
@@ -75,6 +75,7 @@ def facebook():
 		# for testing
 		# contacts = sorted(contacts_test, reverse=True, key=lambda c: c.msg_count) ## for testing
 		return render_template('contact_list.html', name=current_user.username, contacts=contacts)
+
 	return render_template('facebook_login.html', form=form)
 
 @app.route('/confirmContacts', methods=['POST'])
@@ -96,7 +97,7 @@ def confirmContacts():
 def find_questionnaire(current_user, user_id, questionnaire_id):
 	if user_id != current_user.id:
 		return 1, "you are not this user!", None
-	
+
 	questionnaires = ContactQuestionnaire.query.filter_by(user_id=current_user.id).all()
 	for questionnaire in questionnaires:
 		if questionnaire_id == questionnaire.id:
@@ -109,14 +110,14 @@ def questionnaire(user_id, questionnaire_id):
 	error, message, questionnaire = find_questionnaire(current_user=current_user, user_id=user_id, questionnaire_id=questionnaire_id)
 	if error:
 		return message
-	
+
 	if request.method == 'POST':
 		answers_dict = request.form.to_dict(flat=True)
 		questionnaire.data = dumps(answers_dict, ensure_ascii=False)
 		questionnaire.completed = True
 		db.session.commit()
 		return redirect(url_for('dashboard'))
-	
+
 	elif request.method == 'GET':
 		if questionnaire.is_group:
 			return render_template('group_questionnaire.html', questionnaire=questionnaire)
@@ -129,10 +130,10 @@ def user_questionnaire():
 	questionnaire_done = UserQuestionnaire.query.filter_by(user_id=current_user.id).first()
 	if questionnaire_done:
 		return "you have done the user questionnaire!"
-	
+
 	if request.method == 'GET':
 		return render_template('user_questionnaire.html')
-	
+
 	elif request.method == 'POST':
 		answers_dict = request.form.to_dict(flat=True)
 		new_user_q = UserQuestionnaire(
