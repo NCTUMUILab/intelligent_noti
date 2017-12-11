@@ -34,18 +34,14 @@ Dashboard
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th>ID</th>
 							<th>Name</th>
-							<th>User ID</th>
 							<th>Completed</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for questionnaire in questionnaires %}
 						<tr>
-							<td>{{ questionnaire.id }}</td>
 							<td><a href="/questionnaire/{{questionnaire.user_id}}/{{questionnaire.id}}">{{ questionnaire.contact_name }}</a></td>
-							<td>{{ questionnaire.user_id }}</td>
 							<td>{{ questionnaire.completed }}</td>
 						</tr>
 						{% endfor %}

@@ -6,6 +6,7 @@ class User(UserMixin, db.Model):
 	username = db.Column(db.String(15), unique=True)
 	password = db.Column(db.String(80))
 	email = db.Column(db.String(50), unique=True)
+	phone_id = db.Column(db.String(30))
 
 class ContactQuestionnaire(db.Model):
 	id = db.Column(db.Integer, primary_key=True)

@@ -30,11 +30,7 @@ Contact List
 						{% for contact in contacts %}
 						<tr>
 							<td>
-								<input 
-								type="checkbox" 
-								name="select" 
-								value="{{ contact.name }}" 
-								{% if loop.index0 < 5 %}checked{% endif %} >
+								<input class="single-checkbox" type="checkbox" name="select" value="{{ contact.name }}" {% if loop.index0 < 3 %}checked{% endif %} >
 								<input type="hidden" name="{{ contact.name }}_is_group" value="{{ contact.is_group }}">
 							</td>
 							<td>{{ contact.name }}</td>
@@ -54,4 +50,19 @@ Contact List
 		</div>
 	</div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	myFunction();
+	function myFunction(){
+		var limit = 3;
+		$('input.single-checkbox').on('change', function(evt) {
+		   if($(this).siblings(':checked').length >= limit) {
+		       this.checked = false;
+		   }
+		});
+	}
+</script>
 {% endblock %}
