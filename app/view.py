@@ -86,7 +86,7 @@ def facebook():
 		contacts = sorted(contacts, reverse=True, key=lambda c: c.msg_count)
 		# for testing
 		# contacts = sorted(contacts_test, reverse=True, key=lambda c: c.msg_count) ## for testing
-		return render_template('contact_list.html', name=current_user.username, contacts=contacts, limit=4)
+		return render_template('contact_list.html', name=current_user.username, contacts=contacts, limit=20)
 
 	return render_template('facebook_login.html', form=form)
 
@@ -251,3 +251,9 @@ def get_notification():
                 selected.append(n)
                 break
     return render_template('notification.html', notification=selected, wid_count=_wid_count)
+
+@app.route('/test')
+def test():
+    contactQ = ContactQuestionnaire.query.filter_by(user_id=current_user.id).first()
+    print(type(contactQ.data))
+    return "done"

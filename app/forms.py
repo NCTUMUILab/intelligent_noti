@@ -23,5 +23,5 @@ class RegisterForm(FlaskForm):
 	confirm = PasswordField('Repeat Password')
 	
 class FacebookLoginForm(FlaskForm):
-	account = StringField('Facebook account: Email or Phone number', validators=[InputRequired()])
+	account = StringField('Email or Phone number', validators=[InputRequired()])
 	password = PasswordField('Password', validators=[InputRequired()])

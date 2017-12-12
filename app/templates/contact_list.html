@@ -23,13 +23,7 @@ Contact List
 					<thead>
 						<th>SELECT</th>
 						<th>Name</th>
-						<th>Type</th>
 						<th>Message count</th>
-						<th>File count</th>
-						<th>Image count</th>
-						<th>First talk</th>
-						<th>Last talk</th>
-						<th>Last talk</th>
 					</thead>
 					<tbody>
 						{% for contact in contacts %}
@@ -39,13 +33,7 @@ Contact List
 								<input type="hidden" name="{{ contact.name }}_is_group" value="{{ contact.is_group }}">
 							</td>
 							<td>{{ contact.name }}</td>
-							<td>{{ "group" if contact.is_group else "single" }}</td>
 							<td>{{ contact.msg_count }}</td>
-							<td>{{ contact.file_count }}</td>
-							<td>{{ contact.image_count }}</td>
-							<td>{{ contact.first_talk }}</td>
-							<td>{{ contact.last_talk }}</td>
-							<td>{{ contact.last_msg }}</td>
 						</tr>
 						{% endfor %}
 					</tbody>
