@@ -2,9 +2,16 @@ from flask import render_template, redirect, url_for, request, jsonify, make_res
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from json import dumps
+from datetime import datetime, timedelta
+from sqlalchemy.exc import IntegrityError
+import uuid
+from flask_cors import CORS, cross_origin
+import dateutil.parser
+from sqlalchemy import desc
+import hashlib
 
 from . import app, db, load_user, admin_only
-from .models import User, ContactQuestionnaire, UserQuestionnaire
+from .models import *
 from .forms import LoginForm, RegisterForm, FacebookLoginForm
 from .get_facebook import fbMessenger, ThreadInfo
 from .testing import contacts_test
@@ -34,7 +41,7 @@ def login():
 
 
 @app.route('/signup', methods=['GET', 'POST'])
-@admin_only
+# @admin_only
 def signup():
 	form = RegisterForm()
 
@@ -74,11 +81,11 @@ def facebook():
 	if form.validate_on_submit():
 		print("start scanning fbMessenger")
 		# facebook login
-		# fb = fbMessenger(form.account.data, form.password.data)
-		# contacts = fb.get_messages()
-		# contacts = sorted(contacts, reverse=True, key=lambda c: c.msg_count)
+		fb = fbMessenger(form.account.data, form.password.data)
+		contacts = fb.get_messages()
+		contacts = sorted(contacts, reverse=True, key=lambda c: c.msg_count)
 		# for testing
-		contacts = sorted(contacts_test, reverse=True, key=lambda c: c.msg_count) ## for testing
+		# contacts = sorted(contacts_test, reverse=True, key=lambda c: c.msg_count) ## for testing
 		return render_template('contact_list.html', name=current_user.username, contacts=contacts, limit=4)
 
 	return render_template('facebook_login.html', form=form)
@@ -209,6 +216,7 @@ def add_result():
 def get_notification():
     delta = datetime.utcnow() - timedelta(minutes=600)
     user = request.args.get('user')
+    u = db.session.query(User).filter(User.phone_id==user).one_or_none()
     notification = db.session.query(Result).filter(Result.r_type == 'Notification').filter(Result.user == user).filter(Result.date > delta).order_by(desc(Result.created_at)).all()
     db.session.close()
     notifications = []
@@ -221,7 +229,7 @@ def get_notification():
             p['title'] = noti[1]
             p['content'] = noti[2]
             p['time'] = n.date
-            p['white_list_user'] = db.session.query(WhiteList).filter(WhiteList.user==user).filter(WhiteList.facebook==p['title']).one_or_none()
+            p['white_list_user'] = db.session.query(ContactQuestionnaire).filter(ContactQuestionnaire.user_id==u.id).filter(ContactQuestionnaire.contact_name==p['title']).one_or_none()
 
             if not p['white_list_user']:
                 continue
