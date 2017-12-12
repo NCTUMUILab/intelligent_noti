@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 
+{% block head %}
+{{ super() }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{% endblock %}
+
 {% block title %}
 Contact List
 {% endblock %}
@@ -53,13 +58,12 @@ Contact List
 {% endblock %}
 
 {% block scripts %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script>
 	myFunction();
 	function myFunction(){
-		var limit = 3;
+		var limit = {{ limit }};
 		$('input.single-checkbox').on('change', function(evt) {
-		   if($(this).siblings(':checked').length >= limit) {
+		   if($("input[name='select']:checked").length > limit) {
 		       this.checked = false;
 		   }
 		});

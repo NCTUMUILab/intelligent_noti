@@ -1,9 +1,9 @@
-from flask import render_template, redirect, url_for, request, jsonify
+from flask import render_template, redirect, url_for, request, jsonify, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from json import dumps
 
-from . import app, db, load_user
+from . import app, db, load_user, admin_only
 from .models import User, ContactQuestionnaire, UserQuestionnaire
 from .forms import LoginForm, RegisterForm, FacebookLoginForm
 from .get_facebook import fbMessenger, ThreadInfo
@@ -34,6 +34,7 @@ def login():
 
 
 @app.route('/signup', methods=['GET', 'POST'])
+@admin_only
 def signup():
 	form = RegisterForm()
 
@@ -59,22 +60,26 @@ def logout():
 def dashboard():
 	questionnaires = ContactQuestionnaire.query.filter_by(user_id=current_user.id).all()
 	userQ_done = UserQuestionnaire.query.filter_by(user_id=current_user.id).first()
-	return render_template('dashboard.html', name=current_user.username, questionnaires=questionnaires, userQ_done=userQ_done)
+	return render_template('dashboard.html', current_user=current_user, questionnaires=questionnaires, userQ_done=userQ_done)
 
 ### Facebook ###
 @app.route('/facebook', methods=['GET', 'POST'])
 @login_required
 def facebook():
+	is_summited = ContactQuestionnaire.query.filter_by(user_id=current_user.id).first()
+	if is_summited:
+		return make_response(render_template('403_forbidden.html', current_user=current_user, message="You can't re-summit your facebook account!"), 403)
+
 	form = FacebookLoginForm()
 	if form.validate_on_submit():
 		print("start scanning fbMessenger")
 		# facebook login
-		fb = fbMessenger(form.account.data, form.password.data)
-		contacts = fb.get_messages()
-		contacts = sorted(contacts, reverse=True, key=lambda c: c.msg_count)
+		# fb = fbMessenger(form.account.data, form.password.data)
+		# contacts = fb.get_messages()
+		# contacts = sorted(contacts, reverse=True, key=lambda c: c.msg_count)
 		# for testing
-		# contacts = sorted(contacts_test, reverse=True, key=lambda c: c.msg_count) ## for testing
-		return render_template('contact_list.html', name=current_user.username, contacts=contacts)
+		contacts = sorted(contacts_test, reverse=True, key=lambda c: c.msg_count) ## for testing
+		return render_template('contact_list.html', name=current_user.username, contacts=contacts, limit=4)
 
 	return render_template('facebook_login.html', form=form)
 
@@ -129,7 +134,7 @@ def questionnaire(user_id, questionnaire_id):
 def user_questionnaire():
 	questionnaire_done = UserQuestionnaire.query.filter_by(user_id=current_user.id).first()
 	if questionnaire_done:
-		return "you have done the user questionnaire!"
+		return make_response(render_template('403_forbidden.html', current_user=current_user, message="You have done the user questionnaire!"), 403)
 
 	if request.method == 'GET':
 		return render_template('user_questionnaire.html')

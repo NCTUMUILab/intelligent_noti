@@ -23,14 +23,14 @@ IM MSG
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-left">
-				<li><a href="{{ url_for('dashboard') }}">{{ current_user.username }}</a></li>
+				<li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				{% if not current_user.is_authenticated %}
 				<li><a href="{{ url_for('signup') }}">Sign Up</a></li>
 				<li><a href="{{ url_for('login') }}">Login</a></li>
 				{% else %}
-				<li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+				<li><a href="{{ url_for('dashboard') }}">{{ current_user.username }}</a></li>
 				<li><a href="{{ url_for('logout') }}">Log Out</a></li>
 				{% endif %}
 			</ul>
@@ -41,9 +41,9 @@ IM MSG
 <div class="container">
 
 	<div class="starter-template">
-		<h1>Investigating the Impact of Interpersonal Relationship on Mobile Receptivity and Attending to Instant Messages</h1>
+		<h1>Oops! 403 Forbidden!</h1>
 		<br>
-		<p class="lead">Interruptibility research is growing in computer-mediated communication (CMC). <br>While much CMC research concerns interpersonal communication, <br>we have not seen a close examination of the impact of “who” in mobile interruptibility research. <br><br>In this paper, we propose a study more closely investigating the interplay <br>between interpersonal relationship characteristics <br>with contextual factors and their impact on users’ receptivity to communication.</p>
+		<p class="lead">{{ message }}</p>
 	</div>
 
 </div><!-- /.container -->
