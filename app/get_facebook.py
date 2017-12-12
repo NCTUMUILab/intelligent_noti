@@ -23,12 +23,12 @@ class ThreadInfo:
 		self.first_talk = ""
 		self.last_talk = ""
 		self.last_msg = ""
-	
+
 
 class fbMessenger:
 	def __init__(self, username, password):
 		self.client = Client(username, password) # facebook login
-	
+
 	def print(self, thread, index):
 		print("{}.".format(index))
 		print("thread name: {}".format(thread.name))
@@ -40,25 +40,25 @@ class fbMessenger:
 		print("first talk: {}".format(thread.first_talk))
 		print("last talk: {}".format(thread.last_talk))
 		print("last msg :'{}'\n".format(thread.last_msg))
-	
+
 	def get_messages(self):
 		from_time = datetime.now() - timedelta(days=30) # msg records in previous 30 days
-		threads = self.client.fetchThreadList(limit=60) # find 30 candidate contacts 
+		threads = self.client.fetchThreadList(limit=20) # find 30 candidate contacts
 		contact_list = []
 		index = 1
-		
+
 		print("second try")
 		for thread in threads:
 			msgs = self.client.fetchThreadMessages(thread_id=str(thread.uid), limit=500)
 			if thread.type == ThreadType.USER:
-			
+
 				thread_info = ThreadInfo()
 				thread_info.name = thread.name
 				thread_info.is_group = False if thread.type == ThreadType.USER else True
 				thread_info.last_talk = datetime.fromtimestamp(int(msgs[0].timestamp) / 1000)
 				thread_info.last_msg = msgs[0].text
 				tem_day = None
-				
+
 				for msg in msgs:
 					msg_time = datetime.fromtimestamp(int(msg.timestamp) / 1000)
 					if from_time < msg_time:
@@ -72,17 +72,17 @@ class fbMessenger:
 						if msg_time.day != tem_day: # dat count
 							thread_info.day_count += 1
 							tem_day = msg_time.day
-				
+
 				if thread_info.msg_count == 0:
 					continue
 				else:
 					contact_list.append(thread_info)
 					self.print(thread=thread_info, index=index)
-				if index == 15: #################### number of candidate contacts ##################### 
+				if index == 15: #################### number of candidate contacts #####################
 					break
 				else:
 					index += 1
-			
+
 		return contact_list
 
 
