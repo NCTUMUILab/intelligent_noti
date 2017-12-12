@@ -20,221 +20,220 @@ User Questionnaire
       <form action="{{ url_for('user_questionnaire') }}" method="post">
 
         <h1>第一部分</h1>
-        <p>以下問題，受試者會被要求回顧他/她自身，以及在使用 Line 以及Facebook Messenger 與他人溝通時之情境，每個題目皆是5-point scales (1 = 非常不認同, 5 = 非常認同)</p>
 
-        <h3>1.我覺得我與他人沒有聯繫</h3>
-        <span id="ex18-label-1" class="hidden">Example slider label</span>
-                <input name="我覺得我與他人沒有聯繫" type="text"
-                      data-provide="slider"
-                      data-slider-ticks="[1, 2, 3, 4, 5]"
-                      data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
-                      data-slider-min="1"
-                      data-slider-max="5"
-                      data-slider-step="1"
-                      data-slider-value="1"
-                      data-slider-tooltip="hide" />
+        <p>以下每個題目皆是4-point scales (1 = 從來沒有這種感覺, 2 = 很少有這種感覺, 3 = 有時候有這種感覺 4 = 經常有這種感覺)</p>
 
-        <h3>2.我覺得被冷落</h3>
-        <span id="ex18-label-1" class="hidden">Example slider label</span>
-                <input name="我覺得被冷落" type="text"
-                      data-provide="slider"
-                      data-slider-ticks="[1, 2, 3, 4, 5]"
-                      data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
-                      data-slider-min="1"
-                      data-slider-max="5"
-                      data-slider-step="1"
-                      data-slider-value="1"
-                      data-slider-tooltip="hide" />
-
-        <h3>3.我覺得自己是個局外人</h3>
-        <span id="ex18-label-1" class="hidden">Example slider label</span>
-                <input name="我覺得自己是個局外人" type="text"
-                      data-provide="slider"
-                      data-slider-ticks="[1, 2, 3, 4, 5]"
-                      data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
-                      data-slider-min="1"
-                      data-slider-max="5"
-                      data-slider-step="1"
-                      data-slider-value="1"
-                      data-slider-tooltip="hide" />
-
-        <h3>4.我覺得到我屬於一個團體</h3>
-          <input name="我覺得到我屬於一個團體" type="text"
+        <h3>您覺得您與週遭的人關係和睦嗎?</h3>
+          <input name="您覺得您與週遭的人關係和睦嗎?" type="text"
                 data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
                 data-slider-min="1"
-                data-slider-max="5"
+                data-slider-max="4"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+        <h3>您覺得您缺少友伴嗎?</h3>
+          <input name="您覺得您缺少友伴嗎?" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
+                data-slider-min="1"
+                data-slider-max="4"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+        <h3>您覺得您沒有一個人讓您求助依賴嗎?</h3>
+          <input name="您覺得您沒有一個人讓您求助依賴嗎?" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
+                data-slider-min="1"
+                data-slider-max="4"
                 data-slider-step="1"
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>5.我覺得其他人與我互動頻繁</h3>
-          <input name="我覺得其他人與我互動頻繁" type="text"
+        <h3>您覺得您孤單嗎?</h3>
+          <input name="您覺得您孤單嗎?" type="text"
                 data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
                 data-slider-min="1"
-                data-slider-max="5"
+                data-slider-max="4"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+        <h3>您覺得您是屬於朋友中的一份子嗎?</h3>
+          <input name="您覺得您是屬於朋友中的一份子嗎?" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
+                data-slider-min="1"
+                data-slider-max="4"
                 data-slider-step="1"
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>6.我覺得自己是不錯的人</h3>
-          <input name="我覺得自己是不錯的人" type="text"
+        <h3>您覺得您與週遭的人有許多相同的地方之處嗎?</h3>
+          <input name="您覺得您與週遭的人有許多相同的地方之處嗎?" type="text"
                 data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
                 data-slider-min="1"
-                data-slider-max="5"
+                data-slider-max="4"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+        <h3>您覺得您不再與任何人親近嗎?</h3>
+          <input name="您覺得您不再與任何人親近嗎?" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
+                data-slider-min="1"
+                data-slider-max="4"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+        <h3>您覺得您週圍的人無法和您共享您的興趣和想法嗎?</h3>
+          <input name="您覺得您週圍的人無法和您共享您的興趣和想法嗎?" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
+                data-slider-min="1"
+                data-slider-max="4"
                 data-slider-step="1"
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>7.我擁有高自尊</h3>
-          <input name="我擁有高自尊" type="text"
+        <h3>您覺得您是個外向和友善的人嗎?</h3>
+          <input name="您覺得您是個外向和友善的人嗎?" type="text"
                 data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
                 data-slider-min="1"
-                data-slider-max="5"
+                data-slider-max="4"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+        <h3>您覺得您和人們親密嗎?</h3>
+          <input name="您覺得您和人們親密嗎?" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
+                data-slider-min="1"
+                data-slider-max="4"
                 data-slider-step="1"
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>8.我感覺到自己是被愛的</h3>
-          <input name="我感覺到自己是被愛的" type="text"
+        <h3>您覺得您不被重視嗎?</h3>
+          <input name="您覺得您不被重視嗎?" type="text"
                 data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
                 data-slider-min="1"
-                data-slider-max="5"
+                data-slider-max="4"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+        <h3>您覺得您與其他人的關係是毫無意義的嗎?</h3>
+          <input name="您覺得您與其他人的關係是毫無意義的嗎?" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
+                data-slider-min="1"
+                data-slider-max="4"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+        <h3>您覺得沒有人真正認識您嗎?</h3>
+          <input name="您覺得沒有人真正認識您嗎?" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
+                data-slider-min="1"
+                data-slider-max="4"
                 data-slider-step="1"
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>9.我有不安全感</h3>
-          <input name="我有不安全感" type="text"
+        <h3>您覺得您處於人群中仍覺得孤立嗎?</h3>
+          <input name="您覺得您處於人群中仍覺得孤立嗎?" type="text"
                 data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
                 data-slider-min="1"
-                data-slider-max="5"
+                data-slider-max="4"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+        <h3>您覺得當您需要時您可以找到友伴嗎?</h3>
+          <input name="您覺得當您需要時您可以找到友伴嗎?" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
+                data-slider-min="1"
+                data-slider-max="4"
                 data-slider-step="1"
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>10.我感到滿足</h3>
-          <input name="我感到滿足" type="text"
+        <h3>您覺得您有人真正了解您嗎?</h3>
+          <input name="您覺得您有人真正了解您嗎?" type="text"
                 data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
                 data-slider-min="1"
-                data-slider-max="5"
+                data-slider-max="4"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+        <h3>您覺得您害羞嗎?</h3>
+          <input name="您覺得您害羞嗎?" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
+                data-slider-min="1"
+                data-slider-max="4"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+        <h3>您覺得您的身邊有一些人,但他們不是您的知己嗎?</h3>
+          <input name="您覺得您的身邊有一些人,但他們不是您的知己嗎?" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
+                data-slider-min="1"
+                data-slider-max="4"
                 data-slider-step="1"
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>11.我覺得自己是隱形的</h3>
-          <input name="我覺得自己是隱形的" type="text"
+        <h3>您覺得您有人可以聽您傾訴嗎?</h3>
+          <input name="您覺得您有人可以聽您傾訴嗎?" type="text"
                 data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
                 data-slider-min="1"
-                data-slider-max="5"
+                data-slider-max="4"
+                data-slider-step="1"
+                data-slider-value="1"
+                data-slider-tooltip="hide" />
+        <h3>您覺得您有人可以讓您求助依賴嗎?</h3>
+          <input name="您覺得您有人可以讓您求助依賴嗎?" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4]"
+                data-slider-ticks-labels='["1", "2", "3", "4"]'
+                data-slider-min="1"
+                data-slider-max="4"
                 data-slider-step="1"
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>12.我覺得自己沒有存在感</h3>
-          <input name="我覺得自己沒有存在感" type="text"
-                data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
-                data-slider-min="1"
-                data-slider-max="5"
-                data-slider-step="1"
-                data-slider-value="1"
-                data-slider-tooltip="hide" />
+        <p>以下每個題目皆是5-point scales (1 = 非常不認同, 5 = 非常認同)</p>
 
-        <h3>13.我覺得自己的存在是重要得</h3>
-          <input name="我覺得自己的存在是重要得" type="text"
-                data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
-                data-slider-min="1"
-                data-slider-max="5"
-                data-slider-step="1"
-                data-slider-value="1"
-                data-slider-tooltip="hide" />
-
-        <h3>14.我覺得自己的存在是有用的</h3>
-          <input name="我覺得自己的存在是有用的" type="text"
-                data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
-                data-slider-min="1"
-                data-slider-max="5"
-                data-slider-step="1"
-                data-slider-value="1"
-                data-slider-tooltip="hide" />
-
-        <h3>15.我覺得自己的意見很有力量</h3>
-          <input name="我覺得自己的意見很有力量" type="text"
-                data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
-                data-slider-min="1"
-                data-slider-max="5"
-                data-slider-step="1"
-                data-slider-value="1"
-                data-slider-tooltip="hide" />
-
-        <h3>16.我覺得我時常主導話題</h3>
-          <input name="我覺得我時常主導話題" type="text"
-                data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
-                data-slider-min="1"
-                data-slider-max="5"
-                data-slider-step="1"
-                data-slider-value="1"
-                data-slider-tooltip="hide" />
-
-        <h3>17.我覺得自己能夠讓事情有巨大的變化</h3>
-          <input name="我覺得自己能夠讓事情有巨大的變化" type="text"
-                data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
-                data-slider-min="1"
-                data-slider-max="5"
-                data-slider-step="1"
-                data-slider-value="1"
-                data-slider-tooltip="hide" />
-
-        <h3>18.我覺得自己無法影響別人的行為</h3>
-          <input name="我覺得自己無法影響別人的行為" type="text"
-                data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
-                data-slider-min="1"
-                data-slider-max="5"
-                data-slider-step="1"
-                data-slider-value="1"
-                data-slider-tooltip="hide" />
-
-        <h3>19.我覺得其他人主導了我的行為</h3>
-          <input name="我覺得其他人主導了我的行為" type="text"
-                data-provide="slider"
-                data-slider-ticks="[1, 2, 3, 4, 5]"
-                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
-                data-slider-min="1"
-                data-slider-max="5"
-                data-slider-step="1"
-                data-slider-value="1"
-                data-slider-tooltip="hide" />
-
-        <h3>20.若其他人不接受我，我不會因此受到影響</h3>
+        <h3>若其他人不接受我，我不會因此受到影響</h3>
           <input name="若其他人不接受我，我不會因此受到影響" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -245,7 +244,7 @@ User Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>21.我盡力不去做會讓他人避開，或拒絕我的事情</h3>
+        <h3>我盡力不去做會讓他人避開，或拒絕我的事情</h3>
           <input name="我盡力不去做會讓他人避開，或拒絕我的事情" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -256,7 +255,7 @@ User Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>22.我鮮少去擔心他人是否會在意我</h3>
+        <h3>我鮮少去擔心他人是否會在意我</h3>
           <input name="我鮮少去擔心他人是否會在意我" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -267,7 +266,7 @@ User Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>23.我需要一種，當我需要幫忙時有人可以求助的感覺</h3>
+        <h3>我需要一種，當我需要幫忙時有人可以求助的感覺</h3>
           <input name="我需要一種，當我需要幫忙時有人可以求助的感覺" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -278,7 +277,7 @@ User Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>24.我想要他人接受我</h3>
+        <h3>我想要他人接受我</h3>
           <input name="我想要他人接受我" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -289,7 +288,7 @@ User Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>25.與朋友長時間分別並不會影響我</h3>
+        <h3>與朋友長時間分別並不會影響我</h3>
           <input name="與朋友長時間分別並不會影響我" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -300,7 +299,7 @@ User Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>26.我有很強烈歸屬感需求</h3>
+        <h3>我有很強烈歸屬感需求</h3>
           <input name="我有很強烈歸屬感需求" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -311,7 +310,7 @@ User Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>27.當我不在某人的計畫中時，我的心情會被深深的影響</h3>
+        <h3>當我不在某人的計畫中時，我的心情會被深深的影響</h3>
           <input name="當我不在某人的計畫中時，我的心情會被深深的影響" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -322,7 +321,7 @@ User Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>28.當我了解他人並不接受我時，我的心情會被強烈影響到</h3>
+        <h3>當我了解他人並不接受我時，我的心情會被強烈影響到</h3>
           <input name="當我了解他人並不接受我時，我的心情會被強烈影響到" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
