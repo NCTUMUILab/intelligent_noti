@@ -60,7 +60,7 @@ Questionnaire
           <label><input type="radio" name="你和他大部分的話題是哪些？" value="為了完成特定目的之話題">為了完成特定目的之話題（辦活動、舉辦慶生會、學校團體報告...）</label>
         </div>
 
-        <h3>3.你覺得你在與{{ questionnaire.contact_name }}使用通訊軟體時有多積極? (1非常不積極 - 5非常積極)</h3>
+        <h3>3.你覺得你在與{{ questionnaire.contact_name }}使用通訊軟體時有多積極? (請以1-5來評分，分數越高越積極)</h3>
         <span id="ex18-label-1" class="hidden">Example slider label</span>
                 <input name="你覺得你在與他使用通訊軟體時有多積極?" type="text"
                       data-provide="slider"
@@ -74,30 +74,30 @@ Questionnaire
         <h3>4.你們認識多久了？</h3>
         <input class="form-control" type="text" name="你們認識多久了？">
 
-        <h3>5.你們多久見面一次？</h3>
+        <h3>5.你們平均多久見面一次？</h3>
         <div class="radio">
-          <label><input type="radio" name="你們多久見面一次？" value="一年不到一次">一年不到一次</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="一年不到一次">一年不到一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們多久見面一次？" value="一年一次~一個月一次">一年一次~一個月一次</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="一年一次~一個月一次">一年一次~一個月一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們多久見面一次？" value="一個月一次">一個月一次</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="一個月一次">一個月一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們多久見面一次？" value="一個月一次~一個禮拜一次">一個月一次~一個禮拜一次</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="一個月一次~一個禮拜一次">一個月一次~一個禮拜一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們多久見面一次？" value="一個禮拜一次">一個禮拜一次</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="一個禮拜一次">一個禮拜一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們多久見面一次？" value="一個禮拜一次~每天">一個禮拜一次~每天</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="一個禮拜一次~每天">一個禮拜一次~每天</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們多久見面一次？" value="每天">每天</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="每天">每天</label>
         </div>
 
-        <h3>6.你們多久聯絡一次？</h3>
+        <h3>6.你們平均多久聯絡一次？</h3>
         <div class="radio">
           <label><input type="radio" name="你們多久聯絡一次？" value="一年不到一次">一年不到一次</label>
         </div>
@@ -120,7 +120,7 @@ Questionnaire
           <label><input type="radio" name="你們多久聯絡一次？" value="每天">每天</label>
         </div>
 
-        <h3>7.你覺得你與{{ questionnaire.contact_name }}多親近 (1:非常不接近-7：非常接近)</h3>
+        <h3>7.你覺得你與{{ questionnaire.contact_name }}的關係可以用下列何者關係圖表示</h3>
                 <input name="你覺得你與他多親近" type="text"
                       data-provide="slider"
                       data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
@@ -131,7 +131,7 @@ Questionnaire
                       data-slider-value="1"
                       data-slider-tooltip="hide" />
 
-      <h3>8.我和{{ questionnaire.contact_name }}很親 (1:非常不同意-7：非常同意)</h3>
+      <h3>8.我和{{ questionnaire.contact_name }}很親近 (1:非常不同意-7：非常同意)</h3>
               <input name="我和他/她很親" type="text"
                     data-provide="slider"
                     data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
@@ -154,7 +154,7 @@ Questionnaire
                     data-slider-tooltip="hide" />
 
 
-      <h3>10.我們會向對方分享自己的重要事情 (1:非常不同意-7：非常同意)</h3>
+      <h3>10.他/她和我會向彼此揭露個人重要的私事 (1:非常不同意-7：非常同意)</h3>
               <input name="我們會向對方分享自己的重要事情" type="text"
                     data-provide="slider"
                     data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
@@ -165,7 +165,7 @@ Questionnaire
                     data-slider-value="1"
                     data-slider-tooltip="hide" />
 
-      <h3>11.我們之間的連結很強 (1:非常不同意-7：非常同意)</h3>
+      <h3>11.他/她和我之間的連結很強 (1:非常不同意-7：非常同意)</h3>
               <input name="我們之間的連結很強" type="text"
                     data-provide="slider"
                     data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
@@ -177,7 +177,7 @@ Questionnaire
                     data-slider-tooltip="hide" />
 
 
-      <h3>12.我們會想要聚在一起 (1:非常不同意-7：非常同意)</h3>
+      <h3>12.他/她和我會想要聚在一起 (1:非常不同意-7：非常同意)</h3>
               <input name="我們會想要聚在一起" type="text"
                     data-provide="slider"
                     data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
@@ -189,7 +189,7 @@ Questionnaire
                     data-slider-tooltip="hide" />
 
 
-      <h3>13.我確定我們之間的關係 (1:非常不同意-7：非常同意)</h3>
+      <h3>13我確定我與他/她之間的關係 (1:非常不同意-7：非常同意)</h3>
               <input name="我確定我們之間的關係" type="text"
                     data-provide="slider"
                     data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
@@ -200,7 +200,7 @@ Questionnaire
                     data-slider-value="1"
                     data-slider-tooltip="hide" />
 
-      <h3>14.{{ questionnaire.contact_name }}是我生活中重要的一部分 (1:非常不同意-7：非常同意)</h3>
+      <h3>14.{{ questionnaire.contact_name }}是我生活的重心 (1:非常不同意-7：非常同意)</h3>
               <input name="他是我生活中重要的一部分" type="text"
                     data-provide="slider"
                     data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
@@ -223,7 +223,7 @@ Questionnaire
                     data-slider-value="1"
                     data-slider-tooltip="hide" />
 
-      <h3>16.當有時間時，我會想要跟{{ questionnaire.contact_name }}聚在一起 (1:非常不同意-7：非常同意)</h3>
+      <h3>16.當有時間時，我會想要跟{{ questionnaire.contact_name }}一起共度 (1:非常不同意-7：非常同意)</h3>
               <input name="當有時間時，我會想要跟他聚在一起" type="text"
                     data-provide="slider"
                     data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
@@ -234,7 +234,7 @@ Questionnaire
                     data-slider-value="1"
                     data-slider-tooltip="hide" />
 
-      <h3>17.我常常關心{{ questionnaire.contact_name }} (1:非常不同意-7：非常同意)</h3>
+      <h3>17.我常常想到{{ questionnaire.contact_name }} (1:非常不同意-7：非常同意)</h3>
               <input name="我常常關心他" type="text"
                     data-provide="slider"
                     data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
@@ -258,7 +258,7 @@ Questionnaire
                     data-slider-tooltip="hide" />
 
 
-      <h3>19.在做出重要決定時，我會考慮{{ questionnaire.contact_name }} (1:非常不同意-7：非常同意)</h3>
+      <h3>19.在做出重要決定時，我會將{{ questionnaire.contact_name }}納入考量 (1:非常不同意-7：非常同意)</h3>
               <input name="在做出重要決定時我會考慮他" type="text"
                     data-provide="slider"
                     data-slider-ticks="[1, 2, 3, 4, 5,6,7]"
@@ -282,8 +282,8 @@ Questionnaire
                       data-slider-value="1"
                       data-slider-tooltip="hide" />
 
-        <h3>21.之前曾經有發生過當要做一個決定時，我們等待對方的選擇以當作參考</h3>
-                <input name="之前曾經有發生過當要做一個決定時，我們等待對方的選擇以當作參考" type="text"
+        <h3>21.我們曾經在做某些決定時先去了解對方想法</h3>
+                <input name="我們曾經在做某些決定時先去了解對方想法" type="text"
                       data-provide="slider"
                       data-slider-ticks="[1, 2, 3, 4, 5]"
                       data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
@@ -293,8 +293,8 @@ Questionnaire
                       data-slider-value="1"
                       data-slider-tooltip="hide" />
 
-        <h3>22.我們彼此都沒有留下時間用來與對方交談</h3>
-          <input name="我們彼此都沒有留下時間用來與對方交談" type="text"
+        <h3>22.我們彼此都沒有留下與對方溝通交談的時間</h3>
+          <input name="我們彼此都沒有留下與對方溝通交談的時間" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
@@ -315,8 +315,8 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>24.我們時常影響對方對於我們目前正在處理的事情的感覺</h3>
-          <input name="我們時常影響對方對於我們目前正在處理的事情的感覺" type="text"
+        <h3>24.我們常能影響對方對於當下正在處理的事情的感覺</h3>
+          <input name="我們常能影響對方對於當下正在處理的事情的感覺" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
@@ -326,8 +326,8 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>25.有需要的話，我們會專程去幫忙對方的忙</h3>
-          <input name="有需要的話，我們會專程去幫忙對方的忙" type="text"
+        <h3>25.如果有需要的話，我們會專程去幫助對方</h3>
+          <input name="如果有需要的話，我們會專程去幫助對方" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
@@ -348,8 +348,8 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>27.對於我們規劃要一起做的事情，我的朋友期待我利用通訊工具溝通</h3>
-          <input name="對於我們規劃要一起做的事情，我的朋友期待我利用通訊工具溝通" type="text"
+        <h3>27.對於我們規劃要一起做的事情，我的朋友期待我利用打電話或用通訊軟體進行溝通</h3>
+          <input name="對於我們規劃要一起做的事情，我的朋友期待我利用打電話或用通訊軟體進行溝通" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
@@ -370,7 +370,7 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>29.我的朋友期待我打電話或用通訊軟體與{{ questionnaire.contact_name }}更新自己的近況</h3>
+        <h3>29.我的朋友期待我打電話或用通訊軟體跟他更新自己的近況</h3>
           <input name="我的朋友期待我打電話或用通訊軟體與他更新自己的近況" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -381,8 +381,8 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>30.我的朋友期待我用電話或通訊軟體噓寒問暖</h3>
-          <input name="我的朋友期待我用電話或通訊軟體噓寒問暖" type="text"
+        <h3>30.我的朋友期待我用電話或用通訊軟體來打招呼</h3>
+          <input name="我的朋友期待我用電話或用通訊軟體來打招呼" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
@@ -392,8 +392,8 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>31.我的朋友期待我在無聊時用電話或通訊軟體與{{ questionnaire.contact_name }}殺時間</h3>
-          <input name="我的朋友期待我在無聊時用電話或通訊軟體與他殺時間" type="text"
+        <h3>31.我的朋友期待我用電話或通訊軟體跟他打發時間</h3>
+          <input name="我的朋友期待我用電話或通訊軟體跟他打發時間" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
@@ -403,7 +403,7 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>32.我的朋友期待我用電話或通訊軟體告訴{{ questionnaire.contact_name }}我在哪裡</h3>
+        <h3>32.我的朋友期待我用電話或通訊軟體告訴他我在哪裡</h3>
           <input name="我的朋友期待我用電話或通訊軟體告訴他我在哪裡" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -414,7 +414,7 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>33.我的朋友期待我用電話或通訊軟體告訴{{ questionnaire.contact_name }}我要去哪裡 </h3>
+        <h3>33.我的朋友期待我用電話或通訊軟體告訴他我要去哪裡 </h3>
           <input name="我的朋友期待我用電話或通訊軟體告訴他我要去哪裡 " type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -425,7 +425,7 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>34.我的朋友期待我用電話或通訊軟體告訴{{ questionnaire.contact_name }}我接下來要做什麼</h3>
+        <h3>34.我的朋友期待我用電話或通訊軟體告訴他我接下來要做什麼</h3>
           <input name="我的朋友期待我用電話或通訊軟體告訴他我接下來要做什麼" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -436,7 +436,7 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>35.我的朋友期待我用電話或通訊軟體告訴{{ questionnaire.contact_name }}我現在正在做什麼</h3>
+        <h3>35.我的朋友期待我用電話或通訊軟體告訴他我現在正在做什麼</h3>
           <input name="我的朋友期待我用電話或通訊軟體告訴他我現在正在做什麼" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -447,10 +447,10 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h1> 你正在使用 Facebook 時收到一封訊息，而且寄送人顯示為上線中，請問下列描述最符合你真實的行為 (1:非常不符合，5:非常符合)</h1>
+        <h1> 你正在使用 Facebook 時收到一封訊息，而且寄送人顯示為上線中，請問下列描述最符合你對於他的真實的行為 (1:非常不符合，5:非常符合)</h1>
 
-        <h3>36.若是我以及讀取信件，我當下會立刻回復</h3>
-          <input name="若是我已經讀取信件，我當下會立刻回復" type="text"
+        <h3>36.當我已讀取訊息，我會立刻回覆</h3>
+          <input name="當我已讀取訊息，我會立刻回覆" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
@@ -460,7 +460,7 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>37.若對方寄送給我一個連結，我會盡快看連結內的內容並回復{{ questionnaire.contact_name }}</h3>
+        <h3>37.若對方寄送給我一個連結，我會在看過連結內容後盡快回覆{{ questionnaire.contact_name }}</h3>
           <input name="若對方寄送給我一個連結，我會盡快看連結內的內容並回復他" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -471,7 +471,7 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>38.若與對方即將有個約會，在讀取訊息後我會盡快回復</h3>
+        <h3>38.若對方要與即將有個約會，在讀取訊息後我會盡快回復</h3>
           <input name="若與對方即將有個約會，在讀取訊息後我會盡快回復" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -504,7 +504,7 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>41.若我無法在十分鐘內回覆訊息，我應該需要道別 </h3>
+        <h3>41.若我無法在十分鐘內回覆對方，我應該道別 </h3>
           <input name="若我無法在十分鐘內回覆訊息，我應該需要道別 " type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -517,7 +517,7 @@ Questionnaire
 
         <h1>以下是針對你的理想Facebook聊天體驗相關的問題。請想像你目前在Facebook上聊天的對象為上線狀態回答以下問題(1:非常不符合，5:非常符合)</h1>
 
-        <h3>42.當我發訊訊息給對方，我期待{{ name }}再看到後能夠立即回復</h3>
+        <h3>42.當我發訊訊息給對方，我期待{{ name }}再看到後能夠立即回覆</h3>
           <input name="當我發訊訊息給對方，我期待他再看到後能夠立即回復" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -528,7 +528,7 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>43.當我要與對方有個小約(時間部會太長)時，我期待對方能夠立即回復 </h3>
+        <h3>43.當我即將與對方有個約會時，我期待對方能夠立即回覆 </h3>
           <input name="當我要與對方有個小約(時間部會太長)時，我期待對方能夠立即回復 " type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -539,7 +539,7 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>44.當我與對方問候近況時，我期待對方能夠立即回復</h3>
+        <h3>44.當我與對方問候近況時，我期待對方能夠立即回覆</h3>
           <input name="當我與對方問候近況時，我期待對方能夠立即回復" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -550,7 +550,7 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>45.當我發送一個連結給對方時，我期待對方能夠在看到連結內容後立即回復我</h3>
+        <h3>45.當我發送一個連結給對方時，我期待對方能夠在看到連結內容後立即回覆我</h3>
           <input name="當我發送一個連結給對方時，我期待對方能夠在看到連結內容後立即回復我" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -562,7 +562,7 @@ Questionnaire
                 data-slider-tooltip="hide" />
 
 
-        <h3>46.當對方要來開對話時，{{ questionnaire.contact_name }}應該要先與我道別</h3>
+        <h3>46.當對方要來開對話時，他應該要先與我道別</h3>
           <input name="當對方要來開對話時，他應該要先與我道別" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
@@ -573,7 +573,7 @@ Questionnaire
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
-        <h3>47.當對方無法在十分鐘內回覆時，{{ questionnaire.contact_name }}應該要與我道別</h3>
+        <h3>47.當對方無法在十分鐘內回覆時，他應該要與我道別</h3>
           <input name="當對方無法在十分鐘內回覆時，他應該要與我道別" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
