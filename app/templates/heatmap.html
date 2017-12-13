@@ -6,23 +6,44 @@ Heatmap
 
 {% block styles %}
 {{super()}}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
-<script src="http://cdn.leafletjs.com/leaflet-0.7.5/leaflet.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script> -->
 <script src="https://rawgit.com/Leaflet/Leaflet.heat/gh-pages/dist/leaflet-heat.js"></script>
 
+
 {% endblock %}
-<style>
+<!-- <style>
 #mapid {
 height: 180px;
 }
-</style>
+</style> -->
 
 {% block content %}
-<div id="mapid" style="width: 1600px; height: 1400px; position: relative; outline: none;"></div>
+		<form style="width:500px;" id="gps_form">
+			<div class="form-group">
+				<label for="place">地點</label>
+				<input type="text" class="form-control" name="label" id="label" placeholder="地點(ex.家,公司,學校)">
+			</div>
+			<input type="text" class="form-control" name="lat" id="lat">
+			<input type="text" class="form-control" name="lng" id="lng">
+			<div class="btn btn-primary" onclick="sendGpsLabel()">Submit</div>
+		</form>
+		<form style="width:500px;" id="delete_form">
+			<label for="place">Marker Id</label>
+			<input type="text" class="form-control" name="markerId" id="d_markerId">
+			<label for="place">Label</label>
+			<input type="text" class="form-control" name="label" id="d_label">
+			<label for="lat">lat</label>
+			<input type="text" class="form-control" name="lat" id="d_lat">
+			<label for="lng">lng</label>
+			<input type="text" class="form-control" name="lng" id="d_lng">
+			<div class="btn btn-primary" onclick="deleteGpsLabel()">Submit</div>
+		</form>
+
+		<div id="mapid" style="width: 70%; height: 1000px; position: relative; outline: none;"></div>
 
 <script>
 var markList = [];
@@ -69,6 +90,69 @@ var heat = L.heatLayer(data, {
             radius: 10,
             blur: 5
         }).addTo(mymap);
+
+	var popup = L.popup();
+
+	function onMapClick(e) {
+			$("#lat").val(e.latlng.lat)
+			$("#lng").val(e.latlng.lng)
+	    popup
+	        .setLatLng(e.latlng)
+	        .setContent("You clicked the map at " + e.latlng.toString())
+	        .openOn(mymap);
+	}
+	var markers = L.layerGroup();
+
+	function sendGpsLabel(){
+		$.ajax({
+			url: '/createGpsLabel',
+			type: 'post',
+			data: $("#gps_form").serialize(),
+			success: function (data) {
+				getGpsLabel()
+			},
+		});
+	}
+
+	function deleteGpsLabel(){
+		$.ajax({
+			url: '/deleteGpsLabel',
+			type: 'post',
+			data: $("#delete_form").serialize(),
+			success: function (data) {
+				getGpsLabel()
+			},
+		});
+	}
+
+	function getGpsLabel(){
+
+		$.ajax({
+			url: '/listGpsLabel',
+			type: 'get',
+			success: function (data) {
+				markers.clearLayers()
+				console.log(data)
+				for(var i=0; i<data.length; i++){
+					var m = L.marker([data[i]['lat'],data[i]['lng']]).bindTooltip(data[i]['label'],{direction: 'top',sticky: 'false'})
+					m.raw = data[i];
+					m.on('click', function(e){
+						var data = e.target.raw;
+						$("#d_markerId").val(data['markerId'])
+						$("#d_label").val(data['label'])
+						$("#d_lat").val(data['lat'])
+						$("#d_lng").val(data['lng'])
+					})
+					markers.addLayer(m);
+				}
+				mymap.addLayer(markers);
+			},
+		});
+	}
+	getGpsLabel()
+
+
+	mymap.on('click', onMapClick);
 
 </script>
 

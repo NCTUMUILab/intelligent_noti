@@ -71,3 +71,10 @@ class UserQuestionnaire(db.Model):
 	user_id = db.Column(db.Integer, unique=True)
 	completed = db.Column(db.Boolean)
 	data = db.Column(db.Text)
+
+class GpsLabel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    lat = db.Column(db.Float)
+    lng = db.Column(db.Float)
+    label = db.Column(db.String(256))
