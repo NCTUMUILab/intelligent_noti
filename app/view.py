@@ -17,7 +17,6 @@ from .get_facebook import fbMessenger, ThreadInfo
 from .testing import contacts_test
 import csv
 
-
 ### route ###
 @app.route('/')
 def index():
@@ -161,18 +160,16 @@ def user_questionnaire():
 def heatmap():
 	return render_template('heatmap.html')
 
-@app.route('/getLocations', methods=['POST'])
+@app.route('/getLocations', methods=['GET','POST'])
 def getLocations():
 	marks = []
-	f = open('result.csv', 'r')
-	for row in csv.DictReader(f):
-		loc = (row['raw'].split('\t')[2], row['raw'].split('\t')[3])
+	locations = db.session.query(Result).filter(Result.r_type == 'gps').filter(Result.user == '1674662e9b773a69').order_by(desc(Result.created_at)).limit(100000).all()
+	for location in locations:
+		loc = (location.raw.split('\t')[2], location.raw.split('\t')[3])
+		print(loc)
 		marks.append(loc)
-		print(row['raw'].split('\t')[2])
-	f.close()
 	locations = {"marks": marks}
 	return jsonify(locations)
-
 
 @app.route('/form/', methods=['POST'])
 def add_form():
