@@ -163,7 +163,7 @@ def heatmap():
 @app.route('/getLocations', methods=['GET','POST'])
 def getLocations():
 	marks = []
-	locations = db.session.query(Result).filter(Result.r_type == 'gps').filter(Result.user == '1674662e9b773a69').order_by(desc(Result.created_at)).limit(10).all()
+	locations = db.session.query(Result).filter(Result.r_type == 'gps').filter(Result.user == current_user.id).order_by(desc(Result.created_at)).limit(10000).all()
 	for location in locations:
 		loc = (location.raw.split('\t')[2], location.raw.split('\t')[3])
 		marks.append(loc)

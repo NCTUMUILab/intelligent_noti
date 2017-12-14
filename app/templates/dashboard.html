@@ -21,6 +21,7 @@ Dashboard
 				{% if not userQ_done %}
 				<li><a href="{{ url_for('user_questionnaire') }}">User Questionnaire</a></li>
 				{% endif %}
+				<li><a href="{{ url_for('heatmap') }}">Heatmap Location Label</a></li>
 				{% if current_user.username == "admin" %}
 				<li><a href="{{ url_for('signup') }}">Sign Up</a></li>
 				{% endif %}
@@ -28,7 +29,7 @@ Dashboard
 				<li><a href="#">Export</a></li> #}
 			</ul>
 		</div>
-		
+
 		{# MAIN AREA #}
 		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 			<h1 class="page-header">Welcome, {{ current_user.username }}</h1>
@@ -50,7 +51,7 @@ Dashboard
 						{% endfor %}
 					</tbody>
 				</table>
-			</div> 
+			</div>
 		</div>
 	</div>
 </div>

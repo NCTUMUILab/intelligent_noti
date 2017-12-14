@@ -1,50 +1,83 @@
-{% extends "bootstrap/base.html" %}
-
-{% block title %}
-Heatmap
-{% endblock %}
-
-{% block styles %}
-{{super()}}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script> -->
 <script src="https://rawgit.com/Leaflet/Leaflet.heat/gh-pages/dist/leaflet-heat.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 
-
-{% endblock %}
 <!-- <style>
 #mapid {
 height: 180px;
 }
 </style> -->
-
 {% block content %}
-		<form style="width:500px;" id="gps_form">
-			<div class="form-group">
-				<label for="place">地點</label>
-				<input type="text" class="form-control" name="label" id="label" placeholder="地點(ex.家,公司,學校)">
+<div class="container">
+	<div class="row">
+		<div class="col-9">
+			<div id="mapid" style="width: 100%; height: 1000px; position: relative; outline: none;"></div>
+		</div>
+		<div class="col-3">
+		<form id="gps_form">
+			<div class="form-group row">
+				<label for="place" class="col-sm-2 col-form-label">地點</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="label" id="label" placeholder="這邊是(ex.家,公司,學校)">
+				</div>
 			</div>
-			<input type="text" class="form-control" name="lat" id="lat">
-			<input type="text" class="form-control" name="lng" id="lng">
-			<div class="btn btn-primary" onclick="sendGpsLabel()">Submit</div>
-		</form>
-		<form style="width:500px;" id="delete_form">
-			<label for="place">Marker Id</label>
-			<input type="text" class="form-control" name="markerId" id="d_markerId">
-			<label for="place">Label</label>
-			<input type="text" class="form-control" name="label" id="d_label">
-			<label for="lat">lat</label>
-			<input type="text" class="form-control" name="lat" id="d_lat">
-			<label for="lng">lng</label>
-			<input type="text" class="form-control" name="lng" id="d_lng">
-			<div class="btn btn-primary" onclick="deleteGpsLabel()">Submit</div>
-		</form>
 
-		<div id="mapid" style="width: 70%; height: 1000px; position: relative; outline: none;"></div>
+			<div class="form-group row">
+				<label for="lat" class="col-sm-2 col-form-label">Lat</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="lat" id="lat">
+				</div>
+			</div>
 
+			<div class="form-group row">
+				<label for="lng" class="col-sm-2 col-form-label">Lng</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="lng" id="lng">
+				</div>
+			</div>
+			<div class="btn btn-primary" onclick="sendGpsLabel()">Create New Label</div>
+		</form>
+<br/><br/>
+
+		<form id="delete_form">
+			<div class="form-group row" style="display:none;">
+				<label for="d_markerId" class="col-sm-2 col-form-label">Marker</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="markerId" id="d_markerId">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label" for="d_place">地點</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="label" id="d_label">
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label for="d_lat" class="col-sm-2 col-form-label">lat</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="lat" id="d_lat">
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="d_lng" class="col-sm-2 col-form-label">lng</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" name="lng" id="d_lng">
+				</div>
+			</div>
+			<div class="btn btn-danger" onclick="deleteGpsLabel()">Delete This Label</div>
+		</form>
+		<br/><br/>
+		<a href="/dashboard">Back To Dashboard-></a>
+	</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 <script>
 var markList = [];
 var loc_data = [];
