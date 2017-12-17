@@ -31,7 +31,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您與週遭的人關係和睦嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
         <h3>您覺得您缺少友伴嗎?</h3>
           <input name="您覺得您缺少友伴嗎?" type="text"
@@ -41,7 +41,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您缺少友伴嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
         <h3>您覺得您沒有一個人讓您求助依賴嗎?</h3>
           <input name="您覺得您沒有一個人讓您求助依賴嗎?" type="text"
@@ -51,7 +51,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您沒有一個人讓您求助依賴嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>您覺得您孤單嗎?</h3>
@@ -62,7 +62,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您孤單嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
         <h3>您覺得您是屬於朋友中的一份子嗎?</h3>
           <input name="您覺得您是屬於朋友中的一份子嗎?" type="text"
@@ -72,7 +72,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您是屬於朋友中的一份子嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>您覺得您與週遭的人有許多相同的地方之處嗎?</h3>
@@ -83,7 +83,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您與週遭的人有許多相同的地方之處嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
         <h3>您覺得您不再與任何人親近嗎?</h3>
           <input name="您覺得您不再與任何人親近嗎?" type="text"
@@ -93,7 +93,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您不再與任何人親近嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
         <h3>您覺得您週圍的人無法和您共享您的興趣和想法嗎?</h3>
           <input name="您覺得您週圍的人無法和您共享您的興趣和想法嗎?" type="text"
@@ -103,7 +103,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您週圍的人無法和您共享您的興趣和想法嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>您覺得您是個外向和友善的人嗎?</h3>
@@ -114,7 +114,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您是個外向和友善的人嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
         <h3>您覺得您和人們親密嗎?</h3>
           <input name="您覺得您和人們親密嗎?" type="text"
@@ -124,7 +124,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您和人們親密嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>您覺得您不被重視嗎?</h3>
@@ -135,7 +135,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您不被重視嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
         <h3>您覺得您與其他人的關係是毫無意義的嗎?</h3>
           <input name="您覺得您與其他人的關係是毫無意義的嗎?" type="text"
@@ -145,7 +145,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您與其他人的關係是毫無意義的嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
         <h3>您覺得沒有人真正認識您嗎?</h3>
           <input name="您覺得沒有人真正認識您嗎?" type="text"
@@ -155,7 +155,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得沒有人真正認識您嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>您覺得您處於人群中仍覺得孤立嗎?</h3>
@@ -166,7 +166,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您處於人群中仍覺得孤立嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
         <h3>您覺得當您需要時您可以找到友伴嗎?</h3>
           <input name="您覺得當您需要時您可以找到友伴嗎?" type="text"
@@ -176,7 +176,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得當您需要時您可以找到友伴嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>您覺得您有人真正了解您嗎?</h3>
@@ -187,7 +187,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您有人真正了解您嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
         <h3>您覺得您害羞嗎?</h3>
           <input name="您覺得您害羞嗎?" type="text"
@@ -197,7 +197,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您害羞嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
         <h3>您覺得您的身邊有一些人,但他們不是您的知己嗎?</h3>
           <input name="您覺得您的身邊有一些人,但他們不是您的知己嗎?" type="text"
@@ -207,7 +207,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您的身邊有一些人,但他們不是您的知己嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>您覺得您有人可以聽您傾訴嗎?</h3>
@@ -218,7 +218,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您有人可以聽您傾訴嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
         <h3>您覺得您有人可以讓您求助依賴嗎?</h3>
           <input name="您覺得您有人可以讓您求助依賴嗎?" type="text"
@@ -228,7 +228,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="4"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['您覺得您有人可以讓您求助依賴嗎?'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <p>以下每個題目皆是5-point scales (1 = 非常不認同, 5 = 非常認同)</p>
@@ -241,7 +241,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['若其他人不接受我，我不會因此受到影響'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>我盡力不去做會讓他人避開，或拒絕我的事情</h3>
@@ -252,7 +252,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['我盡力不去做會讓他人避開，或拒絕我的事情'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>我鮮少去擔心他人是否會在意我</h3>
@@ -263,7 +263,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['我鮮少去擔心他人是否會在意我'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>我需要一種，當我需要幫忙時有人可以求助的感覺</h3>
@@ -274,7 +274,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['我需要一種，當我需要幫忙時有人可以求助的感覺'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>我想要他人接受我</h3>
@@ -285,7 +285,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['我想要他人接受我'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>與朋友長時間分別並不會影響我</h3>
@@ -296,7 +296,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['與朋友長時間分別並不會影響我'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>我有很強烈歸屬感需求</h3>
@@ -307,7 +307,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['我有很強烈歸屬感需求'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>當我不在某人的計畫中時，我的心情會被深深的影響</h3>
@@ -318,7 +318,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['當我不在某人的計畫中時，我的心情會被深深的影響'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>當我了解他人並不接受我時，我的心情會被強烈影響到</h3>
@@ -329,7 +329,7 @@ User Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ userQ['當我了解他人並不接受我時，我的心情會被強烈影響到'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
       <div class="row" style="margin-top: 30px">

@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request, jsonify, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
-from json import dumps
+from json import dumps, loads
 from datetime import datetime, timedelta
 from sqlalchemy.exc import IntegrityError
 import uuid
@@ -138,20 +138,22 @@ def questionnaire(user_id, questionnaire_id):
 @app.route('/user_questionnaire', methods=['GET', 'POST'])
 @login_required
 def user_questionnaire():
-	questionnaire_done = UserQuestionnaire.query.filter_by(user_id=current_user.id).first()
-	if questionnaire_done:
-		return make_response(render_template('403_forbidden.html', current_user=current_user, message="You have done the user questionnaire!"), 403)
-
+	userQ = UserQuestionnaire.query.filter_by(user_id=current_user.id).first()
+	
 	if request.method == 'GET':
-		return render_template('user_questionnaire.html')
+		userQ = loads(userQ.data)
+		return render_template('user_questionnaire.html', userQ=userQ)
 
 	elif request.method == 'POST':
 		answers_dict = request.form.to_dict(flat=True)
-		new_user_q = UserQuestionnaire(
-			user_id=current_user.id,
-			completed=True,
-			data=dumps(answers_dict, ensure_ascii=False))
-		db.session.add(new_user_q)
+		if not userQ:
+			new_user_q = UserQuestionnaire(
+				user_id=current_user.id,
+				completed=True,
+				data=dumps(answers_dict, ensure_ascii=False))
+			db.session.add(new_user_q)
+		else:
+			userQ.data=dumps(answers_dict, ensure_ascii=False)
 		db.session.commit()
 		return redirect(url_for('dashboard'))
 
@@ -288,6 +290,8 @@ def get_notification():
 
 @app.route('/test')
 def test():
-    contactQ = ContactQuestionnaire.query.filter_by(user_id=current_user.id).first()
-    print(type(contactQ.data))
+    userQ = UserQuestionnaire.query.filter_by(user_id=current_user.id).first()
+    if userQ:
+    	userQ = loads(userQ.data)
+    	print(userQ)
     return "done"

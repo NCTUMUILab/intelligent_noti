@@ -18,9 +18,7 @@ Dashboard
 		{# SIDE BAR #}
 		<div class="col-sm-3 col-md-2 sidebar">
 			<ul class="nav nav-sidebar">
-				{% if not userQ_done %}
-				<li><a href="{{ url_for('user_questionnaire') }}">User Questionnaire</a></li>
-				{% endif %}
+				<li><a href="{{ url_for('user_questionnaire') }}">{{'User Questionnaire(Edit)' if userQ_done else 'User Questionnaire'}}</a></li>
 				<li><a href="{{ url_for('heatmap') }}">Heatmap Location Label</a></li>
 				{% if current_user.username == "admin" %}
 				<li><a href="{{ url_for('signup') }}">Sign Up</a></li>
