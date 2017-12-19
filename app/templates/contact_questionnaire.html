@@ -1,3 +1,4 @@
+{% from "macros.html" import nav_bar with context %}
 {% extends "bootstrap/base.html" %}
 
 {% block title %}
@@ -14,7 +15,7 @@ Questionnaire
 
 <html lang="en">
   <body>
-
+    {{ nav_bar() }}
     <div class="container" style="margin-bottom: 100px;">
 
       <form action="/questionnaire/{{ questionnaire.user_id }}/{{ questionnaire.id }}" method="post">

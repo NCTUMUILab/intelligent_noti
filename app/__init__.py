@@ -9,7 +9,7 @@ app.config.from_pyfile('config.py')
 
 # Brootstrap, DebugToolbar, SQLAlchemy
 Bootstrap(app)
-DebugToolbarExtension(app)
+# DebugToolbarExtension(app)
 db = SQLAlchemy(app)
 
 # login-manage

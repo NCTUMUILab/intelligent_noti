@@ -1,3 +1,4 @@
+{% from "macros.html" import nav_bar with context %}
 {% extends "layout.html" %}
 
 {% block head %}
@@ -10,13 +11,13 @@ Contact List
 {% endblock %}
 
 {% block content %}
-{# NAV BAR #}
-{{ super() }}
+{{ nav_bar() }}
 
 {# MAIN AREA #}
 <div class="container-fluid">
 	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-		<h2 class="sub-header">Hi, {{ name }}. please choose _ contacts</h2>
+		<h2>Hi, {{ current_user.username }}. Please choose {{ limit }} contacts</h2>
+		<h3><div class="selected"></div></h3>
 		<div class="table-responsive">
 			<form action="{{ url_for('confirmContacts') }}" method="POST">
 				<table class="table table-striped">
@@ -24,16 +25,17 @@ Contact List
 						<th>SELECT</th>
 						<th>Name</th>
 						<th>Message count</th>
+						<th>Day count</th>
 					</thead>
 					<tbody>
 						{% for contact in contacts %}
 						<tr>
 							<td>
-								<input class="single-checkbox" type="checkbox" name="select" value="{{ contact.name }}" {% if loop.index0 < 3 %}checked{% endif %} >
-								<input type="hidden" name="{{ contact.name }}_is_group" value="{{ contact.is_group }}">
+								<input class="single-checkbox" type="checkbox" name="select" value="{{ contact['user_name'] }}" {% if loop.index0 < 3 %}checked{% endif %} >
 							</td>
-							<td>{{ contact.name }}</td>
-							<td>{{ contact.msg_count }}</td>
+							<td>{{ contact['user_name'] }}</td>
+							<td>{{ contact['msg_count'] }}</td>
+							<td>{{ contact['day_count'] }}</td>
 						</tr>
 						{% endfor %}
 					</tbody>
@@ -49,12 +51,18 @@ Contact List
 <script>
 	myFunction();
 	function myFunction(){
+		var n = $( "input.single-checkbox:checked" ).length;
+		$( "div.selected" ).text( n + (n === 1 ? " contact is" : " contacts are") + " checked" );
+		
 		var limit = {{ limit }};
 		$('input.single-checkbox').on('change', function(evt) {
-		   if($("input[name='select']:checked").length > limit) {
-		       this.checked = false;
-		   }
+			if($("input[name='select']:checked").length > limit) {
+		    	this.checked = false;
+			}
+			var n = $( "input.single-checkbox:checked" ).length;
+			$( "div.selected" ).text( n + (n === 1 ? " contact is" : " contacts are") + " checked" );
 		});
+			
 	}
 </script>
 {% endblock %}

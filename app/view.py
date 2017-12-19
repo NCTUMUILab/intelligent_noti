@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, request, jsonify, make_response
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 from json import dumps, loads
 from datetime import datetime, timedelta
 from sqlalchemy.exc import IntegrityError
@@ -12,7 +12,7 @@ import hashlib
 
 from . import app, db, load_user, admin_only
 from .models import *
-from .forms import LoginForm, RegisterForm, FacebookLoginForm
+from .forms import LoginForm, RegisterForm, FacebookLoginForm, FacebookResultForm
 from .get_facebook import fbMessenger, ThreadInfo
 from .testing import contacts_test
 import csv
@@ -50,7 +50,7 @@ def signup():
 		db.session.add(new_user)
 		db.session.commit()
 		login_user(new_user)
-		return redirect(url_for('facebook'))
+		return redirect(url_for('uploadFacebookResult'))
 
 	return render_template('signup.html', form=form)
 
@@ -79,30 +79,41 @@ def facebook():
 	form = FacebookLoginForm()
 	if form.validate_on_submit():
 		print("start scanning fbMessenger")
-		# facebook login
+		### FACEBOOK LOGIN ###
 		fb = fbMessenger(form.account.data, form.password.data)
 		contacts = fb.get_messages()
 		contacts = sorted(contacts, reverse=True, key=lambda c: c.msg_count)
-		# for testing
+		### TESTING ###
 		# contacts = sorted(contacts_test, reverse=True, key=lambda c: c.msg_count) ## for testing
-		return render_template('contact_list.html', name=current_user.username, contacts=contacts, limit=20)
-
-	return render_template('facebook_login.html', form=form)
+		return render_template('contact_list.html', current_user=current_user, contacts=contacts, limit=20)
+	else:
+		return render_template('facebook_login.html', form=form)
 
 @app.route('/confirmContacts', methods=['POST'])
 @login_required
 def confirmContacts():
 	contact_name_list = request.form.getlist('select')
 	for name in contact_name_list:
-		is_group = request.form['{}_is_group'.format(name)] == 'True'
 		new_questionnaire = ContactQuestionnaire(
 			contact_name=name,
 			user_id=current_user.id,
-			is_group=is_group,
+			is_group=False,
 			completed=False)
 		db.session.add(new_questionnaire)
 		db.session.commit()
 	return redirect(url_for('dashboard'))
+
+@app.route('/facebook/upload', methods=['GET', 'POST'])
+@login_required
+def uploadFacebookResult():
+	form = FacebookResultForm()
+	if form.validate_on_submit():
+		result_str = form.file.data.read().decode('utf-8')
+		result_list = sorted(loads(result_str), reverse=True, key=lambda c: c['msg_count'])
+		return render_template('contact_list.html', current_user=current_user, contacts=result_list, limit=20)
+	return render_template('upload_facebook_result.html', form=form)
+	
+	
 
 ### Questionnare System ###
 def find_questionnaire(current_user, user_id, questionnaire_id):
@@ -287,11 +298,4 @@ def get_notification():
                 selected.append(n)
                 break
     return render_template('notification.html', notification=selected, wid_count=_wid_count)
-
-@app.route('/test')
-def test():
-    userQ = UserQuestionnaire.query.filter_by(user_id=current_user.id).first()
-    if userQ:
-    	userQ = loads(userQ.data)
-    	print(userQ)
-    return "done"
+    
