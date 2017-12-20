@@ -19,7 +19,7 @@ Contact List
 		<h2>Hi, {{ current_user.username }}. Please choose {{ limit }} contacts</h2>
 		<h3><div class="selected"></div></h3>
 		<div class="table-responsive">
-			<form action="{{ url_for('confirmContacts') }}" method="POST">
+			<form action="{{ url_for('facebook.confirmContacts') }}" method="POST">
 				<table class="table table-striped">
 					<thead>
 						<th>SELECT</th>

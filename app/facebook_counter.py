@@ -3,15 +3,19 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from json import dumps
 
-# class Thread(object):
-#     def __init__(self):
+class Thread(object):
+    def __init__(self, beautiful_soup):
+        self.soup = beautiful_soup
+        self.user_name = self.soup.find('title').get_text()[18:]
+        self.msg_count = 0
+        self.day_count = 0 
         
 class FacebookCounter(object):
     def __init__(self, directory):
         self.directory = directory
-        self.soup = None
         self.file_list = []
         self.result = []
+        self.time_threshold = datetime.now() - timedelta(days=30)
     
     def make_list(self):
         for file_name in listdir(self.directory):
@@ -20,38 +24,39 @@ class FacebookCounter(object):
 
     def count_messages(self, file_name):
         with open(self.directory+file_name, encoding='utf-8') as file:
-            self.soup = BeautifulSoup(file.read(), 'html.parser')
+            thread = Thread(BeautifulSoup(file.read(), 'html.parser'))
         
-        user_name = self.soup.find('title').get_text()[18:]
-        if ',' in user_name or user_name == 'Facebook User' or not user_name:
+        if ',' in thread.user_name or thread.user_name == 'Facebook User' or not thread.user_name:
             return
-        p_tag_list = self.soup.find_all('p')
-        time_list = self.soup.find_all('span', class_='meta')
         
-        thirty_days_ago = datetime.now() - timedelta(days=30)
-        msg_count = 0
+        p_tag_list = thread.soup.find_all('p')
+        time_list = thread.soup.find_all('span', class_='meta') 
         last_day = None
-        day_count = 0
 
         for index, time in enumerate(time_list):
             msg_time = datetime.strptime(time.get_text()+"00", '%A, %B %d, %Y at %I:%M%p %Z%z').replace(tzinfo=None)
             tmp_last_day = datetime.strftime(msg_time, '%Y %m %d')
-            if msg_time > thirty_days_ago:
-                msg_count += 1
+            if msg_time > self.time_threshold:
+                thread.msg_count += 1
                 if last_day != tmp_last_day:
-                    day_count += 1
+                    thread.day_count += 1
                     last_day = tmp_last_day
             else:
                 break
-        if msg_count > 0:
-            print('Thread: {}'.format(file_name[:-5]))
-            print('User: {}'.format(user_name))
-            print('Message Count: {}'.format(msg_count))
-            print('Day Count: {}\n'.format(day_count))
-            thread_dict = { "user_name": user_name, 'msg_count': msg_count, 'day_count': day_count }
-            self.result.append(thread_dict)
+        if thread.msg_count > 0:
+            self.result.append( { 
+                "user_name": thread.user_name, 
+                'msg_count': thread.msg_count, 
+                'day_count': thread.day_count } )
+            self.print(thread_no=file_name[:-5], thread=thread)
             
-    def output(self):
+    def print(self, thread_no, thread):
+        print('Thread: {}'.format(thread_no))
+        print('User: {}'.format(thread.user_name))
+        print('Message Count: {}'.format(thread.msg_count))
+        print('Day Count: {}\n'.format(thread.day_count))
+    
+    def output_file(self):
         with open('result.txt', 'w') as file:
             file.write(dumps(self.result, ensure_ascii=False))
     
@@ -61,8 +66,7 @@ class FacebookCounter(object):
             if index%100 == 0:
                 print("[INDEX] {}".format(index))
             self.count_messages(file_name)
-        self.output()
-        # print('result: {}'.format(self.result))
+        self.output_file()
         
     
 if __name__ == '__main__':

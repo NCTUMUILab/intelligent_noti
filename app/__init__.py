@@ -18,7 +18,7 @@ from .models import User
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'user.login'
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -39,5 +39,16 @@ def admin_only(f):
 	return decorated_function
 
 # views
-from .view import *
+# from .view import *
 
+from .views.user import user
+from .views.facebook import facebook
+from .views.questionnaire import questionnaire
+from .views.heatmap import heatmap
+from .views.mobile import mobile
+
+app.register_blueprint(user)
+app.register_blueprint(facebook)
+app.register_blueprint(questionnaire)
+app.register_blueprint(heatmap)
+app.register_blueprint(mobile)
