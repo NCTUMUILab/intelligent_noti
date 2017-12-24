@@ -28,4 +28,5 @@ class FacebookLoginForm(FlaskForm):
 	password = PasswordField('Password', validators=[ InputRequired() ])
 	
 class FacebookResultForm(FlaskForm):
-	file = FileField(validators=[ FileRequired() ])
+	file_facebook = FileField('result_facebook.txt', validators=[ FileRequired() ])
+	file_line     = FileField('result_line.txt',     validators=[ FileRequired() ])

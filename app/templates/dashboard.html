@@ -1,3 +1,4 @@
+{% from "macros.html" import nav_bar with context %}
 {% extends "layout.html" %}
 
 {% block title %}
@@ -5,11 +6,11 @@ Dashboard
 {% endblock %}
 
 {% block content %}
-{# NAV BAR #}
-{{ super() }}
+{{ nav_bar() }}
 
 <div class="container-fluid">
 	<div class="row">
+		
 		{# SIDE BAR #}
 		<div class="col-sm-3 col-md-2 sidebar">
 			<ul class="nav nav-sidebar">
@@ -31,6 +32,7 @@ Dashboard
 						<tr>
 							<th>Name</th>
 							<th>Completed</th>
+							<th>New Name</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -38,6 +40,14 @@ Dashboard
 						<tr>
 							<td><a href="/questionnaire/{{questionnaire.user_id}}/{{questionnaire.id}}">{{ questionnaire.contact_name }}</a></td>
 							<td>{{ questionnaire.completed }}</td>
+							<form action="/facebook/editName/{{questionnaire.user_id}}/{{questionnaire.id}}" method="POST">
+								<td>
+									<input type="text" name="name" />
+								</td>
+								<td>
+									<input type="submit" name="Edit">
+								</td>
+							</form>
 						</tr>
 						{% endfor %}
 					</tbody>

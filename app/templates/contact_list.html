@@ -4,6 +4,7 @@
 {% block head %}
 {{ super() }}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 {% endblock %}
 
 {% block title %}
@@ -18,42 +19,75 @@ Contact List
 	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 		<h2>Hi, {{ current_user.username }}. Please choose {{ limit }} contacts</h2>
 		<h3><div class="selected"></div></h3>
-		<div class="table-responsive">
-			<form action="{{ url_for('facebook.confirmContacts') }}" method="POST">
-				<table class="table table-striped">
-					<thead>
-						<th>SELECT</th>
-						<th>Name</th>
-						<th>Message count</th>
-						<th>Day count</th>
-					</thead>
-					<tbody>
-						{% for contact in contacts %}
-						<tr>
-							<td>
-								<input class="single-checkbox" type="checkbox" name="select" value="{{ contact['user_name'] }}" {% if loop.index0 < 3 %}checked{% endif %} >
-							</td>
-							<td>{{ contact['user_name'] }}</td>
-							<td>{{ contact['msg_count'] }}</td>
-							<td>{{ contact['day_count'] }}</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-				<input type="submit" name="Submit">
-			</form>
+		
+		<div id="contacts">
+			<button class="sort" data-sort="msg_count">
+	    		Sort by message count
+	  		</button>
+			
+			<div class="table-responsive">
+				<form action="{{ url_for('facebook.confirmContacts') }}" method="POST">
+					
+					<table class="table table-striped">
+						<thead>
+							<th>SELECT</th>
+							<th>Name</th>
+							<th>Message count</th>
+							<th>Day count</th>
+							<th>Last time</th>
+							<th>App</th>
+							<th>Merge</th>
+							<th></th>
+						</thead>
+						<tbody class="list">
+							{% for contact in contacts %}
+							<tr>
+								<td>
+									<input class="single-checkbox" type="checkbox" name="select" value="{{ contact['user_name'] }}" {% if loop.index0 < pre_selected %}checked{% endif %} >
+								</td>
+								<td class="user_name">{{ contact['user_name'] }}</td>
+								<td class="msg_count">{{ contact['msg_count'] }}</td>
+								<td>{{ contact['day_count'] }}</td>
+								<td>{{ contact['last_time'] }}</td>
+								<td class="app">{{ contact['app'] }}</td>
+								<td>
+									{%- if contact['app'] == "facebook" -%}
+									<input type="text" name="merge" class="merge-input">
+									{%- endif -%}
+								</td>
+								<td>
+									{%- if contact['app'] == "facebook" -%}
+									<button type="button" class="merge-btn">Merge</button>
+									{%- endif -%}
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					
+					<input type="submit" name="Submit">
+				</form>
+			</div>
 		</div>
+		
 	</div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-	myFunction();
-	function myFunction(){
+	function stopRKey(evt) { 
+	  var evt = (evt) ? evt : ((event) ? event : null); 
+	  var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null); 
+	  if ((evt.keyCode == 13) && (node.type=="text"))  {return false;} 
+	}
+	
+	function showSelectedContactNum(){
 		var n = $( "input.single-checkbox:checked" ).length;
 		$( "div.selected" ).text( n + (n === 1 ? " contact is" : " contacts are") + " checked" );
-		
+	}
+	
+	function limitSelectedContactNum(){
 		var limit = {{ limit }};
 		$('input.single-checkbox').on('change', function(evt) {
 			if($("input[name='select']:checked").length > limit) {
@@ -62,7 +96,34 @@ Contact List
 			var n = $( "input.single-checkbox:checked" ).length;
 			$( "div.selected" ).text( n + (n === 1 ? " contact is" : " contacts are") + " checked" );
 		});
-			
 	}
+	
+	function mergeContact(){
+		var mergeBtn = $('.merge-btn');
+		mergeBtn.click(function() {
+			var itemInput = $(this).closest('tr').find('.merge-input').val();
+			var lineContact = userList.get('user_name', itemInput)[0];
+			var lineMsgCount = lineContact.values().msg_count;
+			
+			var facebookName = $(this).closest('tr').find('.user_name').text();
+			var facebookContact = userList.get('user_name', facebookName)[0];
+			var facebookMsgCount = facebookContact.values().msg_count;
+			facebookContact.values({
+				user_name: facebookName,
+				msg_count: Number(lineMsgCount) + Number(facebookMsgCount),
+				app: "facebook, line"
+			});
+		});
+	} 
+	
+	var options = {
+	  valueNames: [ 'user_name', 'msg_count', 'app' ]
+	};
+	var userList = new List('contacts', options);
+	
+	document.onkeypress = stopRKey; 
+	showSelectedContactNum();
+	limitSelectedContactNum();
+	mergeContact();
 </script>
 {% endblock %}

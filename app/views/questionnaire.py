@@ -14,7 +14,7 @@ def find_questionnaire(current_user, user_id, questionnaire_id):
 	for questionnaire in questionnaires:
 		if questionnaire_id == questionnaire.id:
 			return 0, "Found", questionnaire
-	return 2, "you don't have THIS questionnaire", None
+	return 2, "you don't have THIS contact", None
 	
 
 @questionnaire.route('/questionnaire/<int:user_id>/<int:questionnaire_id>', methods=['GET', 'POST'])
@@ -48,11 +48,11 @@ def user_questionnaire():
 		answers_dict = request.form.to_dict(flat=True)
 		if not userQ:
 			new_user_q = UserQuestionnaire(
-				user_id=current_user.id,
-				completed=True,
-				data=dumps(answers_dict, ensure_ascii=False))
+				user_id = current_user.id,
+				completed = True,
+				data = dumps(answers_dict, ensure_ascii=False))
 			db.session.add(new_user_q)
 		else:
-			userQ.data=dumps(answers_dict, ensure_ascii=False)
+			userQ.data = dumps(answers_dict, ensure_ascii=False)
 		db.session.commit()
 		return redirect(url_for('user.dashboard'))

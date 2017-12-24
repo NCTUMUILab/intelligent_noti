@@ -16,9 +16,10 @@ Upload Facebook Result
 
 <div class="container">
 	<form class="form-signin" method="POST" action="{{ url_for('facebook.uploadFacebookResult') }}" enctype="multipart/form-data">
-		<h2 class="form-signin-heading">Upload result.txt</h2>
+		<h2 class="form-signin-heading">Upload Result</h2>
 		{{ form.hidden_tag() }}
-		{{ wtf.form_field(form.file) }}
+		{{ wtf.form_field(form.file_facebook) }}
+		{{ wtf.form_field(form.file_line    ) }}
 		<button class="btn btn-lg btn-primary btn-block" type="submit">Upload</button>
 	</form>
 </div> <!-- /container -->

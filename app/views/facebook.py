@@ -4,6 +4,7 @@ from app.models import ContactQuestionnaire
 from app.forms import FacebookLoginForm, FacebookResultForm
 from app.get_facebook import fbMessenger, ThreadInfo
 from app.testing import contacts_test
+from app.helpers import find_questionnaire
 from app import db
 from json import loads
 
@@ -34,6 +35,10 @@ def facebook_login():
 @facebook.route('/confirmContacts', methods=['POST'])
 @login_required
 def confirmContacts():
+	is_summited = ContactQuestionnaire.query.filter_by(user_id=current_user.id).first()
+	if is_summited:
+		return make_response(render_template('403_forbidden.html', current_user=current_user, message="You can't re-summit your facebook account!"), 403)
+		
 	contact_name_list = request.form.getlist('select')
 	for name in contact_name_list:
 		new_questionnaire = ContactQuestionnaire(
@@ -49,9 +54,35 @@ def confirmContacts():
 @facebook.route('/facebook/upload', methods=['GET', 'POST'])
 @login_required
 def uploadFacebookResult():
+	is_summited = ContactQuestionnaire.query.filter_by(user_id=current_user.id).first()
+	if is_summited:
+		return make_response(render_template('403_forbidden.html', current_user=current_user, message="You can't re-summit your facebook account!"), 403)
+	
 	form = FacebookResultForm()
 	if form.validate_on_submit():
-		result_str = form.file.data.read().decode('utf-8')
-		result_list = sorted(loads(result_str), reverse=True, key=lambda c: c['msg_count'])
-		return render_template('contact_list.html', current_user=current_user, contacts=result_list, limit=20)
-	return render_template('upload_facebook_result.html', form=form)
+		result_facebook_str = form.file_facebook.data.read().decode('utf-8')
+		result_line_str = form.file_line.data.read().decode('utf-8')
+		result_list = loads(result_facebook_str)
+		result_list.extend(loads(result_line_str))
+		result_list = sorted(result_list, reverse=True, key=lambda c: c['msg_count'])
+		return render_template(
+			'contact_list.html', 
+			current_user=current_user, 
+			contacts=result_list, 
+			limit=20,
+			pre_selected=20)
+		
+	return render_template('upload_result.html', form=form)
+
+@facebook.route('/facebook/editName/<int:user_id>/<int:questionnaire_id>', methods=['POST'])
+@login_required
+def editName(user_id, questionnaire_id):
+	error, message, questionnaire = find_questionnaire(current_user=current_user, user_id=user_id, questionnaire_id=questionnaire_id)
+	if error:
+		return message
+	
+	if request.method == 'POST':
+		contact = ContactQuestionnaire.query.filter_by(id=questionnaire_id).first()
+		contact.contact_name = request.form['name']
+		db.session.commit()
+		return redirect(url_for('user.dashboard'))

@@ -8,8 +8,11 @@ class Thread(object):
         self.soup = beautiful_soup
         self.user_name = self.soup.find('title').get_text()[18:]
         self.msg_count = 0
-        self.day_count = 0 
+        self.day_count = 0
+        self.last_time = None
+        self.max_oneday = 0
         
+
 class FacebookCounter(object):
     def __init__(self, directory):
         self.directory = directory
@@ -29,10 +32,12 @@ class FacebookCounter(object):
         if ',' in thread.user_name or thread.user_name == 'Facebook User' or not thread.user_name:
             return
         
-        p_tag_list = thread.soup.find_all('p')
         time_list = thread.soup.find_all('span', class_='meta') 
         last_day = None
-
+        if time_list:
+            last_time = datetime.strptime(time_list[0].get_text()+"00", '%A, %B %d, %Y at %I:%M%p %Z%z').replace(tzinfo=None)
+            thread.last_time = datetime.strftime(last_time, '%Y/%m/%d')
+        
         for index, time in enumerate(time_list):
             msg_time = datetime.strptime(time.get_text()+"00", '%A, %B %d, %Y at %I:%M%p %Z%z').replace(tzinfo=None)
             tmp_last_day = datetime.strftime(msg_time, '%Y %m %d')
@@ -43,21 +48,25 @@ class FacebookCounter(object):
                     last_day = tmp_last_day
             else:
                 break
+        
         if thread.msg_count > 0:
             self.result.append( { 
                 "user_name": thread.user_name, 
                 'msg_count': thread.msg_count, 
-                'day_count': thread.day_count } )
+                'day_count': thread.day_count,
+                'last_time': thread.last_time,
+                'app': 'facebook' } )
             self.print(thread_no=file_name[:-5], thread=thread)
             
     def print(self, thread_no, thread):
         print('Thread: {}'.format(thread_no))
         print('User: {}'.format(thread.user_name))
         print('Message Count: {}'.format(thread.msg_count))
-        print('Day Count: {}\n'.format(thread.day_count))
+        print('Day Count: {}'.format(thread.day_count))
+        print('Last time: {}\n'.format(thread.last_time))
     
     def output_file(self):
-        with open('result.txt', 'w') as file:
+        with open('result_facebook.txt', 'w') as file:
             file.write(dumps(self.result, ensure_ascii=False))
     
     def run(self):

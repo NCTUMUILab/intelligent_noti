@@ -2,3 +2,6 @@ __pycache__*
 database.db
 result.csv
 app/result.txt
+*sublime*
+result_facebook.txt
+result_line.txt
