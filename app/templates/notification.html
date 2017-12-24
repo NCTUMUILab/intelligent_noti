@@ -35,14 +35,7 @@
 				</div>
 			</div>
 		</div>
-		{% endfor %}
 
-
-		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/semantic.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
-
-		{% for n in notification %}
 		<div id="form-{{n.hash}}" class="ui modal">
 			<div class="header">Form</div>
 			<div class="content">
@@ -592,6 +585,9 @@
 		</div>
 		{% endfor %}
 
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/semantic.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
 
 		<script>
         function getParameterByName(name, url) {
