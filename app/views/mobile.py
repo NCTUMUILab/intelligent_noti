@@ -51,7 +51,9 @@ def get_form_valid(notifications, user):
     now = datetime.now()
     hour = now.hour
     delta_last_form =  now - last_form_time
-    if (hour >= 8 and hour <= 22) and (delta_last_form > timedelta(minutes=90)) and (last_form_sender not in contacts):
+    if last_form_sender in contacts:
+        contacts.remove(last_form_sender)
+    if (hour >= 8 and hour <= 23) and (delta_last_form > timedelta(minutes=90)) and contacts:
         return True
     return False
 
