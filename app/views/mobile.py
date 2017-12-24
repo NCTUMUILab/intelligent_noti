@@ -53,7 +53,9 @@ def get_form_valid(notifications, user):
     delta_last_form =  now - last_form_time
     if last_form_sender in contacts:
         contacts.remove(last_form_sender)
-    if (hour >= 8 and hour <= 23) and (delta_last_form > timedelta(minutes=90)) and contacts:
+    if (hour >= 8 and hour <= 22) and (delta_last_form > timedelta(minutes=90)) and contacts:
+        return True
+    if (hour >= 8 and hour <= 22) and (delta_last_form > timedelta(minutes=180)):
         return True
     return False
 
@@ -105,6 +107,7 @@ def get_notification():
 
     notifications = get_notification_data(user)
     form_valid = get_form_valid(notifications, user)
-
-    print(form_valid)
-    return render_template('notification.html', notification=notifications)
+    msg = ""
+    if len(notifications) == 0:
+        msg = '現在沒有問卷喔!'
+    return render_template('notification.html', notification=notifications, msg=msg, count=len(notifications))

@@ -13,9 +13,14 @@
 				Whos Matter
 			</div>
         </div>
-
+		{{ msg }}
+		<div>
+			問卷：
+			<span id="current_count"></span>/
+			<span id="total_count"></span>
+		</div>
 		{% for n in notification %}
-		<div class="ui cards">
+		<div id="form-index-{{loop.index}}" class="ui cards form-card">
 			<div class="card">
 				<div class="content">
 					<div class="header">
@@ -29,9 +34,13 @@
 					</div>
 				</div>
 				<div class="extra content">
-					<button class="ui button form-btn" data-hash="{{n.hash}}">
+					<button class="ui blue button form-btn" data-hash="{{n.hash}}">
 						填寫問卷
 					</button>
+					<button class="ui green button" onclick="next_card()" data-hash="{{n.hash}}">
+						我沒看過這個問卷
+					</button>
+
 				</div>
 			</div>
 		</div>
@@ -636,6 +645,33 @@ $(".form-btn").click(function(){
 		}
 	}).modal('show');
 })
+
+		var current_index = 1;
+		var total_card = {{count}};
+
+
+		$(".form-card").hide();
+		$("#form-index-1").show();
+		$("#current_count").text(current_index);
+		$("#total_count").text(total_card);
+
+		function next_card() {
+			$(".form-card").hide();
+			if(current_index < total_card){
+				current_index = current_index + 1;
+				$("#current_count").text(current_index);
+				$("#form-index-" + current_index).show();
+			}
+			else{
+				current_index = 1;
+				$("#current_count").text(current_index);
+				$("#form-index-" + current_index).show();
+			}
+	}
+
+
+
+
 		</script>
 
 
