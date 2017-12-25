@@ -77,7 +77,7 @@ class FacebookCounter(object):
         return False
         
     
-    def count_messages(self, thread):        
+    def count_messages(self, thread):
         time_list = thread.soup.find_all('span', class_='meta') 
         last_day = None
         if time_list:
@@ -152,14 +152,11 @@ class FacebookCounter(object):
         
     
 if __name__ == '__main__':
-#     directory = input("\
-# Please enter the path of directory.\n\
-# eg. /Users/alex/Downloads/facebook-cowbonlin\n\
-# Path: ")
     print("Please choose the facebook backup directory.\n"
           "eg. /Users/alex/Downloads/facebook-cowbonlin")
     Tk().withdraw()
-    directory = filedialog.askdirectory(title="eg. /Users/alex/Downloads/facebook-cowbonlin")
+    directory = filedialog.askdirectory()
+    
     fb_counter = FacebookCounter(directory=directory)
     fb_counter.run()
     
