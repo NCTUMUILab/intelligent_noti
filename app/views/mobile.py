@@ -69,12 +69,13 @@ def get_form_valid(notifications, user):
     now = datetime.now()
     hour = now.hour
     delta_last_form =  now - last_form_time
+    if (hour >= 8 and hour <= 22) and (delta_last_form > timedelta(minutes=180)) and contacts:
+        return True
     if last_form_sender in contacts:
         contacts.remove(last_form_sender)
     if (hour >= 8 and hour <= 22) and (delta_last_form > timedelta(minutes=90)) and contacts:
         return True
-    if (hour >= 8 and hour <= 22) and (delta_last_form > timedelta(minutes=180)):
-        return True
+
     return False
 
 @mobile.route('/form/', methods=['POST'])
@@ -125,6 +126,8 @@ def get_notification():
 
     notifications = get_notification_data(user)
     form_valid = get_form_valid(notifications, user)
+    if len(notifications) > 10:
+        notifications = notifications[0:10]
     msg = ""
     if len(notifications) == 0:
         msg = '現在沒有問卷喔!'
