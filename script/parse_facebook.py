@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from json import dumps
 from re import finditer
+from tkinter import Tk, filedialog
 
 
 class Thread(object):
@@ -151,10 +152,14 @@ class FacebookCounter(object):
         
     
 if __name__ == '__main__':
-    directory = input("\
-Please enter the path of directory.\n\
-eg. /Users/alex/Downloads/facebook-cowbonlin\n\
-Path: ")
+#     directory = input("\
+# Please enter the path of directory.\n\
+# eg. /Users/alex/Downloads/facebook-cowbonlin\n\
+# Path: ")
+    print("Please choose the facebook backup directory.\n"
+          "eg. /Users/alex/Downloads/facebook-cowbonlin")
+    Tk().withdraw()
+    directory = filedialog.askdirectory(title="eg. /Users/alex/Downloads/facebook-cowbonlin")
     fb_counter = FacebookCounter(directory=directory)
     fb_counter.run()
     
