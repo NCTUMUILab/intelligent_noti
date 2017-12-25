@@ -4,6 +4,7 @@
 	<head>
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/semantic.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.0.0/css/bootstrap-slider.min.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	</head>
 
@@ -58,51 +59,59 @@
 					<input type="hidden" name="content" value="{{ n.content }}">
 					<input type="hidden" name="hash" value="{{ n.hash }}">
 					<input type="hidden" name="wid" value="{{ n.wid }}">
+								<div id="session-1">
                     <h3>1.你有沒有在手機上感受到通知</h3>
                     <div class="grouped fields">
                         <div class="field">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="你有沒有在手機上感受到通知" value="鈴聲＋震動"  tabindex="0" class="hidden" required>
-                                <label>鈴聲＋震動</label>
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="你有沒有在手機上感受到通知"  value="我沒有感覺到通知"  tabindex="0" class="hidden" required>
+                                <label>我沒有感覺到通知</label>
                             </div>
                         </div>
                         <div class="field">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="你有沒有在手機上感受到通知" value="鈴聲" tabindex="0" class="hidden">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="你有沒有在手機上感受到通知"  value="鈴聲" tabindex="0" class="hidden">
                                 <label>鈴聲</label>
                             </div>
                         </div>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="你有沒有在手機上感受到通知"  value="震動" tabindex="0" class="hidden">
+                                <label>震動</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="你有沒有在手機上感受到通知"  value="手機上的提示LED燈" tabindex="0" class="hidden">
+                                <label>手機上的提示LED燈</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui checkbox">
+                                <input type="checkbox" name="你有沒有在手機上感受到通知"  value="看到螢幕跳出通知" tabindex="0" class="hidden">
+                                <label>看到螢幕跳出通知</label>
+                            </div>
+                        </div>
                     </div>
-									<div class="field">
-									     <div class="ui radio checkbox">
-									         <input type="radio" name="你有沒有在手機上感受到通知" value="鈴聲" tabindex="0" class="hidden">
-									         <label>鈴聲</label>
-									     </div>
-									 </div>
+								</div>
 
-									 <div class="field">
-									      <div class="ui radio checkbox">
-									          <input type="radio" name="你有沒有在手機上感受到通知" value="震動" tabindex="0" class="hidden">
-									          <label>震動</label>
-									      </div>
-									  </div>
+								<h3>在感受到通知的當下，你有沒有猜是誰傳的訊息？</h3>
+								<div class="grouped fields">
+										<div class="field">
+												<div class="ui radio checkbox">
+														<input type="radio" name="在感受到通知的當下，你有沒有猜是誰傳的訊息？"  value="有"  tabindex="0" class="hidden" required>
+														<label>有</label>
+												</div>
+										</div>
+										<div class="field">
+												<div class="ui radio checkbox">
+														<input type="radio" name="在感受到通知的當下，你有沒有猜是誰傳的訊息？" value="沒有" tabindex="0" class="hidden">
+														<label>沒有</label>
+												</div>
+										</div>
+								</div>
 
-									  <div class="field">
-									       <div class="ui radio checkbox">
-									           <input type="radio" name="你有沒有在手機上感受到通知" value="螢幕亮" tabindex="0" class="hidden">
-									           <label>螢幕亮</label>
-									       </div>
-									   </div>
-
-										 <div class="field">
- 									       <div class="ui radio checkbox">
- 									           <input type="radio" name="你有沒有在手機上感受到通知" value="我沒有在手機上感受到通知" tabindex="0" class="hidden">
- 									           <label>我沒有在手機上感受到通知</label>
- 									       </div>
- 									   </div>
-
-
-                    <h3>2.你是不是因為你所猜的那個人，而決定看不看這則通知？</h3>
+                    <h3>你是不是因為你所猜的那個人，而決定看不看這則通知？</h3>
                     <div class="grouped fields">
                         <div class="field">
                             <div class="ui radio checkbox">
@@ -125,109 +134,106 @@
 
                     </div>
 
-										<h3>3.你有沒有立即去看這則通知？</h3>
+										<h3>你剛剛猜的是誰</h3>
+										<input name="你剛剛猜的是誰" tabindex="0" class="hidden">
+
+										<h3>我覺得這則通知干擾到我了（1:非常不同意；5:非常同意）</h3>
+										<input name="我覺得這則通知干擾到我了" type="text"
+			                    data-provide="slider"
+			                    data-slider-ticks="[1, 2, 3, 4, 5]"
+			                    data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+			                    data-slider-min="1"
+			                    data-slider-max="5"
+			                    data-slider-step="1"
+			                    data-slider-value="1"
+			                    data-slider-tooltip="hide" />
+
+										<h3>你覺得這個時機點送這則通知如何</h3>
+										<div class="grouped fields">
+												<div class="field">
+														<div class="ui radio checkbox">
+																<input type="radio" name="你覺得這個時機點送這則通知如何?"  value="現在一定要看到"  tabindex="0" class="hidden">
+																<label>現在一定要看到</label>
+														</div>
+												</div>
+												<div class="field">
+														<div class="ui radio checkbox">
+																<input type="radio" name="你覺得這個時機點送這則通知如何?" value="現在是個好時機"  tabindex="0" class="hidden">
+																<label>現在是個好時機</label>
+														</div>
+												</div>
+												<div class="field">
+														<div class="ui radio checkbox">
+																<input type="radio" name="你覺得這個時機點送這則通知如何?"   value="沒差 什麼時候送都可以" tabindex="0" class="hidden">
+																<label>沒差 什麼時候送都可以</label>
+														</div>
+												</div>
+												<div class="field">
+														<div class="ui radio checkbox">
+																<input type="radio" name="你覺得這個時機點送這則通知如何?" value="可以延後通知"  tabindex="0" class="hidden">
+																<label>可以延後通知</label>
+														</div>
+												</div>
+												<div class="field">
+														<div class="ui radio checkbox">
+																<input type="radio" name="你覺得這個時機點送這則通知如何?"  value="非常想要延後通知"  tabindex="0" class="hidden" required>
+																<label>非常想要延後通知</label>
+														</div>
+												</div>
+										</div>
+
+										<h3>你有沒有立即去看這則通知？</h3>
                     <div class="grouped fields">
                         <div class="field">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="3.你有沒有立即去看這則通知？"  value="有"  tabindex="0" class="hidden" required>
+                            <div class="ui radio checkbox" onclick="$('#session-3').show()">
+                                <input type="radio" name="你有沒有立即去看這則通知？"  value="有"  tabindex="0" class="hidden" required>
                                 <label>有</label>
                             </div>
                         </div>
                         <div class="field">
-                            <div class="ui radio checkbox">
-                                <input type="radio" name="3.你有沒有立即去看這則通知？" value="沒有" tabindex="0" class="hidden">
+                            <div class="ui radio checkbox" onclick="$('#session-3').hide()">
+                                <input type="radio" name="你有沒有立即去看這則通知？" value="沒有" tabindex="0" class="hidden">
                                 <label>沒有</label>
                             </div>
                         </div>
                     </div>
 
-										<h3>4.看到訊息之後，你怎麼處理這則通知？</h3>
+									<div id='session-3'>
+										<h3>這則訊息我需要多即時的進行回覆？</h3>
 										<div class="grouped fields">
 												<div class="field">
 														<div class="ui radio checkbox">
-																<input type="radio" name="看到訊息之後，你怎麼處理這則通知？"  value="立即回應"  tabindex="0" class="hidden" required>
-																<label>立即回應</label>
+																<input type="radio" name="這則訊息我需要多即時的進行回覆？"  value="需要立即回覆"  tabindex="0" class="hidden" required>
+																<label>需要立即回覆</label>
 														</div>
 												</div>
 												<div class="field">
 														<div class="ui radio checkbox">
-																<input type="radio" name="看到訊息之後，你怎麼處理這則通知？" value="無立即回應" tabindex="0" class="hidden">
-																<label>無立即回應</label>
+																<input type="radio" name="這則訊息我需要多即時的進行回覆？"  value="可間隔數分鐘"  tabindex="0" class="hidden" required>
+																<label>可間隔數分鐘</label>
 														</div>
 												</div>
 												<div class="field">
 														<div class="ui radio checkbox">
-																<input type="radio" name="看到訊息之後，你怎麼處理這則通知？" value="這則訊息我覺得我不需回覆" tabindex="0" class="hidden">
-																<label>這則訊息我覺得我不需回覆</label>
+																<input type="radio" name="這則訊息我需要多即時的進行回覆？"  value="一小時以內"  tabindex="0" class="hidden" required>
+																<label>一小時以內</label>
+														</div>
+												</div>
+												<div class="field">
+														<div class="ui radio checkbox">
+																<input type="radio" name="這則訊息我需要多即時的進行回覆？"  value="可間隔數小時，但需要再當天回覆"  tabindex="0" class="hidden" required>
+																<label>可間隔數小時，但需要再當天回覆</label>
+														</div>
+												</div>
+												<div class="field">
+														<div class="ui radio checkbox">
+																<input type="radio" name="這則訊息我需要多即時的進行回覆？"  value="可以不必在當天回覆"  tabindex="0" class="hidden" required>
+																<label>可以不必在當天回覆</label>
 														</div>
 												</div>
 										</div>
 
-										<h3>5.這則訊息我需要多即時的進行回覆？</h3>
-										<div class="grouped fields">
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="這則訊息我需要多即時的進行回覆？"  value="1 需要非常即時"  tabindex="0" class="hidden" required>
-																<label>1 需要非常即時</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="這則訊息我需要多即時的進行回覆？"  value="2"  tabindex="0" class="hidden" required>
-																<label>2</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="這則訊息我需要多即時的進行回覆？"  value="3"  tabindex="0" class="hidden" required>
-																<label>3</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="這則訊息我需要多即時的進行回覆？"  value="4"  tabindex="0" class="hidden" required>
-																<label>4</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="這則訊息我需要多即時的進行回覆？"  value="5 隨時都可以回覆"  tabindex="0" class="hidden" required>
-																<label>5 隨時都可以回覆</label>
-														</div>
-												</div>
-
-										</div>
-
-										<h3>6.你預期這則訊息會是多連續即時的談話？</h3>
-										<div class="grouped fields">
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="你預期這則訊息會是多連續即時的談話？"  value="需要連續即時的互動"  tabindex="0" class="hidden" required>
-																<label>需要連續即時的互動</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="你預期這則訊息會是多連續即時的談話？" value="可以間隔數分鐘" tabindex="0" class="hidden">
-																<label>可以間隔數分鐘</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="你預期這則訊息會是多連續即時的談話？" value="可以間隔數個小時" tabindex="0" class="hidden">
-																<label>可以間隔數個小時</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="你預期這則訊息會是多連續即時的談話？" value="可以間隔數天以上" tabindex="0" class="hidden">
-																<label>可以間隔數天以上</label>
-														</div>
-												</div>
-										</div>
-
-
-										<h3>7.你覺得這個通知怎麼樣</h3>
+										<h3>你覺得這個通知怎麼樣</h3>
 										<div class="grouped fields">
 												<label>a. 你覺得這個通知的內容</label>
 												<div class="field">
@@ -294,82 +300,9 @@
 														</div>
 												</div>
 										</div>
+									</div>
 
-										<h3>8.這個通知有沒有打擾到當下的你？</h3>
-										<div class="grouped fields">
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="這個通知有沒有打擾到當下的你？"  value="完全沒有打擾"  tabindex="0" class="hidden">
-																<label>完全沒有打擾</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="這個通知有沒有打擾到當下的你？" value="沒有明顯的打擾"  tabindex="0" class="hidden">
-																<label>沒有明顯的打擾</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="這個通知有沒有打擾到當下的你？"   value="有打擾，但可以接受" tabindex="0" class="hidden">
-																<label>有打擾，但可以接受</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="這個通知有沒有打擾到當下的你？" value="有明顯的打擾"  tabindex="0" class="hidden">
-																<label>有明顯的打擾</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="這個通知有沒有打擾到當下的你？"  value="非常的打擾"  tabindex="0" class="hidden">
-																<label>非常的打擾</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="這個通知有沒有打擾到當下的你？"  value="忘記了"  tabindex="0" class="hidden" required>
-																<label>忘記了</label>
-														</div>
-												</div>
-										</div>
-
-										<h3>9.你覺得這個時機點送這則通知如何</h3>
-										<div class="grouped fields">
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="你覺得這個時機點送這則通知如何?"  value="現在一定要看到"  tabindex="0" class="hidden">
-																<label>現在一定要看到</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="你覺得這個時機點送這則通知如何?" value="現在是個好時機"  tabindex="0" class="hidden">
-																<label>現在是個好時機</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="你覺得這個時機點送這則通知如何?"   value="沒差 什麼時候送都可以" tabindex="0" class="hidden">
-																<label>沒差 什麼時候送都可以</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="你覺得這個時機點送這則通知如何?" value="可以延後通知"  tabindex="0" class="hidden">
-																<label>可以延後通知</label>
-														</div>
-												</div>
-												<div class="field">
-														<div class="ui radio checkbox">
-																<input type="radio" name="你覺得這個時機點送這則通知如何?"  value="非常想要延後通知"  tabindex="0" class="hidden" required>
-																<label>非常想要延後通知</label>
-														</div>
-												</div>
-										</div>
-
-                    <h3>10.你當時正在做什麼事？</h3>
+                    <h3>你當時正在做什麼事？</h3>
                     <div class="grouped fields">
                         <div class="field">
                             <div class="ui radio checkbox">
@@ -526,8 +459,7 @@
                         </div>
                     </div>
 
-
-                    <h3>12.你身邊有誰？</h3>
+                    <h3>你身邊有誰？</h3>
                     <div class="grouped fields">
                         <div class="field">
                             <div class="ui checkbox">
