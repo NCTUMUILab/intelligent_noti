@@ -30,8 +30,10 @@ Dashboard
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th>Name</th>
+							<th>Facebook Name</th>
+							<th>Line Name</th>
 							<th>Completed</th>
+							<th>App of New Name</th>
 							<th>New Name</th>
 						</tr>
 					</thead>
@@ -39,8 +41,15 @@ Dashboard
 						{% for questionnaire in questionnaires %}
 						<tr>
 							<td><a href="/questionnaire/{{questionnaire.user_id}}/{{questionnaire.id}}">{{ questionnaire.contact_name }}</a></td>
+							<td>{{ questionnaire.contact_name_line }}</td>
 							<td>{{ questionnaire.completed }}</td>
 							<form action="/facebook/editName/{{questionnaire.user_id}}/{{questionnaire.id}}" method="POST">
+								<td>
+									<select name="appNewName">
+										<option value="facebook">facebook</option>
+										<option value="line">line</option>
+									</select>
+								</td>
 								<td>
 									<input type="text" name="name" />
 								</td>

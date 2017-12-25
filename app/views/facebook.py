@@ -84,6 +84,9 @@ def editName(user_id, questionnaire_id):
 	
 	if request.method == 'POST':
 		contact = ContactQuestionnaire.query.filter_by(id=questionnaire_id).first()
-		contact.contact_name = request.form['name']
+		if request.form['appNewName'] == "facebook":
+			contact.contact_name = request.form['name']
+		elif request.form['appNewName'] == "line":
+			contact.contact_name_line = request.form['name']
 		db.session.commit()
 		return redirect(url_for('user.dashboard'))
