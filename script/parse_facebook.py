@@ -154,8 +154,10 @@ class FacebookCounter(object):
 if __name__ == '__main__':
     print("Please choose the facebook backup directory.\n"
           "eg. /Users/alex/Downloads/facebook-cowbonlin")
-    Tk().withdraw()
+    window = Tk()
+    window.withdraw()
     directory = filedialog.askdirectory()
+    window.update()
     
     fb_counter = FacebookCounter(directory=directory)
     fb_counter.run()
