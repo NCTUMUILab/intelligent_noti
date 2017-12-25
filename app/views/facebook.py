@@ -43,6 +43,7 @@ def confirmContacts():
 	for name in contact_name_list:
 		new_questionnaire = ContactQuestionnaire(
 			contact_name=name,
+			contact_name_line = "kkk",
 			user_id=current_user.id,
 			is_group=False,
 			completed=False)

@@ -38,14 +38,20 @@ class FacebookCounter(object):
             last_time = datetime.strptime(time_list[0].get_text()+"00", '%A, %B %d, %Y at %I:%M%p %Z%z').replace(tzinfo=None)
             thread.last_time = datetime.strftime(last_time, '%Y/%m/%d')
         
-        for index, time in enumerate(time_list):
+        tmp_max_oneday = 0
+        for index, time in enumerate(time_list): # each message time
             msg_time = datetime.strptime(time.get_text()+"00", '%A, %B %d, %Y at %I:%M%p %Z%z').replace(tzinfo=None)
             tmp_last_day = datetime.strftime(msg_time, '%Y %m %d')
-            if msg_time > self.time_threshold:
+            
+            if msg_time > self.time_threshold: # desired time period
                 thread.msg_count += 1
-                if last_day != tmp_last_day:
+                if last_day != tmp_last_day: # different day
                     thread.day_count += 1
                     last_day = tmp_last_day
+                    thread.max_oneday = max(thread.max_oneday, tmp_max_oneday)
+                    tmp_max_oneday = 0
+                else: # same day
+                    tmp_max_oneday += 1
             else:
                 break
         
@@ -55,6 +61,7 @@ class FacebookCounter(object):
                 'msg_count': thread.msg_count, 
                 'day_count': thread.day_count,
                 'last_time': thread.last_time,
+                'max_oneday': thread.max_oneday,
                 'app': 'facebook' } )
             self.print(thread_no=file_name[:-5], thread=thread)
             
@@ -63,7 +70,9 @@ class FacebookCounter(object):
         print('User: {}'.format(thread.user_name))
         print('Message Count: {}'.format(thread.msg_count))
         print('Day Count: {}'.format(thread.day_count))
-        print('Last time: {}\n'.format(thread.last_time))
+        print('Last Time: {}'.format(thread.last_time))
+        print('Max Oneday: {}'.format(thread.max_oneday))
+        print()
     
     def output_file(self):
         with open('result_facebook.txt', 'w') as file:
