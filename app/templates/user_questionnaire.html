@@ -19,7 +19,201 @@ User Questionnaire
 
       <form action="{{ url_for('questionnaire.user_questionnaire') }}" method="post">
 
-        <h1>第一部分</h1>
+        <h1>Personal Characteristics</h1>
+
+        <p>這裡有一些特徵可能適合用來描述你,請在「我認為我是一個...」之後針對每一題勾選您同意的程度。 (以 1~5 回答，1:非常不精確 2:有些不精確 3:普通 4:有些精確 5:非常精確)</p>
+
+        <h3>健談的人</h3>
+          <input name="健談的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['健談的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>會創新、有新想法的人</h3>
+          <input name="會創新、有新想法的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['會創新、有新想法的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>樂於助人且無私的人</h3>
+          <input name="健談的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['樂於助人且無私的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>充滿活力的人</h3>
+          <input name="充滿活力的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['充滿活力的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>可信賴的工作者</h3>
+          <input name="可信賴的工作者" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['可信賴的工作者'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>緊張的人</h3>
+          <input name="緊張的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['緊張的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>有非常多熱情的人</h3>
+          <input name="有非常多熱情的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['有非常多熱情的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>有寬容本質的人</h3>
+          <input name="有寬容本質的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['有寬容本質的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>擔心很多的人</h3>
+          <input name="擔心很多的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['擔心很多的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>具有生動想像力的人</h3>
+          <input name="具有生動想像力的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['具有生動想像力的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>有創造力的人</h3>
+          <input name="有創造力的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['有創造力的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>會堅持到工作完成的人</h3>
+          <input name="會堅持到工作完成的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['會堅持到工作完成的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>幾乎對所有人體貼且仁慈的人</h3>
+          <input name="幾乎對所有人體貼且仁慈的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['幾乎對所有人體貼且仁慈的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>做事有效率的人</h3>
+          <input name="做事有效率的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['做事有效率的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>喜歡外出、好社交的人</h3>
+          <input name="喜歡外出、好社交的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['喜歡外出、好社交的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>會訂計畫並依計畫執行的人</h3>
+          <input name="會訂計畫並依計畫執行的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['會訂計畫並依計畫執行的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>容易感到緊張的人</h3>
+          <input name="容易感到緊張的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['容易感到緊張的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>喜歡思考、常有想法的人</h3>
+          <input name="喜歡思考、常有想法的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['喜歡思考、常有想法的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+        <h3>喜歡與他人合作的人</h3>
+          <input name="喜歡與他人合作的人" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['喜歡與他人合作的人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+
 
         <p>以下每個題目皆是4-point scales (1 = 從來沒有這種感覺, 2 = 很少有這種感覺, 3 = 有時候有這種感覺 4 = 經常有這種感覺)</p>
 
@@ -266,15 +460,15 @@ User Questionnaire
                 data-slider-value="{{ userQ['我鮮少去擔心他人是否會在意我'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
-        <h3>我需要一種，當我需要幫忙時有人可以求助的感覺</h3>
-          <input name="我需要一種，當我需要幫忙時有人可以求助的感覺" type="text"
+        <h3>我需要那種處於困境中總有人可以幫助我的感覺</h3>
+          <input name="我需要那種處於困境中總有人可以幫助我的感覺" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="{{ userQ['我需要一種，當我需要幫忙時有人可以求助的感覺'] if userQ else 1 }}"
+                data-slider-value="{{ userQ['我需要那種處於困境中總有人可以幫助我的感覺'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>我想要他人接受我</h3>
@@ -288,15 +482,26 @@ User Questionnaire
                 data-slider-value="{{ userQ['我想要他人接受我'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
-        <h3>與朋友長時間分別並不會影響我</h3>
-          <input name="與朋友長時間分別並不會影響我" type="text"
+        <h3>我不喜歡獨自一人</h3>
+          <input name="我不喜歡獨自一人" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="{{ userQ['與朋友長時間分別並不會影響我'] if userQ else 1 }}"
+                data-slider-value="{{ userQ['我不喜歡獨自一人'] if userQ else 1 }}"
+                data-slider-tooltip="hide" />
+
+        <h3>與朋友長時間分離並不會困擾我</h3>
+          <input name="與朋友長時間分離並不會困擾我" type="text"
+                data-provide="slider"
+                data-slider-ticks="[1, 2, 3, 4, 5]"
+                data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
+                data-slider-min="1"
+                data-slider-max="5"
+                data-slider-step="1"
+                data-slider-value="{{ userQ['與朋友長時間分離並不會困擾我'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>我有很強烈歸屬感需求</h3>
@@ -310,26 +515,26 @@ User Questionnaire
                 data-slider-value="{{ userQ['我有很強烈歸屬感需求'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
-        <h3>當我不在某人的計畫中時，我的心情會被深深的影響</h3>
-          <input name="當我不在某人的計畫中時，我的心情會被深深的影響" type="text"
+        <h3>當他人的規劃中不包括我時，我會很不舒服</h3>
+          <input name="當他人的規劃中不包括我時，我會很不舒服" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="{{ userQ['當我不在某人的計畫中時，我的心情會被深深的影響'] if userQ else 1 }}"
+                data-slider-value="{{ userQ['當他人的規劃中不包括我時，我會很不舒服'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
-        <h3>當我了解他人並不接受我時，我的心情會被強烈影響到</h3>
-          <input name="當我了解他人並不接受我時，我的心情會被強烈影響到" type="text"
+        <h3>當我覺得他人不接受我時，我很容易有受傷的感覺</h3>
+          <input name="當我覺得他人不接受我時，我很容易有受傷的感覺" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="{{ userQ['當我了解他人並不接受我時，我的心情會被強烈影響到'] if userQ else 1 }}"
+                data-slider-value="{{ userQ['當我覺得他人不接受我時，我很容易有受傷的感覺'] if userQ else 1 }}"
                 data-slider-tooltip="hide" />
 
       <div class="row" style="margin-top: 30px">
