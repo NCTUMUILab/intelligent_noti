@@ -59,8 +59,8 @@
 					<input type="hidden" name="content" value="{{ n.content }}">
 					<input type="hidden" name="hash" value="{{ n.hash }}">
 					<input type="hidden" name="wid" value="{{ n.wid }}">
-								<div id="session-1">
-                    <h3>1.你有沒有在手機上感受到通知</h3>
+								<div class="session-1">
+                    <h3>你有沒有在手機上感受到通知</h3>
                     <div class="grouped fields">
                         <div class="field">
                             <div class="ui checkbox">
@@ -138,15 +138,38 @@
 										<input name="你剛剛猜的是誰" tabindex="0" class="hidden">
 
 										<h3>我覺得這則通知干擾到我了（1:非常不同意；5:非常同意）</h3>
-										<input name="我覺得這則通知干擾到我了" type="text"
-			                    data-provide="slider"
-			                    data-slider-ticks="[1, 2, 3, 4, 5]"
-			                    data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
-			                    data-slider-min="1"
-			                    data-slider-max="5"
-			                    data-slider-step="1"
-			                    data-slider-value="1"
-			                    data-slider-tooltip="hide" />
+										<div class="grouped fields">
+												<div class="field">
+														<div class="ui radio checkbox">
+																<input type="radio" name="我覺得這則通知干擾到我了"  value="1"  tabindex="0" class="hidden">
+																<label>1</label>
+														</div>
+												</div>
+												<div class="field">
+														<div class="ui radio checkbox">
+																<input type="radio" name="我覺得這則通知干擾到我了" value="2"  tabindex="0" class="hidden">
+																<label>2</label>
+														</div>
+												</div>
+												<div class="field">
+														<div class="ui radio checkbox">
+																<input type="radio" name="我覺得這則通知干擾到我了"   value="3" tabindex="0" class="hidden">
+																<label>3</label>
+														</div>
+												</div>
+												<div class="field">
+														<div class="ui radio checkbox">
+																<input type="radio" name="我覺得這則通知干擾到我了" value="4"  tabindex="0" class="hidden">
+																<label>4</label>
+														</div>
+												</div>
+												<div class="field">
+														<div class="ui radio checkbox">
+																<input type="radio" name="我覺得這則通知干擾到我了"  value="5"  tabindex="0" class="hidden" required>
+																<label>5</label>
+														</div>
+												</div>
+										</div>
 
 										<h3>你覺得這個時機點送這則通知如何</h3>
 										<div class="grouped fields">
@@ -185,20 +208,20 @@
 										<h3>你有沒有立即去看這則通知？</h3>
                     <div class="grouped fields">
                         <div class="field">
-                            <div class="ui radio checkbox" onclick="$('#session-3').show()">
+                            <div class="ui radio checkbox" onclick="$('.session-hide').show()">
                                 <input type="radio" name="你有沒有立即去看這則通知？"  value="有"  tabindex="0" class="hidden" required>
                                 <label>有</label>
                             </div>
                         </div>
                         <div class="field">
-                            <div class="ui radio checkbox" onclick="$('#session-3').hide()">
+                            <div class="ui radio checkbox" onclick="$('.session-hide').hide()">
                                 <input type="radio" name="你有沒有立即去看這則通知？" value="沒有" tabindex="0" class="hidden">
                                 <label>沒有</label>
                             </div>
                         </div>
                     </div>
 
-									<div id='session-3'>
+									<div class="session-hide">
 										<h3>這則訊息我需要多即時的進行回覆？</h3>
 										<div class="grouped fields">
 												<div class="field">
@@ -419,7 +442,7 @@
                         </div>
                     </div>
 
-                    <h3>11.請問你當時的專注（投入）程度？</h3>
+                    <h3>請問你當時的專注（投入）程度？</h3>
                     <div class="grouped fields">
                         <div class="field">
                             <div class="ui radio checkbox">
@@ -511,7 +534,6 @@
                         </div>
                     </div>
 
-
 				</div>
 			</div>
 			<div class="actions">
@@ -600,10 +622,6 @@ $(".form-btn").click(function(){
 				$("#form-index-" + current_index).show();
 			}
 	}
-
-
-
-
 		</script>
 
 
