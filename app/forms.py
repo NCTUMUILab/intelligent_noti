@@ -29,4 +29,4 @@ class FacebookLoginForm(FlaskForm):
 	
 class FacebookResultForm(FlaskForm):
 	file_facebook = FileField('result_facebook.txt', validators=[ FileRequired() ])
-	file_line     = FileField('result_line.txt',     validators=[ FileRequired() ])
+	file_line     = FileField('result_line.txt')

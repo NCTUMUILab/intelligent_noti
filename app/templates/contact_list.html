@@ -44,6 +44,7 @@ Contact List
 							<tr>
 								<td>
 									<input class="single-checkbox" type="checkbox" name="select" value="{{ contact['user_name'] }}" {% if loop.index0 < pre_selected %}checked{% endif %} >
+									<input type="hidden" name="line_name" value="init">
 								</td>
 								<td class="user_name">{{ contact['user_name'] }}</td>
 								<td class="msg_count">{{ contact['msg_count'] }}</td>
@@ -101,18 +102,30 @@ Contact List
 	function mergeContact(){
 		var mergeBtn = $('.merge-btn');
 		mergeBtn.click(function() {
-			var itemInput = $(this).closest('tr').find('.merge-input').val();
-			var lineContact = userList.get('user_name', itemInput)[0];
-			var lineMsgCount = lineContact.values().msg_count;
-			
-			var facebookName = $(this).closest('tr').find('.user_name').text();
-			var facebookContact = userList.get('user_name', facebookName)[0];
-			var facebookMsgCount = facebookContact.values().msg_count;
-			facebookContact.values({
-				user_name: facebookName,
-				msg_count: Number(lineMsgCount) + Number(facebookMsgCount),
-				app: "facebook, line"
-			});
+			var mergeText = $(this).closest('tr').find('.merge-input');
+			if ( userList.get('user_name', mergeText.val()).length == 0 )
+				alert("Invalid Line user name");
+			else{
+				var lineContact = userList.get('user_name', mergeText.val())[0];
+				var lineMsgCount = lineContact.values().msg_count;
+				var lineName = lineContact.values().user_name;
+				
+				var facebookName = $(this).closest('tr').find('.user_name').text();
+				var facebookContact = userList.get('user_name', facebookName)[0];
+				var facebookMsgCount = facebookContact.values().msg_count;
+				
+				facebookContact.values({
+					user_name: facebookName,
+					msg_count: Number(lineMsgCount) + Number(facebookMsgCount),
+					app: "facebook, line"
+				});
+				
+				var input = $(this).closest('tr').find('input.single-checkbox');
+				input.val(facebookName + '||' + lineName);
+				
+				$(this).prop('disabled', true);
+				$(this).text('Merged');	
+			}
 		});
 	} 
 	

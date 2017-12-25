@@ -41,9 +41,12 @@ def confirmContacts():
 		
 	contact_name_list = request.form.getlist('select')
 	for name in contact_name_list:
+		facebook_name = name.split('||')[0] if '||' in name else name
+		line_name     = name.split('||')[1] if '||' in name else ""
+
 		new_questionnaire = ContactQuestionnaire(
-			contact_name=name,
-			contact_name_line = "kkk",
+			contact_name=facebook_name,
+			contact_name_line=line_name,
 			user_id=current_user.id,
 			is_group=False,
 			completed=False)
@@ -62,9 +65,11 @@ def uploadFacebookResult():
 	form = FacebookResultForm()
 	if form.validate_on_submit():
 		result_facebook_str = form.file_facebook.data.read().decode('utf-8')
-		result_line_str = form.file_line.data.read().decode('utf-8')
 		result_list = loads(result_facebook_str)
-		result_list.extend(loads(result_line_str))
+		if form.file_line.data:
+			result_line_str = form.file_line.data.read().decode('utf-8')
+			result_list.extend(loads(result_line_str))
+			
 		result_list = sorted(result_list, reverse=True, key=lambda c: c['msg_count'])
 		return render_template(
 			'contact_list.html', 
@@ -74,6 +79,7 @@ def uploadFacebookResult():
 			pre_selected=20)
 		
 	return render_template('upload_result.html', form=form)
+
 
 @facebook.route('/facebook/editName/<int:user_id>/<int:questionnaire_id>', methods=['POST'])
 @login_required

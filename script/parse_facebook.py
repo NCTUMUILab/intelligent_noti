@@ -6,19 +6,18 @@ from json import dumps
 class Thread(object):
     def __init__(self, beautiful_soup):
         self.soup = beautiful_soup
-        self.user_name = self.soup.find('title').get_text()[18:]
+        self.user_name = self.soup.find('title').get_text()[10:]
         self.msg_count = 0
         self.day_count = 0
         self.last_time = None
         self.max_oneday = 0
-        
 
 class FacebookCounter(object):
     def __init__(self, directory):
         self.directory = directory
         self.file_list = []
         self.result = []
-        self.time_threshold = datetime.now() - timedelta(days=30)
+        self.time_threshold = datetime.now() - timedelta(days=60)
     
     def make_list(self):
         for file_name in listdir(self.directory):
@@ -26,7 +25,9 @@ class FacebookCounter(object):
         print('{} threads in total'.format( len(self.file_list) ))
 
     def count_messages(self, file_name):
-        with open(self.directory+file_name, encoding='utf-8') as file:
+        with open(self.directory+file_name) as file:
+            if '_' in (self.directory+file_name):
+                return
             thread = Thread(BeautifulSoup(file.read(), 'html.parser'))
         
         if ',' in thread.user_name or thread.user_name == 'Facebook User' or not thread.user_name:
@@ -35,12 +36,15 @@ class FacebookCounter(object):
         time_list = thread.soup.find_all('span', class_='meta') 
         last_day = None
         if time_list:
-            last_time = datetime.strptime(time_list[0].get_text()+"00", '%A, %B %d, %Y at %I:%M%p %Z%z').replace(tzinfo=None)
+            # last_time = datetime.strptime(time_list[0].get_text()+"00", '%A, %B %d, %Y at %I:%M%p %Z%z').replace(tzinfo=None)
+            # 2011年4月14日 8:51 UTC+0800
+            last_time = datetime.strptime(time_list[0].get_text()+"00", '%Y年%m月%d日 %H:%M %Z%z').replace(tzinfo=None)
             thread.last_time = datetime.strftime(last_time, '%Y/%m/%d')
         
         tmp_max_oneday = 0
         for index, time in enumerate(time_list): # each message time
-            msg_time = datetime.strptime(time.get_text()+"00", '%A, %B %d, %Y at %I:%M%p %Z%z').replace(tzinfo=None)
+            # msg_time = datetime.strptime(time.get_text()+"00", '%A, %B %d, %Y at %I:%M%p %Z%z').replace(tzinfo=None)
+            msg_time = datetime.strptime(time.get_text()+"00", '%Y年%m月%d日 %H:%M %Z%z').replace(tzinfo=None)
             tmp_last_day = datetime.strftime(msg_time, '%Y %m %d')
             
             if msg_time > self.time_threshold: # desired time period
@@ -88,6 +92,7 @@ class FacebookCounter(object):
         
     
 if __name__ == '__main__':
-    fb_counter = FacebookCounter(directory='/Users/alex/Downloads/facebook-cowbonlin/messages/')
+    path = input("Please enter the path of directory.\neg. /Users/alex/Downloads/facebook-cowbonlin/messages/\nPath: ")
+    fb_counter = FacebookCounter(directory=path)
     fb_counter.run()
     
