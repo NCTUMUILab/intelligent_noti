@@ -16,11 +16,13 @@ mobile = Blueprint('mobile', __name__)
 def get_notification_data(user):
     delta = datetime.utcnow() - timedelta(minutes=30)
     u = db.session.query(User).filter(User.phone_id==user).one_or_none()
-    notification = db.session.query(Result).filter(Result.date > delta).filter(Result.r_type == 'Notification').filter(Result.raw.like('com.facebook.orca%')).filter(Result.user == user).order_by(desc(Result.created_at)).all()
+
+    notification_line = db.session.query(Result).filter(Result.date > delta).filter(Result.r_type == 'Notification').filter(Result.raw.like('jp.naver.line.android%')).filter(Result.user == user).order_by(desc(Result.created_at)).all()
+    notification_fb = db.session.query(Result).filter(Result.date > delta).filter(Result.r_type == 'Notification').filter(Result.raw.like('com.facebook.orca%')).filter(Result.user == user).order_by(desc(Result.created_at)).all()
     db.session.close()
     notifications = []
     wids = []
-    for n in notification:
+    for n in notification_fb:
         noti = n.raw.split('\t')
         p = {}
         if noti[0] == 'com.facebook.orca':
@@ -29,6 +31,22 @@ def get_notification_data(user):
             p['content'] = noti[2]
             p['time'] = n.date + timedelta(hours=8)
             p['white_list_user'] = db.session.query(ContactQuestionnaire).filter(ContactQuestionnaire.user_id==u.id).filter(ContactQuestionnaire.contact_name==p['title']).one_or_none()
+            if not p['white_list_user']:
+                continue
+            wids.append(p['white_list_user'].id)
+            p['wid'] = p['white_list_user'].id
+            p['hash'] = hashlib.md5((str(noti[0:2]) + str(n.date)).encode()).hexdigest()
+            p['done'] = bool(db.session.query(FormResult).filter(FormResult.hash==p['hash']).one_or_none())
+            notifications.append(p)
+    for n in notification_line:
+        noti = n.raw.split('\t')
+        p = {}
+        if noti[0] == 'jp.naver.line.android':
+            p['app'] = 'Line'
+            p['title'] = noti[1]
+            p['content'] = noti[2]
+            p['time'] = n.date + timedelta(hours=8)
+            p['white_list_user'] = db.session.query(ContactQuestionnaire).filter(ContactQuestionnaire.user_id==u.id).filter(ContactQuestionnaire.contact_name_line==p['title']).one_or_none()
             if not p['white_list_user']:
                 continue
             wids.append(p['white_list_user'].id)
