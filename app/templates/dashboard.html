@@ -10,11 +10,11 @@ Dashboard
 
 <div class="container-fluid">
 	<div class="row">
-		
+
 		{# SIDE BAR #}
 		<div class="col-sm-3 col-md-2 sidebar">
 			<ul class="nav nav-sidebar">
-				<li><a href="{{ url_for('questionnaire.user_questionnaire') }}">{{'User Questionnaire(Edit)' if userQ_done else 'User Questionnaire'}}</a></li>
+				<li><a href="{{ url_for('questionnaire.user_questionnaire') }}">{{'About You(Edit)' if userQ_done else 'About You'}}</a></li>
 				<li><a href="{{ url_for('heatmap.show_heatmap') }}">Heatmap Location Label</a></li>
 				{% if current_user.username == "admin" %}
 				<li><a href="{{ url_for('user.signup') }}">Sign Up</a></li>
