@@ -66,6 +66,11 @@ def get_form_valid(notifications, user):
     if last_form:
         last_form_time = last_form.created_at
         last_form_sender = last_form.sender
+    elif contacts:
+        return True
+    else:
+        return False
+
     now = datetime.now()
     hour = now.hour
     delta_last_form =  now - last_form_time
