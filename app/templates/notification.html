@@ -94,7 +94,7 @@
                         </div>
                     </div>
 								</div>
-
+	<div class="no-feel-hide">
 								<h3>在感受到通知的當下，你有沒有猜是誰傳的訊息？</h3>
 								<div class="grouped fields">
 										<div class="field">
@@ -110,7 +110,6 @@
 												</div>
 										</div>
 								</div>
-
                     <h3>你是不是因為你所猜的那個人，而決定看不看這則通知？</h3>
                     <div class="grouped fields">
                         <div class="field">
@@ -220,7 +219,7 @@
                             </div>
                         </div>
                     </div>
-
+</div>
 									<div class="session-hide">
 										<h3>這則訊息我需要多即時的進行回覆？</h3>
 										<div class="grouped fields">
@@ -628,6 +627,16 @@ $(".form-btn").click(function(){
 				$("#form-index-" + current_index).show();
 			}
 	}
+
+$("input[value='我沒有感覺到通知']").change(function () {
+    if($("input[value='我沒有感覺到通知']").is(":checked")){
+		$(".no-feel-hide").hide();
+	}
+	else{
+		$(".no-feel-hide").show();
+	}
+ });
+
 		</script>
 
 
