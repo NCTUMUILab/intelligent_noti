@@ -60,36 +60,52 @@
 					<input type="hidden" name="hash" value="{{ n.hash }}">
 					<input type="hidden" name="wid" value="{{ n.wid }}">
 								<div class="session-1">
-                    <h3>你有沒有在手機上感受到通知</h3>
+									<h3>你有沒有在手機上感受到通知？</h3>
+									<div class="grouped fields">
+											<div class="field">
+													<div class="ui checkbox">
+															<input type="checkbox" name="你有沒有在手機上感受到通知"  value="有"  tabindex="0" class="hidden" required>
+															<label>有</label>
+													</div>
+											</div>
+											<div class="field">
+													<div class="ui checkbox">
+															<input type="checkbox" name="你有沒有在手機上感受到通知"  value="我沒有感覺到通知" tabindex="0" class="hidden">
+															<label>沒有</label>
+													</div>
+											</div>
+									</div>
+
+                    <h3>你如何感知到這則通知</h3>
                     <div class="grouped fields">
+												<div class="field">
+														<div class="ui checkbox">
+																<input type="checkbox" name="你如何感知到這則通知"  value="我剛剛正在使用手機" tabindex="0" class="hidden">
+																<label>我剛剛正在使用手機</label>
+														</div>
+												</div>
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="你有沒有在手機上感受到通知"  value="我沒有感覺到通知"  tabindex="0" class="hidden" required>
-                                <label>我沒有感覺到通知</label>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <div class="ui checkbox">
-                                <input type="checkbox" name="你有沒有在手機上感受到通知"  value="鈴聲" tabindex="0" class="hidden">
+                                <input type="checkbox" name="你如何感知到這則通知"  value="鈴聲" tabindex="0" class="hidden">
                                 <label>鈴聲</label>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="你有沒有在手機上感受到通知"  value="震動" tabindex="0" class="hidden">
+                                <input type="checkbox" name="你如何感知到這則通知"  value="震動" tabindex="0" class="hidden">
                                 <label>震動</label>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="你有沒有在手機上感受到通知"  value="手機上的提示LED燈" tabindex="0" class="hidden">
+                                <input type="checkbox" name="你如何感知到這則通知"  value="手機上的提示LED燈" tabindex="0" class="hidden">
                                 <label>手機上的提示LED燈</label>
                             </div>
                         </div>
                         <div class="field">
                             <div class="ui checkbox">
-                                <input type="checkbox" name="你有沒有在手機上感受到通知"  value="看到螢幕跳出通知" tabindex="0" class="hidden">
-                                <label>看到螢幕跳出通知</label>
+                                <input type="checkbox" name="你如何感知到這則通知"  value="看到螢幕從按變亮，跳出通知" tabindex="0" class="hidden">
+                                <label>看到螢幕從按變亮，跳出通知</label>
                             </div>
                         </div>
                     </div>
@@ -628,6 +644,8 @@ $(".form-btn").click(function(){
 			}
 	}
 
+
+
 $("input[value='我沒有感覺到通知']").change(function () {
     if($("input[value='我沒有感覺到通知']").is(":checked")){
 		$(".no-feel-hide").hide();
@@ -636,6 +654,16 @@ $("input[value='我沒有感覺到通知']").change(function () {
 		$(".no-feel-hide").show();
 	}
  });
+
+ $("input[value='我剛剛正在使用手機']").change(function () {
+     if($("input[value='我剛剛正在使用手機']").is(":checked")){
+ 		$(".no-feel-hide").hide();
+ 	}
+ 	else{
+ 		$(".no-feel-hide").show();
+ 	}
+  });
+
 
 		</script>
 
