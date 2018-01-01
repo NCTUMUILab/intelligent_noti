@@ -4,6 +4,7 @@ from app import db
 from datetime import datetime, timedelta
 from sqlalchemy import desc
 import hashlib
+import json
 
 from sqlalchemy.exc import IntegrityError
 import uuid
@@ -90,7 +91,7 @@ def get_form_valid(notifications, user):
 @mobile.route('/form/', methods=['POST'])
 def add_form():
     content = request.get_json(silent=True)
-    r = FormResult({'raw': str(content), 'wid': content['wid'], 'user': content['user'], 'hash': content['hash'], 'sender': content['title'], 'app': content['app']})
+    r = FormResult({'raw': str(content), 'wid': '', 'user': content['user'], 'hash': '', 'sender': content['title'], 'app': content['app']})
     db.session.add(r)
     try:
         db.session.commit()
@@ -133,17 +134,26 @@ def whitelist():
     user = request.args.get('user')
     u = db.session.query(User).filter(User.phone_id==user).one_or_none()
     contactQuestionnaire = db.session.query(ContactQuestionnaire).filter(ContactQuestionnaire.user_id==u.id)
-    result = ''
+    result = []
     for c in contactQuestionnaire:
         if c.contact_name:
-            result += '(line) ' + c.contact_name + '\t'
+            result += '(line) ' + c.contact_name +  '\t'
+            result.append({
+                'app': 'line',
+                'name': c.contact_name,
+                'wid': contactQuestionnaire.id
+            })
         if c.contact_name_line:
-            result += '(fb) ' + c.contact_name_line + '\t'
-    return jsonify({'result': result})
+            result.append({
+                'app': 'fb',
+                'name': c.contact_name_line,
+                'wid': contactQuestionnaire.id
+            })
+    return jsonify(result)
 
 
 @mobile.route('/notification/')
 def get_notification():
     data = request.args.get('data')
 
-    return render_template('notification.html', data=data)
+    return render_template('notification.html', data=json.loads(data))
