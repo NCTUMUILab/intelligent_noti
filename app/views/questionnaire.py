@@ -23,16 +23,19 @@ def contact_questionnaire(user_id, questionnaire_id):
 	error, message, questionnaire = find_questionnaire(current_user=current_user, user_id=user_id, questionnaire_id=questionnaire_id)
 	if error:
 		return message
-
-	if request.method == 'POST':
+	
+	if request.method == 'GET':
+		content = loads(questionnaire.data) if questionnaire.data else None
+		if content:
+			print(content['你和他的關係是？'])
+		return render_template('contact_questionnaire.html', questionnaire=questionnaire, content=content)
+	
+	elif request.method == 'POST':
 		answers_dict = request.form.to_dict(flat=True)
 		questionnaire.data = dumps(answers_dict, ensure_ascii=False)
 		questionnaire.completed = True
 		db.session.commit()
 		return redirect(url_for('user.dashboard'))
-
-	elif request.method == 'GET':
-		return render_template('contact_questionnaire.html', questionnaire=questionnaire)
 
 
 @questionnaire.route('/user_questionnaire', methods=['GET', 'POST'])

@@ -25,109 +25,109 @@ Questionnaire
 
         <h3>1.你和{{ questionnaire.contact_name }}的關係是？</h3>
         <div class="radio">
-          <label><input type="radio" name="你和他的關係是？" value="近親(父母、兄弟、兒女)">近親(父母、兄弟、兒女)</label>
+          <label><input type="radio" name="你和他的關係是？" value="近親(父母、兄弟、兒女)" {{"checked" if content['你和他的關係是？'] == '近親(父母、兄弟、兒女)'}}>近親(父母、兄弟、兒女)</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你和他的關係是？" value="遠親">遠親</label>
+          <label><input type="radio" name="你和他的關係是？" value="遠親" {{"checked" if content['你和他的關係是？'] == '遠親'}}>遠親</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你和他的關係是？" value="同事(上司)">同事(上司)</label>
+          <label><input type="radio" name="你和他的關係是？" value="同事(上司)" {{"checked" if content['你和他的關係是？'] == '同事(上司)'}}>同事(上司)</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你和他的關係是？" value="同事(下屬)">同事(下屬)</label>
+          <label><input type="radio" name="你和他的關係是？" value="同事(下屬)" {{"checked" if content['你和他的關係是？'] == '同事(下屬)'}}>同事(下屬)</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你和他的關係是？" value="朋友">同事(同輩)</label>
+          <label><input type="radio" name="你和他的關係是？" value="同事(同輩)" {{"checked" if content['你和他的關係是？'] == '同事(同輩)'}}>同事(同輩)</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你和他的關係是？" value="朋友">朋友</label>
+          <label><input type="radio" name="你和他的關係是？" value="朋友" {{"checked" if content['你和他的關係是？'] == '朋友'}}>朋友</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你和他的關係是？" value="伴侶">伴侶</label>
+          <label><input type="radio" name="你和他的關係是？" value="伴侶" {{"checked" if content['你和他的關係是？'] == '伴侶'}}>伴侶</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你和他的關係是？" value="其他">其他</label>
+          <label><input type="radio" name="你和他的關係是？" value="其他" {{"checked" if content['你和他的關係是？'] == '其他'}}>其他</label>
         </div>
         <input class="form-control" type="text" name="你和他的關係是其他:" placeholder="其他">
 
         <h3>2.你和{{ questionnaire.contact_name }}大部分的話題是哪些？</h3>
         <div class="radio">
-          <label><input type="radio" name="你和他大部分的話題是哪些？" value="工作相關話題">工作相關話題</label>
+          <label><input type="radio" name="你和他大部分的話題是哪些？" value="工作相關話題" {{"checked" if content['你和他大部分的話題是哪些？'] == '工作相關話題'}}>工作相關話題</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你和他大部分的話題是哪些？" value="一般聊天話題">一般聊天話題</label>
+          <label><input type="radio" name="你和他大部分的話題是哪些？" value="一般聊天話題" {{"checked" if content['你和他大部分的話題是哪些？'] == '一般聊天話題'}}>一般聊天話題</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你和他大部分的話題是哪些？" value="為了完成特定目的之話題">為了完成特定目的之話題（辦活動、舉辦慶生會、學校團體報告...）</label>
+          <label><input type="radio" name="你和他大部分的話題是哪些？" value="為了完成特定目的之話題" {{"checked" if content['你和他大部分的話題是哪些？'] == '為了完成特定目的之話題'}}>為了完成特定目的之話題（辦活動、舉辦慶生會、學校團體報告...）</label>
         </div>
 
         <h3>3.你們認識多久了？</h3>
         <div class="radio">
-          <label><input type="radio" name="你們認識多久了？" value="一個月以內">一個月以內</label>
+          <label><input type="radio" name="你們認識多久了？" value="一個月以內" {{"checked" if content['你們認識多久了？'] == '一個月以內'}}>一個月以內</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們認識多久了？" value="一個月～半年">一個月～半年</label>
+          <label><input type="radio" name="你們認識多久了？" value="一個月～半年" {{"checked" if content['你們認識多久了？'] == '一個月～半年'}}>一個月～半年</label>
         </div>
         <div class="radio">
-        <label><input type="radio" name="你們認識多久了？" value="半年～一年">半年～一年</label>
+        <label><input type="radio" name="你們認識多久了？" value="半年～一年" {{"checked" if content['你們認識多久了？'] == '半年～一年'}}>半年～一年</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們認識多久了？" value="一年～三年">一年～三年</label>
+          <label><input type="radio" name="你們認識多久了？" value="一年～三年" {{"checked" if content['你們認識多久了？'] == '一年～三年'}}>一年～三年</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們認識多久了？" value="三年～五年">三年～五年</label>
+          <label><input type="radio" name="你們認識多久了？" value="三年～五年" {{"checked" if content['你們認識多久了？'] == '三年～五年'}}>三年～五年</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們認識多久了？" value="五年～十年">五年～十年</label>
+          <label><input type="radio" name="你們認識多久了？" value="五年～十年" {{"checked" if content['你們認識多久了？'] == '五年～十年'}}>五年～十年</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們認識多久了？" value="十年以上">十年以上</label>
+          <label><input type="radio" name="你們認識多久了？" value="十年以上" {{"checked" if content['你們認識多久了？'] == '十年以上'}}>十年以上</label>
         </div>
 
         <h3>4.你們平均多久見面一次？</h3>
         <div class="radio">
-          <label><input type="radio" name="你們平均多久見面一次？" value="一年不到一次">一年不到一次</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="一年不到一次" {{"checked" if content['你們平均多久見面一次？'] == '一年不到一次'}}>一年不到一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們平均多久見面一次？" value="一年一次~一個月一次">數個月一次</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="數個月一次" {{"checked" if content['你們平均多久見面一次？'] == '數個月一次'}}>數個月一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們平均多久見面一次？" value="一個月一次">一個月一次</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="一個月一次" {{"checked" if content['你們平均多久見面一次？'] == '一個月一次'}}>一個月一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們平均多久見面一次？" value="一個月一次~一個禮拜一次">2~3個禮拜一次</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="2~3個禮拜一次" {{"checked" if content['你們平均多久見面一次？'] == '2~3個禮拜一次'}}>2~3個禮拜一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們平均多久見面一次？" value="一個禮拜一次">一個禮拜一次</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="一個禮拜一次" {{"checked" if content['你們平均多久見面一次？'] == '一個禮拜一次'}}>一個禮拜一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們平均多久見面一次？" value="一個禮拜一次~每天">幾天一次</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="幾天一次" {{"checked" if content['你們平均多久見面一次？'] == '幾天一次'}}>幾天一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們平均多久見面一次？" value="每天">每天</label>
+          <label><input type="radio" name="你們平均多久見面一次？" value="每天" {{"checked" if content['你們平均多久見面一次？'] == '每天'}}>每天</label>
         </div>
 
         <h3>5.你們平均多久聯絡一次？</h3>
         <div class="radio">
-          <label><input type="radio" name="你們多久聯絡一次？" value="一年不到一次">一年不到一次</label>
+          <label><input type="radio" name="你們多久聯絡一次？" value="一年不到一次" {{"checked" if content['你們多久聯絡一次？'] == '一年不到一次'}}>一年不到一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們多久聯絡一次？" value="一年一次~一個月一次">數個月一次</label>
+          <label><input type="radio" name="你們多久聯絡一次？" value="數個月一次" {{"checked" if content['你們多久聯絡一次？'] == '數個月一次'}}>數個月一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們多久聯絡一次？" value="一個月一次">一個月一次</label>
+          <label><input type="radio" name="你們多久聯絡一次？" value="一個月一次" {{"checked" if content['你們多久聯絡一次？'] == '一個月一次'}}>一個月一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們多久聯絡一次？" value="一個月一次~一個禮拜一次">2~3個禮拜一次</label>
+          <label><input type="radio" name="你們多久聯絡一次？" value="2~3個禮拜一次" {{"checked" if content['你們多久聯絡一次？'] == '2~3個禮拜一次'}}>2~3個禮拜一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們多久聯絡一次？" value="一個禮拜一次">一個禮拜一次</label>
+          <label><input type="radio" name="你們多久聯絡一次？" value="一個禮拜一次" {{"checked" if content['你們多久聯絡一次？'] == '一個禮拜一次'}}>一個禮拜一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們多久聯絡一次？" value="一個禮拜一次~每天">幾天一次</label>
+          <label><input type="radio" name="你們多久聯絡一次？" value="幾天一次" {{"checked" if content['你們多久聯絡一次？'] == '幾天一次'}}>幾天一次</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="你們多久聯絡一次？" value="每天">每天</label>
+          <label><input type="radio" name="你們多久聯絡一次？" value="每天" {{"checked" if content['你們多久聯絡一次？'] == '每天'}}>每天</label>
         </div>
 
         <h3>6.你覺得你與{{ questionnaire.contact_name }}的關係可以用下列何者關係圖表示</h3>
@@ -139,7 +139,7 @@ Questionnaire
                       data-slider-min="1"
                       data-slider-max="7"
                       data-slider-step="1"
-                      data-slider-value="1"
+                      data-slider-value="{{ content['你覺得你與他多親近'] if content else 1 }}"
                       data-slider-tooltip="hide" />
 
       <h3>7.我和{{ questionnaire.contact_name }}很親近 (1:非常不同意-7：非常同意)</h3>
@@ -150,7 +150,7 @@ Questionnaire
                     data-slider-min="1"
                     data-slider-max="7"
                     data-slider-step="1"
-                    data-slider-value="1"
+                    data-slider-value="{{ content['我和他/她很親近'] if content else 1 }}"
                     data-slider-tooltip="hide" />
 
       <h3>8.當與{{ questionnaire.contact_name }}分開時，我會很想念他 (1:非常不同意-7：非常同意)</h3>
@@ -161,7 +161,7 @@ Questionnaire
                     data-slider-min="1"
                     data-slider-max="7"
                     data-slider-step="1"
-                    data-slider-value="1"
+                    data-slider-value="{{ content['當我們分開時，我會很想念他'] if content else 1 }}"
                     data-slider-tooltip="hide" />
 
 
@@ -173,7 +173,7 @@ Questionnaire
                     data-slider-min="1"
                     data-slider-max="7"
                     data-slider-step="1"
-                    data-slider-value="1"
+                    data-slider-value="{{ content['他/她和我會向彼此揭露個人重要的私事'] if content else 1 }}"
                     data-slider-tooltip="hide" />
 
       <h3>10.{{ questionnaire.contact_name }}和我之間的連結很強 (1:非常不同意-7：非常同意)</h3>
@@ -184,7 +184,7 @@ Questionnaire
                     data-slider-min="1"
                     data-slider-max="7"
                     data-slider-step="1"
-                    data-slider-value="1"
+                    data-slider-value="{{ content['我們之間的連結很強'] if content else 1 }}"
                     data-slider-tooltip="hide" />
 
 
@@ -196,7 +196,7 @@ Questionnaire
                     data-slider-min="1"
                     data-slider-max="7"
                     data-slider-step="1"
-                    data-slider-value="1"
+                    data-slider-value="{{ content['我們會想要聚在一起'] if content else 1 }}"
                     data-slider-tooltip="hide" />
 
 
@@ -208,7 +208,7 @@ Questionnaire
                     data-slider-min="1"
                     data-slider-max="7"
                     data-slider-step="1"
-                    data-slider-value="1"
+                    data-slider-value="{{ content['我確定我們之間的關係'] if content else 1 }}"
                     data-slider-tooltip="hide" />
 
       <h3>13.{{ questionnaire.contact_name }}是我生活的重心 (1:非常不同意-7：非常同意)</h3>
@@ -219,7 +219,7 @@ Questionnaire
                     data-slider-min="1"
                     data-slider-max="7"
                     data-slider-step="1"
-                    data-slider-value="1"
+                    data-slider-value="{{ content['他是我生活中重要的一部分'] if content else 1 }}"
                     data-slider-tooltip="hide" />
 
 
@@ -231,7 +231,7 @@ Questionnaire
                     data-slider-min="1"
                     data-slider-max="7"
                     data-slider-step="1"
-                    data-slider-value="1"
+                    data-slider-value="{{ content['我會和他一起做很多事情'] if content else 1 }}"
                     data-slider-tooltip="hide" />
 
       <h3>15.當有時間時，我會想要跟{{ questionnaire.contact_name }}一起共度 (1:非常不同意-7：非常同意)</h3>
@@ -242,7 +242,7 @@ Questionnaire
                     data-slider-min="1"
                     data-slider-max="7"
                     data-slider-step="1"
-                    data-slider-value="1"
+                    data-slider-value="{{ content['當有時間時，我會想要跟他聚在一起'] if content else 1 }}"
                     data-slider-tooltip="hide" />
 
       <h3>16.我常常想到{{ questionnaire.contact_name }} (1:非常不同意-7：非常同意)</h3>
@@ -253,7 +253,7 @@ Questionnaire
                     data-slider-min="1"
                     data-slider-max="7"
                     data-slider-step="1"
-                    data-slider-value="1"
+                    data-slider-value="{{ content['我常常關心他'] if content else 1 }}"
                     data-slider-tooltip="hide" />
 
 
@@ -265,7 +265,7 @@ Questionnaire
                     data-slider-min="1"
                     data-slider-max="7"
                     data-slider-step="1"
-                    data-slider-value="1"
+                    data-slider-value="{{ content['我和他的關係在我的生活中是重要的'] if content else 1 }}"
                     data-slider-tooltip="hide" />
 
 
@@ -277,7 +277,7 @@ Questionnaire
                     data-slider-min="1"
                     data-slider-max="7"
                     data-slider-step="1"
-                    data-slider-value="1"
+                    data-slider-value="{{ content['在做出重要決定時我會考慮他'] if content else 1 }}"
                     data-slider-tooltip="hide" />
 
         <h1>以下問題以1-5進行回答（1:非常不同意，5:非常同意)</h1>
@@ -290,7 +290,7 @@ Questionnaire
                       data-slider-min="1"
                       data-slider-max="5"
                       data-slider-step="1"
-                      data-slider-value="1"
+                      data-slider-value="{{ content['我們彼此互相依賴'] if content else 1 }}"
                       data-slider-tooltip="hide" />
 
         <h3>20.我們曾經在做某些決定時先去了解對方想法</h3>
@@ -301,7 +301,7 @@ Questionnaire
                       data-slider-min="1"
                       data-slider-max="5"
                       data-slider-step="1"
-                      data-slider-value="1"
+                      data-slider-value="{{ content['我們曾經在做某些決定時先去了解對方想法'] if content else 1 }}"
                       data-slider-tooltip="hide" />
 
         <h3>21.我們彼此都沒有額外空出時間，與對方討論彼此的想法及感受</h3>
@@ -312,7 +312,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['我們彼此都沒有留下與對方溝通交談的時間'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>22.我們彼此對於對方都有很大的影響</h3>
@@ -323,7 +323,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['我們彼此對於對方都有很大的影響'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>23.我們常能影響對方對於當下正在處理的事情的感覺</h3>
@@ -334,7 +334,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['我們常能影響對方對於當下正在處理的事情的感覺'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>24.如果有需要的話，我們會專程去幫助對方</h3>
@@ -344,7 +344,7 @@ Questionnaire
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
                 data-slider-min="1"
                 data-slider-max="5"
-                data-slider-step="1"
+                data-slider-step="{{ content['如果有需要的話，我們會專程去幫助對方'] if content else 1 }}"
                 data-slider-value="1"
                 data-slider-tooltip="hide" />
 
@@ -356,7 +356,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['我們對於對方的想法沒有什麼影響力'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>26.對於我們規劃要一起做的事情，{{ questionnaire.contact_name }}期待我利用打電話或用通訊軟體進行溝通</h3>
@@ -367,7 +367,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['對於我們規劃要一起做的事情，我的朋友期待我利用打電話或用通訊軟體進行溝通'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>27.{{ questionnaire.contact_name }}期待我打電話或通訊軟體確認一切安好</h3>
@@ -378,7 +378,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['我的朋友期待我打電話或通訊軟體確認一切安好'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>28.{{ questionnaire.contact_name }}期待我打電話或用通訊軟體跟他更新自己的近況</h3>
@@ -389,7 +389,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['我的朋友期待我打電話或用通訊軟體與他更新自己的近況'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>29.{{ questionnaire.contact_name }}期待我用電話或用通訊軟體來打招呼</h3>
@@ -400,7 +400,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['我的朋友期待我用電話或用通訊軟體來打招呼'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>30.{{ questionnaire.contact_name }}期待我用電話或通訊軟體跟他打發時間</h3>
@@ -411,7 +411,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['我的朋友期待我用電話或通訊軟體跟他打發時間'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>31.{{ questionnaire.contact_name }}期待我用電話或通訊軟體，告訴他我在哪裡</h3>
@@ -422,7 +422,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['我的朋友期待我用電話或通訊軟體告訴他我在哪裡'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>32.{{ questionnaire.contact_name }}期待我用電話或通訊軟體，告訴他我要去哪裡 </h3>
@@ -433,7 +433,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['我的朋友期待我用電話或通訊軟體告訴他我要去哪裡'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>33.{{ questionnaire.contact_name }}期待我用電話或通訊軟體，告訴他我接下來要做什麼</h3>
@@ -444,7 +444,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['我的朋友期待我用電話或通訊軟體告訴他我接下來要做什麼'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>34.{{ questionnaire.contact_name }}期待我用電話或通訊軟體，告訴他我現在正在做什麼</h3>
@@ -455,7 +455,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['我的朋友期待我用電話或通訊軟體告訴他我現在正在做什麼'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h1> 你正在使用 Facebook 時收到他的一封訊息，而且{{ questionnaire.contact_name }}顯示為上線中，請問下面的每個句子有多符合你？ </h1>
@@ -468,7 +468,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['當我已讀取訊息，我應該立刻回覆'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>36.若{{ questionnaire.contact_name }}寄送給我一個連結，我應該在看過連結內容後盡快回覆他</h3>
@@ -479,7 +479,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['若對方寄送給我一個連結，我應該盡快看連結內的內容並回復他'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>37.若{{ questionnaire.contact_name }}希望臨時與我有個會面，在讀取訊息後我應該立刻回復</h3>
@@ -490,7 +490,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['若與對方即將有個約會，在讀取訊息後我應該盡快回復'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>38.若{{ questionnaire.contact_name }}與我打招呼，我應該要立刻回復</h3>
@@ -501,7 +501,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['若對方與我打招呼，我應該要立刻回復'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>39.離開對話時，我應該要和{{ questionnaire.contact_name }}道別</h3>
@@ -512,7 +512,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['離開對話時，我應該要和對方道別'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>40.若我無法在十分鐘內回覆{{ questionnaire.contact_name }}，我應該道別 </h3>
@@ -523,7 +523,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['若我無法在十分鐘內回覆訊息，我應該需要道別'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h1>以下是針對你的理想Facebook聊天體驗相關的問題。請想像{{ questionnaire.contact_name }}在Facebook上為上線狀態回答以下問題(1:非常不符合，5:非常符合)</h1>
@@ -536,18 +536,18 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['當我發訊訊息給對方，我期待他在看到後要立即回覆'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
-        <h3>42.若我希望臨時與{{ questionnaire.contact_name }}有個會面，我期待他能夠立即回覆 </h3>
-          <input name="當我要與對方有個小約(時間部會太長)時，我期待對方能夠立即回復 " type="text"
+        <h3>42.若我希望臨時與{{ questionnaire.contact_name }}有個會面，我期待他能夠立即回覆</h3>
+          <input name="當我要與對方有個小約(時間部會太長)時，我期待對方能夠立即回復" type="text"
                 data-provide="slider"
                 data-slider-ticks="[1, 2, 3, 4, 5]"
                 data-slider-ticks-labels='["1", "2", "3", "4", "5"]'
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['當我要與對方有個小約(時間部會太長)時，我期待對方能夠立即回復'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>43.當我發送一個連結給{{ questionnaire.contact_name }}時，我期待他能夠在看到連結內容後立即回覆我</h3>
@@ -558,7 +558,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['當我發送一個連結給對方時，我期待對方能夠在看到連結內容後立即回復我'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
 
@@ -570,7 +570,7 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['當對方要來開對話時，他應該要先與我道別'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h3>45.當{{ questionnaire.contact_name }}無法在十分鐘內回覆時，他應該要與我道別</h3>
@@ -581,45 +581,45 @@ Questionnaire
                 data-slider-min="1"
                 data-slider-max="5"
                 data-slider-step="1"
-                data-slider-value="1"
+                data-slider-value="{{ content['當對方無法在十分鐘內回覆時，他應該要與我道別'] if content else 1 }}"
                 data-slider-tooltip="hide" />
 
         <h1>以下問卷請在實驗結束知後填寫</h1>
         <h3>整體而言，你覺得他產生的訊息通知打擾你程度是？</h3>
         <div class="radio">
-          <label><input type="radio" name="整體而言，你覺得他產生的訊息通知打擾你程度是？" value="完全沒有打擾">完全沒有打擾</label>
+          <label><input type="radio" name="整體而言，你覺得他產生的訊息通知打擾你程度是？" value="完全沒有打擾" {{"checked" if content['整體而言，你覺得他產生的訊息通知打擾你程度是？'] == '完全沒有打擾'}}>完全沒有打擾</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="整體而言，你覺得他產生的訊息通知打擾你程度是？" value="沒有明顯的打擾">沒有明顯的打擾</label>
+          <label><input type="radio" name="整體而言，你覺得他產生的訊息通知打擾你程度是？" value="沒有明顯的打擾" {{"checked" if content['整體而言，你覺得他產生的訊息通知打擾你程度是？'] == '沒有明顯的打擾'}}>沒有明顯的打擾</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="整體而言，你覺得他產生的訊息通知打擾你程度是？" value="有打擾，但可以接受">有打擾，但可以接受</label>
+          <label><input type="radio" name="整體而言，你覺得他產生的訊息通知打擾你程度是？" value="有打擾，但可以接受" {{"checked" if content['整體而言，你覺得他產生的訊息通知打擾你程度是？'] == '有打擾，但可以接受'}}>有打擾，但可以接受</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="整體而言，你覺得他產生的訊息通知打擾你程度是？" value="有明顯的打擾">有明顯的打擾</label>
+          <label><input type="radio" name="整體而言，你覺得他產生的訊息通知打擾你程度是？" value="有明顯的打擾" {{"checked" if content['整體而言，你覺得他產生的訊息通知打擾你程度是？'] == '有明顯的打擾'}}>有明顯的打擾</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="整體而言，你覺得他產生的訊息通知打擾你程度是？" value="非常的打擾">非常的打擾</label>
+          <label><input type="radio" name="整體而言，你覺得他產生的訊息通知打擾你程度是？" value="非常的打擾" {{"checked" if content['整體而言，你覺得他產生的訊息通知打擾你程度是？'] == '非常的打擾'}}>非常的打擾</label>
         </div>
 
         <h3>整體而言，你對他的訊息多即時進行回覆？</h3>
         <div class="radio">
-          <label><input type="radio" name="整體而言，你對他的訊息多即時進行回覆？" value="立即回覆">通常立即回覆</label>
+          <label><input type="radio" name="整體而言，你對他的訊息多即時進行回覆？" value="立即回覆" {{"checked" if content['整體而言，你對他的訊息多即時進行回覆？'] == '立即回覆'}}>通常立即回覆</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="整體而言，你對他的訊息多即時進行回覆？" value="間隔數分鐘">通常間隔數分鐘</label>
+          <label><input type="radio" name="整體而言，你對他的訊息多即時進行回覆？" value="間隔數分鐘" {{"checked" if content['整體而言，你對他的訊息多即時進行回覆？'] == '間隔數分鐘'}}>通常間隔數分鐘</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="整體而言，你對他的訊息多即時進行回覆？" value="半小時以內">通常半小時以內</label>
+          <label><input type="radio" name="整體而言，你對他的訊息多即時進行回覆？" value="半小時以內" {{"checked" if content['整體而言，你對他的訊息多即時進行回覆？'] == '半小時以內'}}>通常半小時以內</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="整體而言，你對他的訊息多即時進行回覆？" value="一小時以內">通常一小時以內</label>
+          <label><input type="radio" name="整體而言，你對他的訊息多即時進行回覆？" value="一小時以內" {{"checked" if content['整體而言，你對他的訊息多即時進行回覆？'] == '一小時以內'}}>通常一小時以內</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="整體而言，你對他的訊息多即時進行回覆？" value="通常幾小時內（當天）">通常幾小時內（當天）</label>
+          <label><input type="radio" name="整體而言，你對他的訊息多即時進行回覆？" value="通常幾小時內（當天）" {{"checked" if content['整體而言，你對他的訊息多即時進行回覆？'] == '通常幾小時內（當天）'}}>通常幾小時內（當天）</label>
         </div>
         <div class="radio">
-          <label><input type="radio" name="整體而言，你對他的訊息多即時進行回覆？" value="通常沒有在當天回覆">通常沒有在當天回覆</label>
+          <label><input type="radio" name="整體而言，你對他的訊息多即時進行回覆？" value="通常沒有在當天回覆" {{"checked" if content['整體而言，你對他的訊息多即時進行回覆？'] == '通常沒有在當天回覆'}}>通常沒有在當天回覆</label>
         </div>
 
 
