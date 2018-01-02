@@ -91,7 +91,7 @@ def get_form_valid(notifications, user):
 @mobile.route('/form/', methods=['POST'])
 def add_form():
     content = request.get_json(silent=True)
-    r = FormResult({'raw': str(content), 'wid': '', 'user': content['user'], 'hash': '', 'sender': content['title'], 'app': content['app']})
+    r = FormResult({'raw': str(content), 'wid': int(content['wid']), 'user': content['user'], 'hash': '', 'sender': content['title'], 'app': content['app']})
     db.session.add(r)
     try:
         db.session.commit()
@@ -129,6 +129,12 @@ def add_result():
 
     return jsonify({'msg': 'ok', 'last_form': last_form, 'form_valid': form_valid})
 
+@mobile.route('/last_form/')
+def lastform():
+    user = request.args.get('user')
+    last_form = db.session.query(FormResult).filter(FormResult.user==user).order_by(desc(FormResult.created_at)).first()
+    return jsonify({'wid': last_form.wid, 'created_at': last_form.created_at})
+
 @mobile.route('/whitelist/')
 def whitelist():
     user = request.args.get('user')
@@ -137,17 +143,16 @@ def whitelist():
     result = []
     for c in contactQuestionnaire:
         if c.contact_name:
-            result += '(line) ' + c.contact_name +  '\t'
             result.append({
-                'app': 'line',
+                'app': 'fb',
                 'name': c.contact_name,
-                'wid': contactQuestionnaire.id
+                'wid': c.id
             })
         if c.contact_name_line:
             result.append({
-                'app': 'fb',
+                'app': 'line',
                 'name': c.contact_name_line,
-                'wid': contactQuestionnaire.id
+                'wid': c.id
             })
     return jsonify(result)
 

@@ -37,6 +37,7 @@
 			<input type="hidden" name="content" value="{{ data.text }}">
 			<input type="hidden" name="hash" value="{{ data.hash }}">
 			<input type="hidden" name="wid" value="{{ data.wid }}">
+			<input type="hidden" name="user" value="{{ data.user }}">
 						<div class="session-1">
 							<h3>你有沒有在手機上感受到通知？</h3>
 							<div class="grouped fields">
@@ -521,8 +522,18 @@
 												</div>
 										</div>
 								</div>
-								<div id="submit-btn" class="ui blue big fluid button">送出</div>
-				</div>
+						<div class="ui positive message" style="display: none" id="info_success">
+        <p>
+          成功送出
+        </p>
+      </div>
+      <div class="ui negative message" style="display: none" id="info_fail">
+        <p>
+          失敗！請確認你的網路是否正常，如果問題持續發生，請聯絡我們！
+        </p>
+      </div>		<div id="submit-btn" class="ui blue big fluid button">送出</div>
+				
+        </div>
 			</div>
 
 		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
@@ -560,7 +571,6 @@ $("#submit-btn").click(function(){
 			o[this.name] = this.value || '';
 		}
 	});
-	o['user'] = getParameterByName('user');
 	console.log(JSON.stringify(o));
 	$.ajax({
 		type: "POST",
@@ -569,6 +579,13 @@ $("#submit-btn").click(function(){
 		contentType: "application/json; charset=utf-8",
 		dataType: "json",
 		success: function() {
+			$("#info_success").show();
+			$("#info_fail").hide();
+			$("#submit-btn").hide();
+		},
+		error: function() {
+			$("#info_success").hide();
+			$("#info_fail").show();
 		}
 	});
 })
