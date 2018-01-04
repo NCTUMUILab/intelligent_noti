@@ -133,7 +133,11 @@ def add_result():
 def lastform():
     user = request.args.get('user')
     last_form = db.session.query(FormResult).filter(FormResult.user==user).order_by(desc(FormResult.created_at)).first()
-    return jsonify({'wid': last_form.wid, 'created_at': last_form.created_at})
+    if last_form:
+        wid = last_form.wid
+    else:
+        wid = None
+    return jsonify({'wid': wid, 'created_at': last_form.created_at})
 
 @mobile.route('/whitelist/')
 def whitelist():
