@@ -59,8 +59,8 @@
 								<div class="grouped fields">
 										<div class="field">
 												<div class="ui checkbox">
-														<input type="checkbox" name="你如何感知到這則通知"  value="我剛剛正在使用手機" tabindex="0" class="hidden">
-														<label>我剛剛正在使用手機</label>
+														<input type="checkbox" name="你如何感知到這則通知"  value="我當時正在使用手機" tabindex="0" class="hidden">
+														<label>我當時正在使用手機</label>
 												</div>
 										</div>
 										<div class="field">
@@ -90,6 +90,7 @@
 								</div>
 						</div>
 <div class="no-feel-hide">
+						<div class="using-phone-hide">
 						<h3>在感受到通知的當下，你有沒有猜是誰傳的訊息？</h3>
 						<div class="grouped fields">
 								<div class="field">
@@ -130,6 +131,7 @@
 
 								<h3>你剛剛猜的是誰</h3>
 								<input name="你剛剛猜的是誰" tabindex="0" class="hidden">
+							</div>
 
 								<h3>我覺得這則通知干擾到我了（1:非常不同意；5:非常同意）</h3>
 								<div class="grouped fields">
@@ -370,7 +372,7 @@
 												</div>
 										</div>
 								</div>
-									
+
 								</h3>
 
 								<h3>你當時正在做什麼事？</h3>
@@ -580,7 +582,7 @@
           失敗！請確認你的網路是否正常，如果問題持續發生，請聯絡我們！
         </p>
       </div>		<div id="submit-btn" class="ui blue big fluid button">送出</div>
-				
+
         </div>
 			</div>
 
@@ -640,7 +642,7 @@ $("#submit-btn").click(function(){
 
 
 
-$("input[value='我沒有感覺到通知']").change(function () {
+$("input[name='你有沒有在手機上感受到通知']").change(function () {
     if($("input[value='我沒有感覺到通知']").is(":checked")){
 		$(".no-feel-hide").hide();
 	}
@@ -649,12 +651,13 @@ $("input[value='我沒有感覺到通知']").change(function () {
 	}
  });
 
- $("input[value='我剛剛正在使用手機']").change(function () {
-     if($("input[value='我剛剛正在使用手機']").is(":checked")){
- 		$(".no-feel-hide").hide();
+ $("input[name='你如何感知到這則通知']").change(function () {
+
+     if($("input[value='我當時正在使用手機']").is(":checked")){
+ 		$(".using-phone-hide").hide();
  	}
  	else{
- 		$(".no-feel-hide").show();
+ 		$(".using-phone-hide").show();
  	}
   });
 
