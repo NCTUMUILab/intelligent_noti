@@ -90,22 +90,23 @@
 								</div>
 						</div>
 <div class="no-feel-hide">
-						<div class="using-phone-hide">
 						<h3>在感受到通知的當下，你有沒有猜是誰傳的訊息？</h3>
 						<div class="grouped fields">
 								<div class="field">
 										<div class="ui radio checkbox">
-												<input type="radio" name="在感受到通知的當下，你有沒有猜是誰傳的訊息？"  value="有"  tabindex="0" class="hidden" required>
+												<input type="radio" name="在感受到通知的當下，你有沒有猜是誰傳的訊息"  value="有"  tabindex="0" class="hidden" required>
 												<label>有</label>
 										</div>
 								</div>
 								<div class="field">
 										<div class="ui radio checkbox">
-												<input type="radio" name="在感受到通知的當下，你有沒有猜是誰傳的訊息？" value="沒有" tabindex="0" class="hidden">
+												<input type="radio" id="radio_guess_no" name="在感受到通知的當下，你有沒有猜是誰傳的訊息" value="沒有" tabindex="0" class="hidden">
 												<label>沒有</label>
 										</div>
 								</div>
 						</div>
+
+						<div class="using-phone-hide">
 								<h3>你是不是因為你所猜的那個人，而決定看不看這則通知？</h3>
 								<div class="grouped fields">
 										<div class="field">
@@ -660,6 +661,16 @@ $("input[name='你有沒有在手機上感受到通知']").change(function () {
  		$(".using-phone-hide").show();
  	}
   });
+ $("input[name='在感受到通知的當下，你有沒有猜是誰傳的訊息']").change(function () {
+
+     if($("#radio_guess_no").is(":checked")){
+ 		$(".using-phone-hide").hide();
+ 	}
+ 	else{
+ 		$(".using-phone-hide").show();
+ 	}
+  });
+
 
 	$("#date").text(new Date("{{data.created_at}}").toLocaleString());
 
