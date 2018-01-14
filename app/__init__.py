@@ -39,8 +39,6 @@ def admin_only(f):
 	return decorated_function
 
 # views
-# from .view import *
-
 from .views.user import user
 from .views.facebook import facebook
 from .views.questionnaire import questionnaire
