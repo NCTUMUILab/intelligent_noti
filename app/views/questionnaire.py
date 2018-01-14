@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, UserQuestionnaire
 from app import db
-from json import dumps, loads
+from json import dumps, loads, load
 
 questionnaire = Blueprint('questionnaire', __name__)
 
@@ -59,3 +59,14 @@ def user_questionnaire():
 			userQ.data = dumps(answers_dict, ensure_ascii=False)
 		db.session.commit()
 		return redirect(url_for('user.dashboard'))
+
+
+@questionnaire.route('/test/<int:user_id>/<int:questionnaire_id>', methods=['GET', 'POST'])
+@login_required
+def test(user_id, questionnaire_id):
+	error, message, questionnaire = find_questionnaire(current_user=current_user, user_id=user_id, questionnaire_id=questionnaire_id)
+	
+	if request.method == 'GET':
+		last_result = loads(questionnaire.data) if questionnaire.data else None
+		question_list = load(open("app/questionnaire/contact_questionnaire.json"))
+		return render_template('test.html', questionnaire=questionnaire, last_result=last_result, list=question_list)
