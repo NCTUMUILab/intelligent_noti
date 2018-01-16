@@ -17,8 +17,6 @@
         <div class="main">
             <form action= "{{ url_for('questionnaire.user_questionnaire') }}" method="post">
                 <h1>About You</h1>
-                這裡有一些特徵可能適合用來描述你,請在「我認為我是一個...」之後針對每一題勾選您同意的程度。 (以 1~5 回答，1:非常不精確 2:有些不精確 3:普通 4:有些精確 5:非常精確)
-                
                 {% set ns = namespace(index=0) %}
                 {% for question in question_list %}
                     {% if question["type"] == "message" %}

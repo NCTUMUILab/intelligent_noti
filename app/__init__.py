@@ -9,8 +9,9 @@ app.config.from_pyfile('config.py')
 
 # Brootstrap, DebugToolbar, SQLAlchemy
 Bootstrap(app)
-# DebugToolbarExtension(app)
 db = SQLAlchemy(app)
+if app.config['DEBUG']:
+	DebugToolbarExtension(app)
 
 # login-manage
 from flask_login import LoginManager
