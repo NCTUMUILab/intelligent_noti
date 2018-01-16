@@ -1,7 +1,6 @@
 from flask_login import UserMixin
 from . import db
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import dateutil.parser
 
