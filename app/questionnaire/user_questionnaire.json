@@ -1,32 +1,264 @@
 [
 	{
-		"type": "radio",
-		"question": "你和%%的關係是？",
-		"options": [
-			"近親(父母、兄弟、兒女)",
-			"遠親",
-			"同事(上司)",
-			"同事(下屬)",
-			"同事(同輩)",
-			"朋友",
-			"伴侶",
-			"其他"
-		],
-		"other_text": "true"
+		"type": "message",
+		"message": "這裡有一些特徵可能適合用來描述你,請在「我認為我是一個...」之後針對每一題勾選您同意的程度。 (以 1~5 回答，1:非常不精確 2:有些不精確 3:普通 4:有些精確 5:非常精確)"
 	},
 	{
 		"type": "slider",
-		"question": "當與%%分開時，我會很想念他 (1:非常不同意-7：非常同意)",
-		"scale": "7" 
+		"question": "健談的人",
+		"scale": "5"
 	},
+	{
+		"type": "slider",
+		"question": "會創新、有新想法的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "樂於助人且無私的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "充滿活力的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "可信賴的工作者",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "緊張的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "有非常多熱情的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "有寬容本質的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "擔心很多的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "具有生動想像力的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "有創造力的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "會堅持到工作完成的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "幾乎對所有人體貼且仁慈的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "做事有效率的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "喜歡外出、好社交的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "會訂計畫並依計畫執行的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "容易感到緊張的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "喜歡思考、常有想法的人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "喜歡與他人合作的人",
+		"scale": "5"
+	},
+
+
+	{
+		"type": "message",
+		"message": "請以1~4回答以下問題，1: 從來沒有這種感覺  2:很少有這種感覺 3:有時候有這種感覺 4: 經常有這種感覺"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您與週遭的人關係和睦嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您缺少友伴嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您沒有一個人讓您求助依賴嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您孤單嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您是屬於朋友中的一份子嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您與週遭的人有許多相同的地方之處嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您不再與任何人親近嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您週圍的人無法和您共享您的興趣和想法嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您是個外向和友善的人嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您和人們親密嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您不被重視嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您與其他人的關係是毫無意義的嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得沒有人真正認識您嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您處於人群中仍覺得孤立嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得當您需要時您可以找到友伴嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您有人真正了解您嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您害羞嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您的身邊有一些人,但他們不是您的知己嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您有人可以聽您傾訴嗎?",
+		"scale": "4"
+	},
+	{
+		"type": "slider",
+		"question": "您覺得您有人可以讓您求助依賴嗎?",
+		"scale": "4"
+	},
+
+
+
 	{
 		"type": "message",
 		"message": "以下問題以1-5進行回答（1:非常不同意，5:非常同意)"
 	},
 	{
-		"type": "image",
-		"question": "你覺得你與%%的關係可以用下列何者關係圖表示",
-		"src": "/static/ios.png",
-		"scale": "7"
+		"type": "slider",
+		"question": "若其他人不接受我，我不會因此感到困擾",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "我盡量不去做會讓他人避開或排斥我的事情",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "我鮮少去擔心他人是否在意我",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "我需要那種處於困境中總有人可以幫助我的感覺",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "我想要他人接受我",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "我不喜歡獨自一人",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "與朋友長時間分離並不會困擾我",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "我有很強烈的歸屬感需求",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "當他人的規劃中不包括我時，我會很不舒服",
+		"scale": "5"
+	},
+	{
+		"type": "slider",
+		"question": "當我覺得他人不接受我時，我很容易有受傷的感覺",
+		"scale": "5"
 	}
 ]
