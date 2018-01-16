@@ -14,7 +14,7 @@ Dashboard
 		{# SIDE BAR #}
 		<div class="col-sm-3 col-md-2 sidebar">
 			<ul class="nav nav-sidebar">
-				<li><a href="{{ url_for('questionnaire.user_questionnaire') }}">{{'About You(Edit)' if userQ_done else 'About You'}}</a></li>
+				<li><a href="{{ url_for('questionnaire.user_questionnaire') }}">{{'About You (Edit)' if userQ_done else 'About You'}}</a></li>
 				<li><a href="{{ url_for('heatmap.show_heatmap') }}">Heatmap Location Label</a></li>
 				{% if current_user.username == "admin" %}
 				<li><a href="{{ url_for('user.signup') }}">Sign Up</a></li>
@@ -40,7 +40,7 @@ Dashboard
 					<tbody>
 						{% for questionnaire in questionnaires %}
 						<tr>
-							<td><a href="/questionnaire/{{questionnaire.user_id}}/{{questionnaire.id}}">{{ questionnaire.contact_name }}</a></td>
+							<td><a href="{{ url_for('questionnaire.contact_questionnaire', questionnaire_id=questionnaire.id) }}">{{ questionnaire.contact_name }}</a></td>
 							<td>{{ questionnaire.contact_name_line }}</td>
 							<td>{{ questionnaire.completed }}</td>
 							<form action="/facebook/editName/{{questionnaire.user_id}}/{{questionnaire.id}}" method="POST">

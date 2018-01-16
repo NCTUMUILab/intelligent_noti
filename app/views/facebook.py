@@ -60,7 +60,7 @@ def confirmContacts():
 def uploadFacebookResult():
 	is_summited = ContactQuestionnaire.query.filter_by(user_id=current_user.id).first()
 	if is_summited:
-		return make_response(render_template('403_forbidden.html', current_user=current_user, message="You can't re-summit your facebook account!"), 403)
+		return make_response(render_template('403_forbidden.html', current_user=current_user, message="You can't re-summit your facebook account"), 403)
 	
 	form = FacebookResultForm()
 	if form.validate_on_submit():
