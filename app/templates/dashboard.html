@@ -1,6 +1,11 @@
 {% from "macros.html" import nav_bar with context %}
 {% extends "layout.html" %}
 
+{% block head %}
+{{ super() }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{% endblock %}
+
 {% block title %}
 Dashboard
 {% endblock %}
@@ -30,30 +35,34 @@ Dashboard
 				<table class="table table-striped">
 					<thead>
 						<tr>
+							<th>Questionnaire</th>
 							<th>Facebook Name</th>
 							<th>Line Name</th>
 							<th>Completed</th>
-							<th>App of New Name</th>
-							<th>New Name</th>
+							<th class="editName" hidden>App</th>
+							<th class="editName" hidden>New Name</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for questionnaire in questionnaires %}
 						<tr>
-							<td><a href="{{ url_for('questionnaire.contact_questionnaire', questionnaire_id=questionnaire.id) }}">{{ questionnaire.contact_name }}</a></td>
+							<td>
+								<button onclick="location.href='{{ url_for('questionnaire.contact_questionnaire', questionnaire_id=questionnaire.id) }}';">Enter</button>
+							</td>
+							<td>{{ questionnaire.contact_name }}</a></td>
 							<td>{{ questionnaire.contact_name_line }}</td>
 							<td>{{ questionnaire.completed }}</td>
-							<form action="/facebook/editName/{{questionnaire.user_id}}/{{questionnaire.id}}" method="POST">
-								<td>
+							<form action="{{ url_for('contact.editName', questionnaire_id=questionnaire.id) }}" method="POST">
+								<td class="editName" hidden>
 									<select name="appNewName">
 										<option value="facebook">facebook</option>
 										<option value="line">line</option>
 									</select>
 								</td>
-								<td>
+								<td class="editName" hidden>
 									<input type="text" name="name" />
 								</td>
-								<td>
+								<td class="editName" hidden>
 									<input type="submit" name="Edit">
 								</td>
 							</form>
@@ -61,8 +70,25 @@ Dashboard
 						{% endfor %}
 					</tbody>
 				</table>
+				<button id="showEditBtn" type="button">Edit Name</button>
+				<button id="cancel" type="button" hidden>Cancel</button>
 			</div>
 		</div>
 	</div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script>
+	$("#showEditBtn").click(function() {
+		$(".editName").show();
+		$("#showEditBtn").hide();
+		$("#cancel").show();
+	})
+	
+	$("#cancel").click(function() {
+		$(".editName").hide();
+		$("#showEditBtn").show();
+		$("#cancel").hide();
+	})
+</script>
 {% endblock %}
