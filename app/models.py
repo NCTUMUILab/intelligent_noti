@@ -1,7 +1,6 @@
 from flask_login import UserMixin
 from . import db
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import dateutil.parser
 
@@ -63,7 +62,7 @@ class ContactQuestionnaire(db.Model):
     contact_name = db.Column(db.String(50))
     contact_name_line = db.Column(db.String(50))
     user_id = db.Column(db.Integer)
-    is_group = db.Column(db.Boolean)
+    is_group = db.Column(db.Boolean) # deprecated
     completed = db.Column(db.Boolean)
     data = db.Column(db.Text)
 

@@ -14,9 +14,8 @@ Contact List
 {% block content %}
 {{ nav_bar() }}
 
-{# MAIN AREA #}
 <div class="container-fluid">
-	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+	<div class="main">
 		<h2>Hi, {{ current_user.username }}. Please choose {{ limit }} contacts</h2>
 		<h3><div class="selected"></div></h3>
 		
@@ -26,7 +25,7 @@ Contact List
 	  		</button>
 			
 			<div class="table-responsive">
-				<form action="{{ url_for('facebook.confirmContacts') }}" method="POST">
+				<form action="{{ url_for('contact.confirmContacts') }}" method="POST">
 					
 					<table class="table table-striped">
 						<thead>

@@ -23,7 +23,7 @@ def signup():
 		db.session.add(new_user)
 		db.session.commit()
 		login_user(new_user)
-		return redirect(url_for('facebook.uploadFacebookResult'))
+		return redirect(url_for('contact.addContact'))
 	return render_template('signup.html', form=form)
 
 	

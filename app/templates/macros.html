@@ -9,8 +9,11 @@
 			<a class="navbar-brand" href="{{ url_for('user.index') }}">Who Matters</a>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
-			<ul class="nav navbar-nav navbar-right">
+			<ul class="nav navbar-nav navbar-left">
 				<li><a href="{{ url_for('user.dashboard') }}">Dashboard</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{{ url_for('user.dashboard') }}">{{ current_user.username }}</a></li>
 				<li><a href="{{ url_for('user.logout') }}">Log Out</a></li>
 			</ul>
 		</div>

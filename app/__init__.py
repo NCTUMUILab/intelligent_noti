@@ -9,8 +9,9 @@ app.config.from_pyfile('config.py')
 
 # Brootstrap, DebugToolbar, SQLAlchemy
 Bootstrap(app)
-# DebugToolbarExtension(app)
 db = SQLAlchemy(app)
+if app.config['DEBUG']:
+	DebugToolbarExtension(app)
 
 # login-manage
 from flask_login import LoginManager
@@ -40,13 +41,13 @@ def admin_only(f):
 
 # views
 from .views.user import user
-from .views.facebook import facebook
+from .views.contact import contact
 from .views.questionnaire import questionnaire
 from .views.heatmap import heatmap
 from .views.mobile import mobile
 
 app.register_blueprint(user)
-app.register_blueprint(facebook)
+app.register_blueprint(contact, url_prefix='/contact')
 app.register_blueprint(questionnaire)
 app.register_blueprint(heatmap)
 app.register_blueprint(mobile)

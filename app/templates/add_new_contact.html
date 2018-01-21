@@ -1,0 +1,146 @@
+{% from "macros.html" import nav_bar with context %}
+{% extends "layout.html" %}
+
+{% block head %}
+{{ super() }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+{% endblock %}
+
+{% block title %}
+Contact List
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+	input:focus {
+	    outline: none;
+	}
+</style>
+{% endblock %}
+
+{% block content %}
+{{ nav_bar() }}
+
+<div class="container-fluid">
+	<div class="row">
+		{# SIDE BAR #}
+		<div class="col-sm-3 col-md-2 sidebar">
+			<ul class="nav nav-sidebar">
+				<li style="margin:10px">
+					<b>Add a new contact</b>
+				</li>
+				<li style="margin:10px">
+					<input type="text" id="name-field" placeholder="Name" style="width:100px">
+				</li>
+				<li style="margin:10px">
+					<select id="app-field">
+						<option value="facebook">facebook</option>
+						<option value="line">line</option>
+					</select>
+				</li>
+				<li style="margin:10px">
+					<button id="add-btn">Add</button>
+				</li>
+			</ul>
+		</div>
+		
+		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+			<h2>Hi, {{ current_user.username }}. Please add contacts</h2>
+			<h3><div class="selected"></div></h3>
+			
+			<div id="contacts">	
+				<div class="table-responsive">
+					<form id="addForm" action="{{ url_for('contact.addContact') }}" method="POST">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th class="name">Name</th>
+									<th class="app">App</th>
+								</tr>
+							</thead>
+							<tbody class="list" id="result">
+								<tr id="initItem" hidden>
+									<td class="name">Alex (Example)</td>
+									<td class="app">facebook</td>
+									<td class="remove" id="removeInit">
+										<button class="remove-btn" type="button">Remove</button></td>
+									<td class="id" hidden>-1</td>
+								</tr>
+							</tbody>
+						</table>
+						<button id="submit-btn" type="button">Submit</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+	var options = { valueNames: ['id', 'name', 'app'] };
+	var contactList = new List('contacts', options);
+	var nameField  = $('#name-field'),
+		appField   = $('#app-field'),
+		addBtn     = $('#add-btn'), 
+		submitBtn  = $('#submit-btn');
+	
+	function clearFields() {
+		nameField.val('');
+	}
+	
+	addBtn.click(function() {		
+		contactList.add({
+			id: Math.floor(Math.random()*100),
+			name: nameField.val(),
+			app:  appField.val()
+		});
+		
+		// remove init item
+		var initItem = $("#initItem");
+		if (initItem) {
+			var id = initItem.find(".id").text();
+			contactList.remove("id", id);
+		}
+		
+		clearFields();
+		$("tr").show();
+		registerRemoveBtn();
+	})
+	
+	submitBtn.click(function() {
+		var list = $("#result").find("tr");
+		list.each(function(i, obj) {
+			if (obj.cells[0].innerText != ""){
+				var name = obj.cells[0].innerText;
+				var app  = obj.cells[1].innerText;
+				
+				var input = document.createElement("input");
+				input.type = "hidden";
+				input.name = name;
+				input.value = app;
+				obj.appendChild(input);
+			}
+		});
+		document.getElementById("addForm").submit();
+	})
+	
+	function registerRemoveBtn(){
+		var removeBtns = $('.remove-btn');
+		console.log(removeBtns);
+		removeBtns.click(function() {
+			var itemId = $(this).closest('tr').find('.id').text();
+			contactList.remove('id', itemId);
+		});
+	}
+	
+	nameField.keyup(function(event) {
+	    if (event.keyCode === 13) {
+	        addBtn.click();
+	    }
+	});
+</script>
+{% endblock %}
