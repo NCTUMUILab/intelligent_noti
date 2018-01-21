@@ -1,0 +1,54 @@
+{% from "macros.html" import nav_bar with context %}
+{% extends "layout.html" %}
+
+{% block head %}
+{{ super() }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+{% endblock %}
+
+{% block title %}
+Contact Questionnaire
+{% endblock %}
+
+{% block content %}
+{{ nav_bar() }}
+
+<div class="container-fluid">
+	<div class="main">
+		<h2>Hi, Admin. This is a List of Users</h2>
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Contact Questionnaire</th>
+					<th>Completed</th>
+					<th>User Questionnaire</th>
+				</thead>
+				<tbody class="list">
+					{% for user in users %}
+					<tr>
+						<td class="id">{{ user.id }}</td>
+						<td class="name">{{ user.username }}</td>
+						<td>{{ q_num[user.id] or "0" }}</td>
+						<td>{{ q_completed[user.id] or "0" }}</td>
+						<td>{{ "Completed" if user.id in user_Q_completed else "Not Yet" }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+	var options = {
+	  valueNames: [ 'user_name', 'msg_count', 'app' ]
+	};
+	var userList = new List('contacts', options);
+	
+</script>
+{% endblock %}

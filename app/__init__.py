@@ -10,8 +10,8 @@ app.config.from_pyfile('config.py')
 # Brootstrap, DebugToolbar, SQLAlchemy
 Bootstrap(app)
 db = SQLAlchemy(app)
-if app.config['DEBUG']:
-	DebugToolbarExtension(app)
+# if app.config['DEBUG']:
+# 	DebugToolbarExtension(app)
 
 # login-manage
 from flask_login import LoginManager
@@ -33,7 +33,7 @@ from functools import wraps
 def admin_only(f):
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
-		if current_user.username == "admin":
+		if getattr(current_user, "username", None) == "admin":
 			return f(*args, **kwargs)
 		else:
 			return make_response(render_template('403_forbidden.html', current_user=current_user, message="You are not the ADMIN!"), 403)
@@ -45,9 +45,14 @@ from .views.contact import contact
 from .views.questionnaire import questionnaire
 from .views.heatmap import heatmap
 from .views.mobile import mobile
+from .views.admin import admin
 
 app.register_blueprint(user)
 app.register_blueprint(contact, url_prefix='/contact')
 app.register_blueprint(questionnaire)
 app.register_blueprint(heatmap)
 app.register_blueprint(mobile)
+app.register_blueprint(admin, url_prefix='/admin')
+
+# from flask_superadmin import Admin, model
+# admin = Admin(app, 'Simple Models')
