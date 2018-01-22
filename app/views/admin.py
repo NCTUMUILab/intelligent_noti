@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify
 from flask_login import login_required, current_user
-from app.models import ContactQuestionnaire, UserQuestionnaire, User
+from app.models import ContactQuestionnaire, UserQuestionnaire, User, FormResult
 from app import admin_only
 
 admin = Blueprint('admin', __name__)
@@ -8,7 +8,10 @@ admin = Blueprint('admin', __name__)
 @admin.route('/esm')
 @admin_only
 def view_esm():
-    return "still working on that"
+    esms = FormResult.query.all()
+    users = User.query.all()
+    id_name_dict = { user.phone_id : user.username for user in users }
+    return render_template("admin/esm.html", esms=esms, id_name_dict=id_name_dict)
 
 @admin.route('/questionnaire')
 @admin_only
@@ -26,7 +29,5 @@ def view_questionnaire():
     user_Q_completed = []
     for user_Q in user_Qs:
         user_Q_completed.append(user_Q.user_id)
-    
-    print(user_Q_completed)
     
     return render_template("admin/questionnaire.html", users=users, q_num=q_num, q_completed=q_completed, user_Q_completed=user_Q_completed)
