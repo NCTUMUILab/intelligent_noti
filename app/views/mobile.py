@@ -5,12 +5,13 @@ from datetime import datetime, timedelta
 from sqlalchemy import desc
 import hashlib
 import json
+from datetime import timezone
 
 from sqlalchemy.exc import IntegrityError
 import uuid
 from flask_cors import CORS, cross_origin
 import dateutil.parser
-
+from flask import abort
 
 mobile = Blueprint('mobile', __name__)
 
@@ -38,7 +39,6 @@ def get_notification_data(user):
             if not p['white_list_user'] and (not user == "c891e5cda613e2ac"):
                 continue
     #        wids.append(p['white_list_user'].id)
-    #        p['wid'] = p['white_list_user'].id
             p['hash'] = hashlib.md5((str(noti[0:2]) + str(n.date)).encode()).hexdigest()
             p['done'] = bool(db.session.query(FormResult).filter(FormResult.hash==p['hash']).one_or_none())
             notifications.append(p)
@@ -91,7 +91,7 @@ def get_form_valid(notifications, user):
 @mobile.route('/form/', methods=['POST'])
 def add_form():
     content = request.get_json(silent=True)
-    r = FormResult({'raw': str(content), 'wid': int(content['wid']), 'user': content['user'], 'hash': '', 'sender': content['title'], 'app': content['app']})
+    r = FormResult({'raw': str(content), 'wid': 0, 'user': content['user'], 'hash': '', 'sender': content['title'], 'app': content['app']})
     db.session.add(r)
     try:
         db.session.commit()
@@ -105,39 +105,39 @@ def add_form():
 
 @mobile.route('/upload/', methods=['POST'])
 def add_result():
-    content = request.get_json(silent=True)
-    print('len: ', len(content))
-    print('first id:', content[0]['id'])
-    for c in content:
-        result = Result(c)
-        db.session.add(result)
-        try:
-            db.session.commit()
-            msg = 'ok'
-        except Exception as e:
-            print(e)
-            db.session.rollback()
-            msg = 'error'
-    if content:
-        user = content[0]['user']
-    last_form = db.session.query(FormResult).filter(FormResult.user==user).order_by(desc(FormResult.created_at)).first()
-    if last_form:
-        last_form = last_form.created_at
+     content = request.get_json(silent=True)
 
-    notifications = get_notification_data(user)
-    form_valid = get_form_valid(notifications, user)
-
-    return jsonify({'msg': 'ok', 'last_form': last_form, 'form_valid': form_valid})
+     result = Result({
+         'type': "new",
+         'user': content['device_id'],
+         'id': 0,
+         'raw': str(content),
+         'date' : content['startTimeString']
+     })
+     db.session.add(result)
+     try:
+         db.session.commit()
+         msg = 'ok'
+     except Exception as e:
+         print(e)
+         db.session.rollback()
+         abort(404)
+     return jsonify({
+          'startTime': int(content['startTime']),
+          'endTime': int(content['endTime'] )
+      })
 
 @mobile.route('/last_form/')
 def lastform():
     user = request.args.get('user')
     last_form = db.session.query(FormResult).filter(FormResult.user==user).order_by(desc(FormResult.created_at)).first()
+    print(last_form.created_at)
+    print(last_form.created_at - timedelta(hours=8))
     if last_form:
-        wid = last_form.wid
+        c = int((last_form.created_at).timestamp())
     else:
-        wid = None
-    return jsonify({'wid': wid, 'created_at': last_form.created_at})
+        c = 0
+    return jsonify({'created_at': c})
 
 @mobile.route('/whitelist/')
 def whitelist():

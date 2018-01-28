@@ -59,6 +59,12 @@
 				<div class="grouped fields">
 					<div class="field">
 						<div class="ui checkbox">
+							<input type="checkbox" name="你如何感知到這則通知" id="radio_using_phone" value="我當時正在使用手機" tabindex="0" class="hidden">
+							<label>我當時正在使用手機</label>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui checkbox">
 							<input type="checkbox" name="你如何感知到這則通知" value="鈴聲" tabindex="0" class="hidden">
 							<label>鈴聲</label>
 						</div>
@@ -78,7 +84,7 @@
 					<div class="field">
 						<div class="ui checkbox">
 							<input type="checkbox" name="你如何感知到這則通知" value="看到螢幕從按變亮，跳出通知" tabindex="0" class="hidden">
-							<label>看到手機螢幕上的通知</label>
+							<label>看到螢幕從暗變亮，跳出通知</label>
 						</div>
 					</div>
 				</div>
@@ -89,20 +95,14 @@
 				<div class="grouped fields">
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input type="radio" id="radio_guess_no_1" name="在感受到通知的當下，你有沒有猜是誰傳的訊息" value="不用猜，因為已經看到是誰" tabindex="0" class="hidden" >
-							<label>不用猜，因為已經看到是誰</label>
+							<input type="radio" name="在感受到通知的當下，你有沒有猜是誰傳的訊息" value="有" tabindex="0" class="hidden" >
+							<label>有</label>
 						</div>
 					</div>
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input type="radio" id="radio_guess_no_2" name="在感受到通知的當下，你有沒有猜是誰傳的訊息" value="沒有看到是誰，有猜是誰" tabindex="0" class="hidden">
-							<label>沒有看到是誰，有猜是誰</label>
-						</div>
-					</div>
-					<div class="field">
-						<div class="ui radio checkbox">
-							<input type="radio" name="在感受到通知的當下，你有沒有猜是誰傳的訊息" value="沒有看到是誰，也沒有猜是誰" tabindex="0" class="hidden">
-							<label>沒有看到是誰，也沒有猜是誰</label>
+							<input type="radio" id="radio_guess_no" name="在感受到通知的當下，你有沒有猜是誰傳的訊息" value="沒有" tabindex="0" class="hidden">
+							<label>沒有</label>
 						</div>
 					</div>
 				</div>
@@ -207,17 +207,17 @@
 					</div>
 				</div>
 
-				<h3>你有沒有立即去處理這則通知？</h3>
+				<h3>你有沒有立即去看這則通知？</h3>
 				<div class="grouped fields">
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input type="radio" name="你有沒有立即去處理這則通知？" id="radio_instant_see" value="有" tabindex="0" class="hidden" >
+							<input type="radio" name="你有沒有立即去看這則通知？" id="radio_instant_see" value="有" tabindex="0" class="hidden" >
 							<label>有</label>
 						</div>
 					</div>
 					<div class="field">
 						<div class="ui radio checkbox">
-							<input type="radio" name="你有沒有立即去處理這則通知？" value="沒有" tabindex="0" class="hidden">
+							<input type="radio" name="你有沒有立即去看這則通知？" value="沒有" tabindex="0" class="hidden">
 							<label>沒有</label>
 						</div>
 					</div>
@@ -411,8 +411,8 @@
 				</div>
 				<div class="field">
 					<div class="ui radio checkbox">
-						<input type="radio" name="當時正在做什麼事？" value="無聊放空" tabindex="0" class="hidden">
-						<label>無聊放空</label>
+						<input type="radio" name="當時正在做什麼事？" value="無聊殺時間" tabindex="0" class="hidden">
+						<label>無聊殺時間</label>
 					</div>
 				</div>
 				<div class="field">
@@ -432,12 +432,6 @@
 					<div class="ui radio checkbox">
 						<input type="radio" name="當時正在做什麼事？" value="看電視、影片" tabindex="0" class="hidden">
 						<label>看電視、影片</label>
-					</div>
-				</div>
-				<div class="field">
-					<div class="ui radio checkbox">
-						<input type="radio" name="當時正在做什麼事？" value="使用電腦上網" tabindex="0" class="hidden">
-						<label>上網</label>
 					</div>
 				</div>
 				<div class="field">
@@ -489,133 +483,89 @@
 				</div>
 			</div>
 
-			<h3>請問你當時做這件事的專注（投入）程度？（1:非常不投入 ; 5:非常投入）</h3>
+			<h3>請問你當時做這件事的專注（投入）程度？（1:非常不投入；5: 非常投入 ）</h3>
 			<div class="grouped fields">
 				<div class="field">
 					<div class="ui radio checkbox">
-						<input type="radio" name="請問你當時做這件事的專注（投入）程度？（1:非常不投入 ; 5:非常投入）" value="1" tabindex="0" class="hidden" >
+						<input type="radio" name="請問你當時的專注（投入）程度？ " value="1" tabindex="0" class="hidden" >
 						<label>1</label>
 					</div>
 				</div>
 				<div class="field">
 					<div class="ui radio checkbox">
-						<input type="radio" name="請問你當時做這件事的專注（投入）程度？（1:非常不投入 ; 5:非常投入）" value="2" tabindex="0" class="hidden">
+						<input type="radio" name="請問你當時的專注（投入）程度？ " value="2" tabindex="0" class="hidden">
 						<label>2</label>
 					</div>
 				</div>
 				<div class="field">
 					<div class="ui radio checkbox">
-						<input type="radio" name="請問你當時做這件事的專注（投入）程度？（1:非常不投入 ; 5:非常投入）" value="3" tabindex="0" class="hidden">
+						<input type="radio" name="請問你當時的專注（投入）程度？ " value="3" tabindex="0" class="hidden">
 						<label>3</label>
 					</div>
 				</div>
 				<div class="field">
 					<div class="ui radio checkbox">
-						<input type="radio" name="請問你當時做這件事的專注（投入）程度？（1:非常不投入 ; 5:非常投入）" value="4" tabindex="0" class="hidden">
-						<label>4</label>
+						<input type="radio" name="請問你當時的專注（投入）程度？ " value="4" tabindex="0" class="hidden">
+                        <label>4</label>
 					</div>
 				</div>
 				<div class="field">
 					<div class="ui radio checkbox">
-						<input type="radio" name="請問你當時做這件事的專注（投入）程度？（1:非常不投入 ; 5:非常投入）" value="5" tabindex="0" class="hidden">
+						<input type="radio" name="請問你當時的專注（投入）程度？ " value="5" tabindex="0" class="hidden">
 						<label>5</label>
 					</div>
 				</div>
 			</div>
-			
-			<h3>你當下在你身邊互動的有多少人？（不包含傳訊息、打電話等等）</h3>
-			<div class="grouped fields">
-				<div class="field">
-					<div class="ui radio checkbox">
-						<input type="radio" name="你當下在你身邊互動的有多少人？（不包含傳訊息、打電話等等）" value="0人" tabindex="0" class="hidden" >
-						<label>0人</label>
-					</div>
-				</div>
-				<div class="field">
-					<div class="ui radio checkbox">
-						<input type="radio" name="你當下在你身邊互動的有多少人？（不包含傳訊息、打電話等等）" value="1人" tabindex="0" class="hidden">
-						<label>1人</label>
-					</div>
-				</div>
-				<div class="field">
-					<div class="ui radio checkbox">
-						<input type="radio" name="你當下在你身邊互動的有多少人？（不包含傳訊息、打電話等等）" value="2人" tabindex="0" class="hidden">
-						<label>2人</label>
-					</div>
-				</div>
-				<div class="field">
-					<div class="ui radio checkbox">
-						<input type="radio" name="你當下在你身邊互動的有多少人？（不包含傳訊息、打電話等等）" value="3人" tabindex="0" class="hidden">
-						<label>3人</label>
-					</div>
-				</div>
-				<div class="field">
-					<div class="ui radio checkbox">
-						<input type="radio" name="你當下在你身邊互動的有多少人？（不包含傳訊息、打電話等等）" value="4人" tabindex="0" class="hidden">
-						<label>4人</label>
-					</div>
-				</div>
-				<div class="field">
-					<div class="ui radio checkbox">
-						<input type="radio" name="你當下在你身邊互動的有多少人？（不包含傳訊息、打電話等等）" value="5人（含）以上" tabindex="0" class="hidden">
-						<label>5人（含）以上</label>
-					</div>
-				</div>
-			</div>
 
-			<h3>你當下在你身邊互動的有誰？(選擇所有符合的身份)</h3>
+			<h3>你當下在你身邊互動的有誰</h3>
 			<div class="grouped fields">
 				<div class="field">
 					<div class="ui checkbox">
-						<input type="checkbox" name="你當下在你身邊互動的有誰？(選擇所有符合的身份)" value="情人" tabindex="0" class="hidden" >
+						<input type="checkbox" name="你當下在你身邊互動的有誰" value="情人" tabindex="0" class="hidden" >
 						<label>情人</label>
 					</div>
 				</div>
 				<div class="field">
 					<div class="ui checkbox">
-						<input type="checkbox" name="你當下在你身邊互動的有誰？(選擇所有符合的身份)" value="朋友" tabindex="0" class="hidden">
+						<input type="checkbox" name="你當下在你身邊互動的有誰" value="朋友" tabindex="0" class="hidden">
 						<label>朋友</label>
 					</div>
 				</div>
 				<div class="field">
 					<div class="ui checkbox">
-						<input type="checkbox" name="你當下在你身邊互動的有誰？(選擇所有符合的身份)" value="同學" tabindex="0" class="hidden">
+						<input type="checkbox" name="你當下在你身邊互動的有誰" value="同學" tabindex="0" class="hidden">
 						<label>同學</label>
 					</div>
 				</div>
 				<div class="field">
 					<div class="ui checkbox">
-						<input type="checkbox" name="你當下在你身邊互動的有誰？(選擇所有符合的身份)" value="家人" tabindex="0" class="hidden">
+						<input type="checkbox" name="你當下在你身邊互動的有誰" value="家人" tabindex="0" class="hidden">
 						<label>家人</label>
 					</div>
 				</div>
 				<div class="field">
 					<div class="ui checkbox">
-						<input type="checkbox" name="你當下在你身邊互動的有誰？(選擇所有符合的身份)" value="同事" tabindex="0" class="hidden">
+						<input type="checkbox" name="你當下在你身邊互動的有誰" value="同事" tabindex="0" class="hidden">
 						<label>同事</label>
 					</div>
 				</div>
 				<div class="field">
 					<div class="ui checkbox">
-						<input type="checkbox" name="你當下在你身邊互動的有誰？(選擇所有符合的身份)" value="老師、教授、上司" tabindex="0" class="hidden">
+						<input type="checkbox" name="你當下在你身邊互動的有誰" value="老師、教授、上司" tabindex="0" class="hidden">
 						<label>老師、教授、上司</label>
 					</div>
 				</div>
 				<div class="field">
 					<div class="ui checkbox">
-						<input type="checkbox" name="你當下在你身邊互動的有誰？(選擇所有符合的身份)" value="學生、下屬" tabindex="0" class="hidden">
+						<input type="checkbox" name="你當下在你身邊互動的有誰" value="學生、下屬" tabindex="0" class="hidden">
 						<label>學生、下屬</label>
 					</div>
 				</div>
 				<div class="field">
 					<div class="ui checkbox">
-						<input type="checkbox" name="你當下在你身邊互動的有誰？(選擇所有符合的身份)" value="陌生人" tabindex="0" class="hidden">
+						<input type="checkbox" name="你當下在你身邊互動的有誰" value="陌生人" tabindex="0" class="hidden">
 						<label>陌生人</label>
 					</div>
-				</div>
-				<div class="field">
-					<label>其他</label>
-					<input name="你當下在你身邊互動的有誰？(選擇所有符合的身份)" tabindex="0" class="hidden">
 				</div>
 			</div>
 			<div class="ui positive message" style="display: none" id="info_success">
@@ -712,21 +662,21 @@
 		});
 		$("input[name='在感受到通知的當下，你有沒有猜是誰傳的訊息']").change(function() {
 
-			if ($("#radio_guess_no_1").is(":checked") || $("#radio_guess_no_2").is(":checked")) {
+			if ($("#radio_guess_no").is(":checked")) {
 				$(".hide-2").hide();
 			} else {
 				$(".hide-2").show();
 			}
 		});
 
-		$("input[name='你有沒有立即去看這則通知？']").change(function() {
-
-			if ($("#radio_instant_see").is(":checked")) {
-				$(".hide-4").show();
-			} else {
-				$(".hide-4").hide();
-			}
-		});
+		//$("input[name='你有沒有立即去看這則通知？']").change(function() {
+        //
+		//	if ($("#radio_instant_see").is(":checked")) {
+		//		$(".hide-4").show();
+		//	} else {
+		//		$(".hide-4").hide();
+		//	}
+		//});
 
 
 
