@@ -53,6 +53,3 @@ app.register_blueprint(questionnaire)
 app.register_blueprint(heatmap)
 app.register_blueprint(mobile)
 app.register_blueprint(admin, url_prefix='/admin')
-
-# from flask_superadmin import Admin, model
-# admin = Admin(app, 'Simple Models')
