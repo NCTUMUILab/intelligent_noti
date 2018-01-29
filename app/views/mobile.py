@@ -164,5 +164,6 @@ def whitelist():
 @mobile.route('/notification/')
 def get_notification():
     data = request.args.get('data')
+    question_list = json.load(open("app/questionnaire/esm.json"))
 
-    return render_template('notification.html', data=json.loads(data))
+    return render_template('notification.html', data=json.loads(data), question_list=question_list)
