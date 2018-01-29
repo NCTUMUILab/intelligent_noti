@@ -131,8 +131,6 @@ def add_result():
 def lastform():
     user = request.args.get('user')
     last_form = db.session.query(FormResult).filter(FormResult.user==user).order_by(desc(FormResult.created_at)).first()
-    print(last_form.created_at)
-    print(last_form.created_at - timedelta(hours=8))
     if last_form:
         c = int((last_form.created_at).timestamp())
     else:
