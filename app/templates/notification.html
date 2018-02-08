@@ -38,14 +38,14 @@
 			<input type="hidden" name="hash" value="{{ data.hash }}">
 			<input type="hidden" name="wid" value="{{ data.wid }}">
 			<input type="hidden" name="user" value="{{ data.user }}">
-			
+
 			{% for question in question_list %}
 				{% if question["hide"] %}
 					<div class="{{ question['hide'] }}">
 				{% endif %}
-				
+
 				<h3>{{ question["question"] ~ question["description"] }}</h3>
-				
+
 				{% if question["type"] == "radio" or question["type"] == "image" %}
 					<div class="grouped fields">
 						{% for option in question["options"] %}
@@ -68,7 +68,7 @@
 							</div>
 						{% endif %}
 					</div>
-				
+
 				{% elif question["type"] == "checkbox" %}
 					<div class="grouped fields">
 						{% for option in question["options"] %}
@@ -86,10 +86,10 @@
 							</div>
 						{% endif %}
 					</div>
-				
+
 				{% elif question["type"] == "text" %}
 					<input type="text" name="{{ question['question'] }}" tabindex="0" class="hidden">
-				
+
 				{% elif question["type"] == "group" %}
 					<div class="grouped fields">
 						{% for sub_question in question["questions"] %}
@@ -104,12 +104,12 @@
 							{% endfor %}
 						{% endfor %}
 					</div>
-				
+
 				{% endif %}
-			
+
 			{% if question["hide"] %}</div>{% endif %}
 			{% endfor %}
-			
+
 			<div class="ui positive message" style="display: none" id="info_success">
 				<p>
 					成功送出
@@ -183,11 +183,15 @@
 				$(".hide-15").hide();
 				$(".hide-2").hide();
 				$(".hide-3").hide();
+				$(".hide-4").hide();
+				$(".hide-4.2").show();
 			} else {
 				$(".hide-1").show();
 				$(".hide-15").show();
 				$(".hide-2").show();
 				$(".hide-3").show();
+				$(".hide-4.2").hide();
+				$(".hide-4").show();
 			}
 		});
 
