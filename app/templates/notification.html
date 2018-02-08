@@ -205,12 +205,25 @@
 			}
 		});
 		$("input[name='在感受到通知的當下，你有沒有猜是誰傳的訊息？']").change(function() {
-			if ($("input[name='在感受到通知的當下，你有沒有猜是誰傳的訊息？'][value='沒有']").is(":checked")) {
-				$(".hide-2").hide();
-			} else {
-				$(".hide-2").show();
+			if ($("input[name='在感受到通知的當下，你有沒有猜是誰傳的訊息？'][value='沒有看到是誰，有猜是誰']").is(":checked")) {
+				$(".hide-2.1").show();
+				$(".hide-2.2").show();
+			}
+			else {
+				$(".hide-2.1").hide();
+				$(".hide-2.2").hide();
 			}
 		});
+
+		$("input[name='你是不是因為你所猜的那個人，而決定看不看這則通知？']").change(function() {
+			if ($("input[name='你是不是因為你所猜的那個人，而決定看不看這則通知？'][value='是']").is(":checked")) {
+				$(".hide-2.2").show();
+			}
+			else {
+				$(".hide-2.2").hide();
+			}
+		});
+
 
 		//$("input[name='你有沒有立即去看這則通知？']").change(function() {
         //
