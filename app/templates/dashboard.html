@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "bootstrap/base.html" %}
 {% from "macros.html" import nav_bar with context %}
 
 {% block head %}
@@ -16,87 +16,92 @@ Dashboard
 {% endblock %}
 
 {% block content %}
-{{ nav_bar() }}
-
-<div class="container-fluid">
-	<div class="row">
-
-		{# SIDE BAR #}
-		<div class="col-sm-3 col-md-2 sidebar">
-			<ul class="nav nav-sidebar">
-				{% if current_user.username == "admin" %}
-					<li><a href="{{ url_for('user.signup') }}">Sign Up New User</a></li>
-					<li><a href="{{ url_for('admin.view_questionnaire') }}">View Questionnaires</a></li>
-					<li><a href="{{ url_for('admin.view_esm') }}">View ESM</a></li>
-				{% else %}
-					<li><a href="{{ url_for('questionnaire.user_questionnaire') }}">{{'About You (Edit)' if userQ_done else 'About You'}}</a></li>
-					<li><a href="{{ url_for('heatmap.show_heatmap') }}">Heatmap Location Label</a></li>
-				{% endif %}
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="{{ url_for('user.index') }}">Who Matters</a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-left">
+				<li><a href="{{ url_for('questionnaire.user_questionnaire') }}">{{'Self Questionnaire (Edit)' if userQ_done else 'Self Questionnaire'}}</a></li>
+				<li><a href="{{ url_for('heatmap.show_heatmap') }}">Location Heatmap</a></li>
 			</ul>
+			{% if current_user.username %}
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{{ url_for('user.dashboard') }}">{{ current_user.username }}</a></li>
+				<li><a href="{{ url_for('user.logout') }}">Log Out</a></li>
+			</ul>
+			{% endif %}
 		</div>
+	</div>
+</nav>
 
-		{# MAIN AREA #}
-		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-			<h1 class="page-header">Welcome, {{ current_user.username }}</h1>
-			<h2 class="sub-header">Contact List</h2>
-			<div class="table-responsive">
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>Questionnaire</th>
-							<th>Facebook Name</th>
-							<th>Line Name</th>
-							<th>Completed</th>
-							<th class="editName" hidden>App</th>
-							<th class="editName" hidden>New Name</th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for questionnaire in questionnaires %}
-						<tr>
-							<td>
-								<button onclick="location.href='{{ url_for('questionnaire.contact_questionnaire', questionnaire_id=questionnaire.id) }}';">Enter</button>
+<div class="container">
+	<div class="main">
+		<h1 class="page-header">Welcome, {{ current_user.username }}</h1>
+		<h2 class="sub-header">Contact List</h2>
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Questionnaire</th>
+						<th>Facebook Name</th>
+						<th>Line Name</th>
+						<th>Completed</th>
+						<th class="editName" hidden>App</th>
+						<th class="editName" hidden>New Name</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for questionnaire in questionnaires %}
+					<tr>
+						<td>
+							<button class="btn btn-default" onclick="location.href='{{ url_for('questionnaire.contact_questionnaire', questionnaire_id=questionnaire.id) }}';">Enter</button>
+						</td>
+						<td>{{ questionnaire.contact_name }}</td>
+						<td>{{ questionnaire.contact_name_line }}</td>
+						<td>{{ questionnaire.completed }}</td>
+						<form action="{{ url_for('contact.editName', questionnaire_id=questionnaire.id) }}" method="POST">
+							<td class="editName" hidden>
+								<select name="appNewName">
+									<option value="facebook">facebook</option>
+									<option value="line">line</option>
+								</select>
 							</td>
-							<td>{{ questionnaire.contact_name }}</a></td>
-							<td>{{ questionnaire.contact_name_line }}</td>
-							<td>{{ questionnaire.completed }}</td>
-							<form action="{{ url_for('contact.editName', questionnaire_id=questionnaire.id) }}" method="POST">
-								<td class="editName" hidden>
-									<select name="appNewName">
-										<option value="facebook">facebook</option>
-										<option value="line">line</option>
-									</select>
-								</td>
-								<td class="editName" hidden>
-									<input type="text" name="name" />
-								</td>
-								<td class="editName" hidden>
-									<input type="submit" name="Edit">
-								</td>
-							</form>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
-				<button id="showEditBtn" type="button">Edit Name</button>
-				<button id="cancel" type="button" hidden>Cancel</button>
-			</div>
+							<td class="editName" hidden>
+								<input type="text" name="name" />
+							</td>
+							<td class="editName" hidden>
+								<input type="submit" name="Edit" class="btn btn-success btn-sm">
+							</td>
+						</form>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 		</div>
+		<button id="editBtn" type="button" class="btn btn-primary btn-block">Edit Name</button>
 	</div>
 </div>
 {% endblock %}
 {% block scripts %}
+{{ super() }}
 <script>
-	$("#showEditBtn").click(function() {
-		$(".editName").show();
-		$("#showEditBtn").hide();
-		$("#cancel").show();
-	})
-	
-	$("#cancel").click(function() {
-		$(".editName").hide();
-		$("#showEditBtn").show();
-		$("#cancel").hide();
+	var editBtnMode = false;
+	$("#editBtn").click(function() {
+		if (editBtnMode) {
+			$(".editName").hide();
+			this.innerHTML = "Edit Name";
+		}
+		else{
+			$(".editName").show();
+			this.innerHTML = "Finish";
+		}
+		editBtnMode = !editBtnMode;
 	})
 </script>
 {% endblock %}
