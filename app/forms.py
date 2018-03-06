@@ -22,6 +22,7 @@ class RegisterForm(FlaskForm):
 	username = StringField('username', validators=[ InputRequired(), Length(min=4, max=15), unique_username ])
 	password = PasswordField('password', validators=[ InputRequired(), Length(min=8, max=80), EqualTo('confirm', message='Passwords must match') ])
 	confirm = PasswordField('Repeat Password')
+	device_id = StringField('device_id', validators=[ InputRequired() ])
 	
 class FacebookLoginForm(FlaskForm):
 	account = StringField('Email or Phone number', validators=[ InputRequired() ])

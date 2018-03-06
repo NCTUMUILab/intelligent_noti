@@ -24,6 +24,7 @@ class Result(db.Model):
     def __repr__(self):
         return '<Result %r>' % self.id
 
+
 class FormResult(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     wid = db.Column(db.Integer)
@@ -42,6 +43,7 @@ class FormResult(db.Model):
         self.sender = r['sender']
         self.app = r['app']
 
+
 class WhiteList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user = db.Column(db.String(256))
@@ -55,7 +57,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(15), unique=True)
     password = db.Column(db.String(80))
     email = db.Column(db.String(50), unique=True)
-    phone_id = db.Column(db.String(30))
+
 
 class ContactQuestionnaire(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -66,11 +68,13 @@ class ContactQuestionnaire(db.Model):
     completed = db.Column(db.Boolean)
     data = db.Column(db.Text)
 
+
 class UserQuestionnaire(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, unique=True)
     completed = db.Column(db.Boolean)
     data = db.Column(db.Text)
+
 
 class GpsLabel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -78,3 +82,16 @@ class GpsLabel(db.Model):
     lat = db.Column(db.Float)
     lng = db.Column(db.Float)
     label = db.Column(db.String(256))
+
+
+class DeviceID(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    device_id = db.Column(db.String(30))
+    is_active = db.Column(db.Boolean)
+
+
+class ESMCount(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    created_at = db.Column(db.DateTime, default=datetime.now)

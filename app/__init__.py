@@ -7,11 +7,8 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
 
-# Brootstrap, DebugToolbar, SQLAlchemy
 Bootstrap(app)
 db = SQLAlchemy(app)
-# if app.config['DEBUG']:
-# 	DebugToolbarExtension(app)
 
 # login-manage
 from flask_login import LoginManager
@@ -46,6 +43,7 @@ from .views.questionnaire import questionnaire
 from .views.heatmap import heatmap
 from .views.mobile import mobile
 from .views.admin import admin
+from .views.esm import esm
 
 app.register_blueprint(user)
 app.register_blueprint(contact, url_prefix='/contact')
@@ -53,3 +51,4 @@ app.register_blueprint(questionnaire)
 app.register_blueprint(heatmap)
 app.register_blueprint(mobile)
 app.register_blueprint(admin, url_prefix='/admin')
+app.register_blueprint(esm, url_prefix='/esm')
