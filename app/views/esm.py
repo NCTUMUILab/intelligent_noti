@@ -5,9 +5,9 @@ from datetime import datetime, timedelta
 
 esm = Blueprint('esm', __name__)
 
-@esm.route('/count', methods=['POST'])
+@esm.route('/count', methods=['GET'])
 def receive_count():
-    device_id = request.form['device_id']
+    device_id = request.args.get('device_id')
     try:
         user_id = DeviceID.query.filter_by(device_id=device_id).first().user_id
     except:
@@ -16,7 +16,7 @@ def receive_count():
     db.session.add(new_count)
     db.session.commit()
     return "success"
-    
+
 @esm.route('/report')
 def report():
     device_id = request.args.get('device_id')
@@ -26,11 +26,11 @@ def report():
     user_id = DeviceID.query.filter_by(device_id=device_id).first().user_id
     all_query = ESMCount.query.filter_by(user_id=user_id)
     result['total'] = len(all_query.all())
-    
+
     time_threshold = datetime.now() - timedelta(days=7)
     esm_one_week_all = all_query.filter(ESMCount.created_at > time_threshold).all()
     result['7_days'] = len(esm_one_week_all)
-    
+
     day_count = {}
     for esm in all_query.all():
         time_str = esm.created_at.strftime('%y-%m-%d')
