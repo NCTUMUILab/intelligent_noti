@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, jsonify
+from flask import Blueprint, request, render_template, redirect, url_for
 from app.models import DeviceID, ESMCount
 from app import db
 from datetime import datetime, timedelta
@@ -8,23 +8,18 @@ esm = Blueprint('esm', __name__)
 @esm.route('/count', methods=['GET'])
 def receive_count():
     device_id = request.args.get('device_id')
-    try:
-        user_id = DeviceID.query.filter_by(device_id=device_id).first().user_id
-    except:
-        return "fail"
-    new_count = ESMCount(user_id=user_id)
+    new_count = ESMCount(device_id=device_id)
     db.session.add(new_count)
     db.session.commit()
-    return "success"
+    return redirect(url_for('esm.report', device_id=device_id))
 
 @esm.route('/report')
 def report():
     device_id = request.args.get('device_id')
     result = {}
-    if not device_id:
+    all_query = ESMCount.query.filter_by(device_id=device_id)
+    if not device_id or not all_query:
         return "bad request"
-    user_id = DeviceID.query.filter_by(device_id=device_id).first().user_id
-    all_query = ESMCount.query.filter_by(user_id=user_id)
     result['total'] = len(all_query.all())
 
     time_threshold = datetime.now() - timedelta(days=7)
@@ -43,4 +38,3 @@ def report():
         day_valid += 1 if count >= 3 else 0
     result['day_valid'] = day_valid
     return render_template('report.html', result=result, device_id=device_id)
-    # return jsonify(result)

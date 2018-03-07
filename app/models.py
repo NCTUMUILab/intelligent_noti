@@ -93,5 +93,5 @@ class DeviceID(db.Model):
 
 class ESMCount(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    device_id = db.Column(db.String(30))
     created_at = db.Column(db.DateTime, default=datetime.now)

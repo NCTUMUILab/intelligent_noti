@@ -3,7 +3,6 @@ from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire
 from app.forms import FacebookLoginForm, FacebookResultForm
 from app.get_facebook import fbMessenger, ThreadInfo
-from app.testing import contacts_test
 from app.helpers import find_questionnaire
 from app import db
 from json import loads, dumps
@@ -25,8 +24,6 @@ def facebook_login():
         fb = fbMessenger(form.account.data, form.password.data)
         contacts = fb.get_messages()
         contacts = sorted(contacts, reverse=True, key=lambda c: c.msg_count)
-        ### TESTING ###
-        # contacts = sorted(contacts_test, reverse=True, key=lambda c: c.msg_count) ## for testing
         return render_template('contact_list.html', current_user=current_user, contacts=contacts, limit=20)
     else:
         return render_template('facebook_login.html', form=form)
