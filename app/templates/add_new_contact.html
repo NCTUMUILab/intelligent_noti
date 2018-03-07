@@ -23,7 +23,7 @@ Contact List
 {% block content %}
 {{ nav_bar() }}
 
-<div class="container-fluid">
+<div class="container">
 	<div class="row">
 		{# SIDE BAR #}
 		<div class="col-sm-3 col-md-2 sidebar">
@@ -51,8 +51,8 @@ Contact List
 			<h3><div class="selected"></div></h3>
 			
 			<div id="contacts">	
-				<div class="table-responsive">
-					<form id="addForm" action="{{ url_for('contact.addContact') }}" method="POST">
+				<form id="addForm" action="{{ url_for('contact.addContact') }}" method="POST">
+					<div class="table-responsive">
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -70,9 +70,9 @@ Contact List
 								</tr>
 							</tbody>
 						</table>
-						<button id="submit-btn" type="button">Submit</button>
-					</form>
-				</div>
+					</div>
+					<button id="submit-btn" type="button" class="btn btn-primary">Submit</button>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -80,6 +80,7 @@ Contact List
 {% endblock %}
 
 {% block scripts %}
+{{ super() }}
 <script>
 	var options = { valueNames: ['id', 'name', 'app'] };
 	var contactList = new List('contacts', options);
