@@ -44,10 +44,11 @@ ESM Report
             </table>
         </div>
         <hr>
-        <h5>Day Valid Remain</h5>
+        <h5>Today's ESM Count</h5>
         <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:70%">
-                70%
+            <div class="progress-bar {{ 'progress-bar-success' if result['today'] >= 10 }}" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:{{ '100' if result['today'] >= 10 else result['today']|int * 10  }}%">
+                {# 70% #}
+                {{ result['today'] }}/10
                 <span class="sr-only">70% Complete</span>
             </div>
         </div>

@@ -22,8 +22,12 @@ def report():
         return "bad request"
     result['total'] = len(all_query.all())
 
-    time_threshold = datetime.now() - timedelta(days=7)
-    esm_one_week_all = all_query.filter(ESMCount.created_at > time_threshold).all()
+    today_threshold = datetime.now() - timedelta(days=1)
+    esm_one_day_all = all_query.filter(ESMCount.created_at > today_threshold).all()
+    result['today'] = len(esm_one_day_all)
+
+    week_threshold = datetime.now() - timedelta(days=7)
+    esm_one_week_all = all_query.filter(ESMCount.created_at > week_threshold).all()
     result['7_days'] = len(esm_one_week_all)
 
     day_count = {}
