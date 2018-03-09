@@ -29,29 +29,28 @@ ESM Report
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Total</th>
-                        <th>Week</th>
-                        <th>Valid Days</th>
+                        <th>總共完成</th>
+                        <th>一周完成</th>
+                        <th>今日完成</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>{{ result['total'] }}</td>
                         <td>{{ result['7_days'] }}</td>
-                        <td>{{ result['day_valid'] }}</td>
+                        <td>{{ result['today'] }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <hr>
+        {# <hr>
         <h5>Today's ESM Count</h5>
         <div class="progress">
             <div class="progress-bar {{ 'progress-bar-success' if result['today'] >= 10 }}" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:{{ '100' if result['today'] >= 10 else result['today']|int * 10  }}%">
-                {# 70% #}
                 {{ result['today'] }}/10
                 <span class="sr-only">70% Complete</span>
             </div>
-        </div>
+        </div> #}
         <hr>
         <canvas id="week"></canvas>
         <hr>

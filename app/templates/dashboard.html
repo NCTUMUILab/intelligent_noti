@@ -51,8 +51,6 @@ Dashboard
 						<th>問卷</th>
 						<th>Facebook 名稱</th>
 						<th>Line 名稱</th>
-						<th class="editName" hidden>App</th>
-						<th class="editName" hidden>New Name</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -65,45 +63,13 @@ Dashboard
 							<button class="btn btn-default" onclick="location.href='{{ url_for('questionnaire.contact_questionnaire', questionnaire_id=questionnaire.id) }}';">填寫</button>
 							{% endif %}
 						</td>
-						<td>{{ questionnaire.contact_name }}</td>
+						<td>{{ questionnaire.contact_name or '' }}</td>
 						<td>{{ questionnaire.contact_name_line or '' }}</td>
-						<form action="{{ url_for('contact.editName', questionnaire_id=questionnaire.id) }}" method="POST">
-							<td class="editName" hidden>
-								<select name="appNewName">
-									<option value="facebook">facebook</option>
-									<option value="line">line</option>
-								</select>
-							</td>
-							<td class="editName" hidden>
-								<input type="text" name="name" />
-							</td>
-							<td class="editName" hidden>
-								<input type="submit" name="Edit" class="btn btn-success btn-sm">
-							</td>
-						</form>
 					</tr>
 					{% endfor %}
 				</tbody>
 			</table>
 		</div>
-		<button id="editBtn" type="button" class="btn btn-primary btn-block">Edit Name</button>
 	</div>
 </div>
-{% endblock %}
-{% block scripts %}
-{{ super() }}
-<script>
-	var editBtnMode = false;
-	$("#editBtn").click(function() {
-		if (editBtnMode) {
-			$(".editName").hide();
-			this.innerHTML = "Edit Name";
-		}
-		else{
-			$(".editName").show();
-			this.innerHTML = "Finish";
-		}
-		editBtnMode = !editBtnMode;
-	})
-</script>
 {% endblock %}
