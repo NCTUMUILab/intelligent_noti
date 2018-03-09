@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, jsonify, request
 from flask_login import login_required, current_user
 from app import db
-from app.models import Result, GpsLabel
+from app.models import Result, GpsLabel, DeviceID
 from sqlalchemy import desc
 from flask import request
 from json import loads
@@ -14,32 +14,29 @@ heatmap = Blueprint('heatmap', __name__)
 def show_heatmap():
 	return render_template('heatmap.html')
 	
-@heatmap.route('/getLocationsTest', methods=['GET', 'POST'])
+@heatmap.route('/getLocations', methods=['GET', 'POST'])
 def getLocationsTest():
 	print('start')
-	all_result = Result.query.filter_by(user='357681080790864').all()
+	device_user = DeviceID.query.filter_by(user_id=current_user.id).first()
+	print(current_user.id, device_user.device_id)
+	all_result = Result.query.filter_by(user=device_user.device_id).all()
+	marks = []
 	for result in all_result:
 		try:
-			result_dict = loads(raw_str)
+			result_dict = loads(result.raw)
 		except Exception as e:
 			print("id:", result.id)
-			print(raw_str)
 			print(e)
-			break
-		notification_info = result_dict.get('Notification', 'None')
-	return 'yes'
-	
-"""
-@heatmap.route('/getLocations', methods=['GET','POST'])
-def getLocations():
-	marks = []
-	locations = db.session.query(Result).filter(Result.r_type == 'gps').filter(Result.user == current_user.phone_id).order_by(desc(Result.created_at)).limit(10000).all()
-	for location in locations:
-		loc = (location.raw.split('\t')[2], location.raw.split('\t')[3])
-		marks.append(loc)
-	locations = {"marks": marks}
-	print(locations)
-	return jsonify(locations)
+			continue
+		if result_dict.get('Notification'):
+			notification = result_dict['Notification']
+			for app_source, lng, lag in zip(notification['app_cols'], notification['longitude_cols'], notification['latitude_cols']):
+				if app_source == 'com.facebook.orca' or app_source == 'jp.naver.line.android':
+					location = (lag, lng)
+					marks.append(location)
+					print(app_source, lag, lng)
+	result_marks = {'marks': marks}
+	return jsonify(result_marks)
 	
 
 @heatmap.route('/createGpsLabel', methods=['POST'])
@@ -80,4 +77,3 @@ def listGpsLabel():
 			'markerId': location.id
 		})
 	return jsonify(result)
-"""
