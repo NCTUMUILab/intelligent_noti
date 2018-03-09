@@ -16,9 +16,7 @@ def show_heatmap():
 	
 @heatmap.route('/getLocations', methods=['GET', 'POST'])
 def getLocationsTest():
-	print('start')
 	device_user = DeviceID.query.filter_by(user_id=current_user.id).first()
-	print(current_user.id, device_user.device_id)
 	all_result = Result.query.filter_by(user=device_user.device_id).all()
 	marks = []
 	for result in all_result:

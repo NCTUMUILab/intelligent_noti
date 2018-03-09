@@ -20,21 +20,32 @@ login_manager.login_view = 'user.login'
 
 @login_manager.user_loader
 def load_user(user_id):
-	return User.query.get(int(user_id))
+    return User.query.get(int(user_id))
 
-# admin
-from flask import redirect, url_for, make_response, render_template
+# decorators
+from flask import redirect, url_for, make_response, render_template, current_app
 from flask_login import current_user
 from functools import wraps
 
 def admin_only(f):
-	@wraps(f)
-	def decorated_function(*args, **kwargs):
-		if getattr(current_user, "username", None) == "admin":
-			return f(*args, **kwargs)
-		else:
-			return make_response(render_template('403_forbidden.html', current_user=current_user, message="You are not the ADMIN!"), 403)
-	return decorated_function
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if getattr(current_user, "username", None) == "admin":
+            return f(*args, **kwargs)
+        else:
+            return make_response(render_template('403_forbidden.html', current_user=current_user, message="You are not the ADMIN!"), 403)
+    return decorated_function
+
+def on_local(f):
+    print("watttssss")
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        print("local:", current_app.config.get('LOCAL'))
+        if current_app.config.get('LOCAL'):
+            return f(*args, **kwargs)
+        else:
+            return make_response(render_template('403_forbidden.html', current_user=current_user, message="YOU SHALL NOT PASS"), 403)
+    return decorated_function
 
 # views
 from .views.user import user

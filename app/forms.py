@@ -31,3 +31,12 @@ class FacebookLoginForm(FlaskForm):
 class FacebookResultForm(FlaskForm):
 	file_facebook = FileField('result_facebook.txt', validators=[ FileRequired() ])
 	file_line     = FileField('result_line.txt')
+
+def check_mail_exist(form, field):
+	if not User.query.filter_by(email=field.data).first():
+		raise ValidationError('Invalid Email, Please contact admin.')
+
+class ForgotPassword(FlaskForm):
+	email = StringField('email', validators=[ InputRequired(), Email(message="Invalid email format"), check_mail_exist ])
+	password = PasswordField('new_password', validators=[ InputRequired(), Length(min=8, max=80), EqualTo('confirm', message='Passowrds must match') ])
+	confirm = PasswordField('Repeat Password', validators=[ InputRequired() ])

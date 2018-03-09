@@ -4,7 +4,7 @@ from app.models import ContactQuestionnaire
 from app.forms import FacebookLoginForm, FacebookResultForm
 from app.get_facebook import fbMessenger, ThreadInfo
 from app.helpers import find_questionnaire
-from app import db
+from app import db, on_local
 from json import loads, dumps
 
 contact = Blueprint('contact', __name__)
@@ -93,24 +93,36 @@ def editName(questionnaire_id):
         contact.contact_name_line = request.form['name']
     db.session.commit()
     return redirect(url_for('user.dashboard'))
-    
+
 @contact.route('/add', methods=['GET', 'POST'])
+@on_local
 def addContact():
     if request.method == 'GET':
         return render_template('add_new_contact.html')
     
     elif request.method == 'POST':
-        result = request.form.to_dict()
-        for name, app in result.items():
-            name_dict = {}
-            name_dict[app] = name
-            
+        result_list = loads(request.form['contacts'])
+        for contact in result_list:
             new_questionnaire = ContactQuestionnaire(
-                contact_name = name_dict.get("facebook", ""),
-                contact_name_line = name_dict.get("line", ""),
+                contact_name = contact['facebook'],
+                contact_name_line = contact['line'],
                 user_id = current_user.id,
                 is_group = False,
                 completed = False)
             db.session.add(new_questionnaire)
         db.session.commit()
         return redirect(url_for('user.dashboard'))
+        # result = request.form.to_dict()
+        # for name, app in result.items():
+        #     name_dict = {}
+        #     name_dict[app] = name
+            
+        #     new_questionnaire = ContactQuestionnaire(
+        #         contact_name = name_dict.get("facebook", ""),
+        #         contact_name_line = name_dict.get("line", ""),
+        #         user_id = current_user.id,
+        #         is_group = False,
+        #         completed = False)
+        #     db.session.add(new_questionnaire)
+        # db.session.commit()
+        # return redirect(url_for('user.dashboard'))

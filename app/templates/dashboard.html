@@ -42,16 +42,15 @@ Dashboard
 
 <div class="container">
 	<div class="main">
-		<h1 class="page-header">Welcome, {{ current_user.username }}</h1>
-		<h2 class="sub-header">Contact List</h2>
+		<h1 class="page-header">嗨！{{ current_user.username }}</h1>
+		<h2 class="sub-header">聯絡人清單</h2>
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
 					<tr>
-						<th>Questionnaire</th>
-						<th>Facebook Name</th>
-						<th>Line Name</th>
-						<th>Completed</th>
+						<th>問卷</th>
+						<th>Facebook 名稱</th>
+						<th>Line 名稱</th>
 						<th class="editName" hidden>App</th>
 						<th class="editName" hidden>New Name</th>
 					</tr>
@@ -60,11 +59,14 @@ Dashboard
 					{% for questionnaire in questionnaires %}
 					<tr>
 						<td>
-							<button class="btn btn-default" onclick="location.href='{{ url_for('questionnaire.contact_questionnaire', questionnaire_id=questionnaire.id) }}';">Enter</button>
+							{% if questionnaire.completed %}
+							<button class="btn btn-default disabled">完成</button>
+							{% else %}
+							<button class="btn btn-default" onclick="location.href='{{ url_for('questionnaire.contact_questionnaire', questionnaire_id=questionnaire.id) }}';">填寫</button>
+							{% endif %}
 						</td>
 						<td>{{ questionnaire.contact_name }}</td>
-						<td>{{ questionnaire.contact_name_line }}</td>
-						<td>{{ questionnaire.completed }}</td>
+						<td>{{ questionnaire.contact_name_line or '' }}</td>
 						<form action="{{ url_for('contact.editName', questionnaire_id=questionnaire.id) }}" method="POST">
 							<td class="editName" hidden>
 								<select name="appNewName">

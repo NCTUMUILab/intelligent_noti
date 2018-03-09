@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block title %}
-Contact List
+Add Contacts
 {% endblock %}
 
 {% block styles %}
@@ -24,57 +24,63 @@ Contact List
 {{ nav_bar() }}
 
 <div class="container">
+	<div class="row" style="margin-top: 20px">
+		<h1>初次見面！{{ current_user.username }}<br><small>現在需要新增一些聯絡人</small></h1>
+	</div>
+	
 	<div class="row">
-		{# SIDE BAR #}
-		<div class="col-sm-3 col-md-2 sidebar">
-			<ul class="nav nav-sidebar">
-				<li style="margin:10px">
-					<b>Add a new contact</b>
-				</li>
-				<li style="margin:10px">
-					<input type="text" id="name-field" placeholder="Name" style="width:100px">
-				</li>
-				<li style="margin:10px">
-					<select id="app-field">
+		<div class="panel panel-default" style="margin-top: 20px">
+			<div class="panel-heading"><b>新增聯絡人</b></div>
+			<div class="panel-body">
+				<div class="col-xs-4">
+					<input type="text" class="form-control" id="name-field-facebook" placeholder="Facebook Name">
+				</div>
+				<div class="col-xs-4">
+					<input type="text" class="form-control" id="name-field-line" placeholder="Line Name">
+					{# <select id="app-field" class="form-control">
 						<option value="facebook">facebook</option>
 						<option value="line">line</option>
 					</select>
-				</li>
-				<li style="margin:10px">
-					<button id="add-btn">Add</button>
-				</li>
-			</ul>
-		</div>
-		
-		<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-			<h2>Hi, {{ current_user.username }}. Please add contacts</h2>
-			<h3><div class="selected"></div></h3>
-			
-			<div id="contacts">	
-				<form id="addForm" action="{{ url_for('contact.addContact') }}" method="POST">
-					<div class="table-responsive">
-						<table class="table table-striped">
-							<thead>
-								<tr>
-									<th class="name">Name</th>
-									<th class="app">App</th>
-								</tr>
-							</thead>
-							<tbody class="list" id="result">
-								<tr id="initItem" hidden>
-									<td class="name">Alex (Example)</td>
-									<td class="app">facebook</td>
-									<td class="remove" id="removeInit">
-										<button class="remove-btn" type="button">Remove</button></td>
-									<td class="id" hidden>-1</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<button id="submit-btn" type="button" class="btn btn-primary">Submit</button>
-				</form>
+ #}				</div>
+				<div class="col-xs-4">
+					<button id="add-btn" class="btn btn-success">新增</button>
+				</div>
+				
 			</div>
+				
 		</div>
+	</div>
+	
+	<div class="row">
+		<form id="addForm" action="{{ url_for('contact.addContact') }}" method="POST">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<h3><div class="selected"></div></h3>
+					<div id="contacts">	
+						<div class="table-responsive">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th class="facebookName">Facebook</th>
+										<th class="lineName">Line</th>
+									</tr>
+								</thead>
+								<tbody class="list" id="result">
+									<tr id="initItem" hidden>
+										<td class="facebookName">Alex (Example)</td>
+										<td class="lineName">Cowbon (Example)</td>
+										<td class="remove" id="removeInit">
+											<button class="remove-btn btn btn-danger btn-sm" type="button">刪除</button></td>
+										<td class="id" hidden>-1</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<button id="submit-btn" type="button" class="btn btn-primary btn-block">Submit</button>
+		</form>
 	</div>
 </div>
 {% endblock %}
@@ -82,30 +88,35 @@ Contact List
 {% block scripts %}
 {{ super() }}
 <script>
-	var options = { valueNames: ['id', 'name', 'app'] };
+	var options = { valueNames: ['id', 'facebookName', 'lineName'] };
+	var total = 0;
 	var contactList = new List('contacts', options);
-	var nameField  = $('#name-field'),
-		appField   = $('#app-field'),
+	var facebookNameField  = $('#name-field-facebook'),
+		lineNameField = $('#name-field-line'),
 		addBtn     = $('#add-btn'), 
 		submitBtn  = $('#submit-btn');
+	var resultList = [];
 	
 	function clearFields() {
-		nameField.val('');
+		facebookNameField.val('');
+		lineNameField.val('');
 	}
 	
-	addBtn.click(function() {		
+	addBtn.click(function() {
+		if (!facebookNameField.val() && !lineNameField.val())
+			return
 		contactList.add({
-			id: Math.floor(Math.random()*100),
-			name: nameField.val(),
-			app:  appField.val()
+			id: total,
+			facebookName: facebookNameField.val(),
+			lineName: lineNameField.val(),
 		});
+		total += 1;
 		
 		// remove init item
 		var initItem = $("#initItem");
-		if (initItem) {
-			var id = initItem.find(".id").text();
+		var id = initItem.find(".id").text();
+		if (id) 
 			contactList.remove("id", id);
-		}
 		
 		clearFields();
 		$("tr").show();
@@ -115,33 +126,35 @@ Contact List
 	submitBtn.click(function() {
 		var list = $("#result").find("tr");
 		list.each(function(i, obj) {
-			if (obj.cells[0].innerText != ""){
-				var name = obj.cells[0].innerText;
-				var app  = obj.cells[1].innerText;
-				
-				var input = document.createElement("input");
-				input.type = "hidden";
-				input.name = name;
-				input.value = app;
-				obj.appendChild(input);
-			}
+			var facebookName = obj.cells[0].innerText;
+			var lineName = obj.cells[1].innerText;
+
+			// var newInput = document.createElement("input");
+			// input.type = "hidden";
+			// input.name = "new_contact";
+			// input.value = facebookName + "||" + lineName;
+			// obj.appendChild(newInput);
+			newContactName = {
+				facebook: facebookName,
+				line:     lineName
+			};
+			resultList.push(newContactName);
 		});
+		var input = document.createElement("input");
+		input.name = "contacts";
+		input.type = "hidden";
+		input.value = JSON.stringify(resultList);
+		$("#addForm").append(input);
+		
 		document.getElementById("addForm").submit();
 	})
 	
 	function registerRemoveBtn(){
 		var removeBtns = $('.remove-btn');
-		console.log(removeBtns);
 		removeBtns.click(function() {
 			var itemId = $(this).closest('tr').find('.id').text();
 			contactList.remove('id', itemId);
 		});
 	}
-	
-	nameField.keyup(function(event) {
-	    if (event.keyCode === 13) {
-	        addBtn.click();
-	    }
-	});
 </script>
 {% endblock %}
