@@ -4,11 +4,10 @@ from flask import Flask
 from datetime import datetime
 import dateutil.parser
 
-
 class Result(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     r_type = db.Column(db.String(256))
-    user = db.Column(db.String(256))
+    user = db.Column(db.String(256)) # device_id
     r_id = db.Column(db.Integer)
     raw = db.Column(db.Text)
     date = db.Column(db.DateTime)
@@ -57,7 +56,6 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(15), unique=True)
     password = db.Column(db.String(80))
     email = db.Column(db.String(50), unique=True)
-
 
 class ContactQuestionnaire(db.Model):
     id = db.Column(db.Integer, primary_key=True)

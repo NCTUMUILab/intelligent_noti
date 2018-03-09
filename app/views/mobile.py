@@ -91,7 +91,7 @@ def get_form_valid(notifications, user):
 @mobile.route('/form/', methods=['POST'])
 def add_form():
     content = request.get_json(silent=True)
-    r = FormResult({'raw': str(content), 'wid': 0, 'user': content['user'], 'hash': '', 'sender': content['title'], 'app': content['app']})
+    r = FormResult({'raw': json.dumps(content), 'wid': 0, 'user': content['user'], 'hash': '', 'sender': content['title'], 'app': content['app']})
     db.session.add(r)
     try:
         db.session.commit()
@@ -111,7 +111,7 @@ def add_result():
          'type': "new",
          'user': content['device_id'],
          'id': 0,
-         'raw': str(content),
+         'raw': json.dumps(content),
          'date' : content['startTimeString']
      })
      db.session.add(result)
