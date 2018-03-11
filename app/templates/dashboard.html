@@ -27,7 +27,7 @@ Dashboard
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-left">
-				<li><a href="{{ url_for('questionnaire.user_questionnaire') }}">{{'Self Questionnaire (Edit)' if userQ_done else 'Self Questionnaire'}}</a></li>
+				<li><a href="{{ 'https://nctucommunication.qualtrics.com/jfe/form/SV_3eM0RppZc5sctZH?name=' ~ current_user.username ~ '&uid=' ~ current_user.id }}">{{'Self Questionnaire (Edit)' if current_user.self_q_completed else 'Self Questionnaire'}}</a></li>
 				<li><a href="{{ url_for('heatmap.show_heatmap') }}">Location Heatmap</a></li>
 			</ul>
 			{% if current_user.username %}
@@ -54,13 +54,15 @@ Dashboard
 					</tr>
 				</thead>
 				<tbody>
+					{% set ns = namespace(url='') %}
 					{% for questionnaire in questionnaires %}
+					{% set ns.url = "'" ~ 'https://nctucommunication.qualtrics.com/jfe/form/SV_eVYvF9g8aHWmhud?name=' ~ ( questionnaire.contact_name or questionnaire.contact_name_line or '' ) ~ '&uid=' ~ current_user.id ~ '&cid=' ~ questionnaire.id ~ "'" %}
 					<tr>
 						<td>
 							{% if questionnaire.completed %}
-							<button class="btn btn-default disabled">完成</button>
+							<button class="btn btn-success disabled">完成</button>
 							{% else %}
-							<button class="btn btn-default" onclick="location.href='{{ url_for('questionnaire.contact_questionnaire', questionnaire_id=questionnaire.id) }}';">填寫</button>
+							<button class="btn btn-primary" onclick="location.href={{ns.url}};">填寫</button>
 							{% endif %}
 						</td>
 						<td>{{ questionnaire.contact_name or '' }}</td>

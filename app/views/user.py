@@ -19,7 +19,7 @@ def signup():
     form = RegisterForm()
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password, self_q_completed=False)
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
@@ -68,5 +68,4 @@ def logout():
 @login_required
 def dashboard():
     questionnaires = ContactQuestionnaire.query.filter_by(user_id=current_user.id).all()
-    userQ_done = UserQuestionnaire.query.filter_by(user_id=current_user.id).first()
-    return render_template('dashboard.html', current_user=current_user, questionnaires=questionnaires, userQ_done=userQ_done)
+    return render_template('dashboard.html', current_user=current_user, questionnaires=questionnaires)

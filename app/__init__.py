@@ -37,10 +37,8 @@ def admin_only(f):
     return decorated_function
 
 def on_local(f):
-    print("watttssss")
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        print("local:", current_app.config.get('LOCAL'))
         if current_app.config.get('LOCAL'):
             return f(*args, **kwargs)
         else:
@@ -58,7 +56,7 @@ from .views.esm import esm
 
 app.register_blueprint(user)
 app.register_blueprint(contact, url_prefix='/contact')
-app.register_blueprint(questionnaire)
+app.register_blueprint(questionnaire, url_prefix='/questionnaire')
 app.register_blueprint(heatmap)
 app.register_blueprint(mobile)
 app.register_blueprint(admin, url_prefix='/admin')

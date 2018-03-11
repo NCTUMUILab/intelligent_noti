@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, make_response
 from flask_login import login_required, current_user
-from app.models import ContactQuestionnaire, UserQuestionnaire
+from app.models import ContactQuestionnaire, UserQuestionnaire, User
 from app.helpers import find_questionnaire
 from app import db
 from json import dumps, loads, load
@@ -10,6 +10,9 @@ questionnaire = Blueprint('questionnaire', __name__)
 
 
 def check_questionnaire(f):
+    """
+    check if the requested contact questionnaire is the one of the current user's
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         questionnaire_id = kwargs['questionnaire_id']
@@ -22,7 +25,7 @@ def check_questionnaire(f):
     return decorated_function
 
 
-@questionnaire.route('/questionnaire/<int:questionnaire_id>', methods=['GET', 'POST'])
+@questionnaire.route('/<int:questionnaire_id>', methods=['GET', 'POST'])
 @login_required
 @check_questionnaire
 def contact_questionnaire(questionnaire_id, questionnaire):
@@ -39,7 +42,7 @@ def contact_questionnaire(questionnaire_id, questionnaire):
         return redirect(url_for('user.dashboard'))
 
 
-@questionnaire.route('/questionnaire/user', methods=['GET', 'POST'])
+@questionnaire.route('/user', methods=['GET', 'POST'])
 @login_required
 def user_questionnaire():
     userQ = UserQuestionnaire.query.filter_by(user_id=current_user.id).first()
@@ -62,3 +65,19 @@ def user_questionnaire():
             userQ.data = dumps(answers_dict, ensure_ascii=False)
             db.session.commit()
         return redirect(url_for('user.dashboard'))
+
+@questionnaire.route('/completed')
+def contact_questionnaire_completed():
+    contact_id = int(request.args.get('cid'))
+    questionnaire = ContactQuestionnaire.query.filter_by(id=contact_id).first()
+    questionnaire.completed = True
+    db.session.commit()
+    return redirect(url_for('user.dashboard'))
+
+@questionnaire.route('/user/completed')
+def user_questionniare_completed():
+    user_id = int(request.args.get('uid'))
+    user = User.query.filter_by(id=user_id).first()
+    user.self_q_completed = True
+    db.session.commit()
+    return redirect(url_for('user.dashboard'))
