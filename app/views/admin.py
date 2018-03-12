@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify
 from flask_login import login_required, current_user
-from app.models import ContactQuestionnaire, UserQuestionnaire, User, FormResult
+from app.models import ContactQuestionnaire, UserQuestionnaire, User, ESMCount, DeviceID
 from app import admin_only
 
 admin = Blueprint('admin', __name__)
@@ -8,10 +8,14 @@ admin = Blueprint('admin', __name__)
 @admin.route('/esm')
 @admin_only
 def view_esm():
-    esms = FormResult.query.all()
+    # esms = FormResult.query.all()
+    # users = User.query.all()
+    # id_name_dict = { user.phone_id : user.username for user in users }
+    
     users = User.query.all()
-    id_name_dict = { user.phone_id : user.username for user in users }
-    return render_template("admin/esm.html", esms=esms, id_name_dict=id_name_dict)
+    esms = ESMCount.query.all()
+    # all_device_id = DeviceID.query.all()
+    return render_template("admin/esm.html", esms=esms, users=users)
 
 @admin.route('/questionnaire')
 @admin_only

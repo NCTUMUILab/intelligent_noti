@@ -14,31 +14,30 @@ ESM List
 {% block content %}
 {{ nav_bar() }}
 
-<div class="container-fluid">
-	<div class="main">
-		<h2>Hi, Admin. This is a List of Users</h2>
-		<div class="table-responsive" id="esms">
+<div class="container">
+	<div class="row">
+		<h2>List of Users</h2>
+		<div class="table-responsive" id="users">
 			<input class="search" placeholder="Search Name" />
 			<button class="sort" data-sort="name">Sort by name</button>
+			<button class="sort" data-sort="id">Sort by id</button>
 			
 			<table class="table table-striped">
 				<thead>
 					<th>ID</th>
 					<th>User</th>
-					<th>Sender</th>
-					<th>App</th>
-					<th>Raw</th>
-					<th>Created at</th>
+					<th>ESM</th>
+					<th>Device ID</th>
 				</thead>
 				<tbody class="list">
-					{% for esm in esms %}
+					{% for user in users %}
 					<tr>
-						<td class="id">{{ esm.id }}</td>
-						<td class="name">{{ id_name_dict[esm.user] or "Unknown" }}</td>
-						<td>{{ esm.sender }}</td>
-						<td>{{ esm.app }}</td>
-						<td>{{ esm.raw }}</td>
-						<td class="created_at">{{ esm.created_at }}</td>
+						<td class="id">{{ user.id }}</td>
+						<td class="name">{{ user.username }}</td>
+						<td>
+							<button class="btn btn-primary">Search</button>
+						</td>
+						<td></td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -51,9 +50,9 @@ ESM List
 {% block scripts %}
 <script>
 	var options = {
-		valueNames: [ 'name', 'id', "created_at" ]
+		valueNames: [ 'name', 'id' ]
 	};
 
-	var esmList = new List('esms', options);
+	var esmList = new List('users', options);
 </script>
 {% endblock %}

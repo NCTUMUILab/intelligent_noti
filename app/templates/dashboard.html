@@ -27,7 +27,6 @@ Dashboard
 		</div>
 		<div id="navbar" class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-left">
-				<li><a href="{{ 'https://nctucommunication.qualtrics.com/jfe/form/SV_3eM0RppZc5sctZH?name=' ~ current_user.username ~ '&uid=' ~ current_user.id }}">{{'Self Questionnaire (Edit)' if current_user.self_q_completed else 'Self Questionnaire'}}</a></li>
 				<li><a href="{{ url_for('heatmap.show_heatmap') }}">Location Heatmap</a></li>
 			</ul>
 			{% if current_user.username %}
@@ -41,8 +40,20 @@ Dashboard
 </nav>
 
 <div class="container">
-	<div class="main">
+	<div class="row">
 		<h1 class="page-header">嗨！{{ current_user.username }}</h1>
+	</div>
+	
+	{% if not current_user.self_q_completed %}
+	{% set self_q_url = "'" ~ 'https://nctucommunication.qualtrics.com/jfe/form/SV_3eM0RppZc5sctZH?name=' ~ current_user.username ~ '&uid=' ~ current_user.id ~ "'" %}
+	<div class="row">
+		<h2 class="sub-header">開始您的第一步<small style="margin-left: 5px;">填寫個人問卷</small></h2>
+		<button class="btn btn-primary btn-md" onclick="location.href={{self_q_url}};">填寫</button>
+		<hr>
+	</div>
+	{% endif %}
+	
+	<div class="row">
 		<h2 class="sub-header">聯絡人清單</h2>
 		<div class="table-responsive">
 			<table class="table table-striped">
