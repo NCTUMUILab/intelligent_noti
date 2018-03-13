@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify
+from flask import Blueprint, render_template, jsonify, request, jsonify
 from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, UserQuestionnaire, User, ESMCount, DeviceID
 from app import admin_only
@@ -16,6 +16,15 @@ def view_esm():
     esms = ESMCount.query.all()
     # all_device_id = DeviceID.query.all()
     return render_template("admin/esm.html", esms=esms, users=users)
+
+
+@admin.route('/esm/get/deviceID')
+def get_device_id():
+    user_id = request.args.get('uid')
+    deviceID_list = DeviceID.query.filter_by(user_id=user_id).all()
+    result_list = [ entry.device_id for entry in deviceID_list ]
+    return jsonify(result_list)
+
 
 @admin.route('/questionnaire')
 @admin_only

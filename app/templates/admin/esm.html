@@ -16,33 +16,34 @@ ESM List
 
 <div class="container">
 	<div class="row">
-		<h2>List of Users</h2>
-		<div class="table-responsive" id="users">
-			<input class="search" placeholder="Search Name" />
-			<button class="sort" data-sort="name">Sort by name</button>
-			<button class="sort" data-sort="id">Sort by id</button>
-			
-			<table class="table table-striped">
-				<thead>
-					<th>ID</th>
-					<th>User</th>
-					<th>ESM</th>
-					<th>Device ID</th>
-				</thead>
-				<tbody class="list">
-					{% for user in users %}
-					<tr>
-						<td class="id">{{ user.id }}</td>
-						<td class="name">{{ user.username }}</td>
-						<td>
-							<button class="btn btn-primary">Search</button>
-						</td>
-						<td></td>
-					</tr>
-					{% endfor %}
-				</tbody>
-			</table>
+		<div class="col-lg-6">
+			<h2>List of Users</h2>
+			<div class="table-responsive" id="users">
+				<input class="search" placeholder="Search Name" />
+				<button class="sort" data-sort="name">Sort by name</button>
+				<button class="sort" data-sort="id">Sort by id</button>
+				
+				<table class="table table-striped">
+					<thead>
+						<th>ID</th>
+						<th>User</th>
+						<th>ESM</th>
+					</thead>
+					<tbody class="list">
+						{% for user in users %}
+						<tr>
+							<td class="id">{{ user.id }}</td>
+							<td class="name">{{ user.username }}</td>
+							<td>
+								<button class="btn btn-primary" id="{{user.id}}" onclick="getESM(this.id)">Search</button>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
 		</div>
+		<div class="col-lg-6"></div>
 	</div>
 </div>
 {% endblock %}
@@ -54,5 +55,15 @@ ESM List
 	};
 
 	var esmList = new List('users', options);
+	
+	function getESM(userID){
+		$.get("esm/get/deviceID?uid=" + userID, function(didList, status){
+			// for (var key in didList){
+			// 	$.get("esm/get/esm?did" + didList[key], function(esms, status){
+						
+			// 	});
+			// }
+		});
+	}
 </script>
 {% endblock %}
