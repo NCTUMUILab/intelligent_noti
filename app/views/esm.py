@@ -33,11 +33,12 @@ def report():
 
     day_count = {}
     for esm in all_query.all():
-        time_str = esm.created_at.strftime('%y-%m-%d')
-        if time_str in day_count:
-            day_count[time_str] += 1
+        each_day_str = esm.created_at.strftime('%y-%m-%d')
+        if each_day_str in day_count:
+            day_count[each_day_str] += 1
         else:
-            day_count[time_str] = 1
+            day_count[each_day_str] = 1
+    
     day_valid = 0
     for day, count in day_count.items():
         day_valid += 1 if count >= 3 else 0

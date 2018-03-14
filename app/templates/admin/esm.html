@@ -35,7 +35,7 @@ ESM List
 							<td class="id">{{ user.id }}</td>
 							<td class="name">{{ user.username }}</td>
 							<td>
-								<button class="btn btn-primary" id="{{user.id}}" onclick="getESM(this.id)">Search</button>
+								<button class="search-esm-btn btn btn-primary" id="{{user.id}}">Search</button>
 							</td>
 						</tr>
 						{% endfor %}
@@ -43,27 +43,69 @@ ESM List
 				</table>
 			</div>
 		</div>
-		<div class="col-lg-6"></div>
+		<div class="col-lg-6">
+			<h2><span id="current-contact-name"></span><br>
+				<small>目前已選 <span>0</span>位</small>
+			</h2>
+			<div class="table-responsive" id="esms">
+				<table class="table table-striped">
+					<thead>
+						<th>Sender</th>
+						<th>Number of times</th>
+						<th>Add Contact</th>
+					</thead>
+					<tbody class="list">
+						<tr>
+							<td class="esmSender"></td>
+							<td class="esmNoneOfTime"></td>
+							<td><button class="add-contact-btn btn btn-primary">Add</button></td>
+							<td class="esmHide" hidden>a</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script>
-	var options = {
-		valueNames: [ 'name', 'id' ]
-	};
-
-	var esmList = new List('users', options);
+	var contactListOptions = { valueNames: [ 'name', 'id' ] };
+	var contactList = new List('users', contactListOptions);
 	
-	function getESM(userID){
-		$.get("esm/get/deviceID?uid=" + userID, function(didList, status){
-			// for (var key in didList){
-			// 	$.get("esm/get/esm?did" + didList[key], function(esms, status){
-						
-			// 	});
-			// }
+	var esmListOptions = { valueNames: [ 'esmSender', 'esmNoneOfTime', 'esmHide' ] };
+	var esmList = new List('esms', esmListOptions);
+	
+	var addContactBtn = $(".add-contact-btn");
+	var searchEsmBtn = $(".search-esm-btn");
+	refreshCallbacks();
+	
+	function refreshCallbacks(){
+		addContactBtn = $(".add-contact-btn");
+		addContactBtn.click(function(){
+			var name = $(this).closest('tr').find('.esmSender').text();
+			$.get("esm/addNewContact?contact="+name+"&user="+$("#current-contact-name").text(), function(result, status){
+			})
 		});
-	}
+	};
+	
+	searchEsmBtn.click(function(){
+		var currentContactName = $(this).closest('tr').find('.name').text();
+		$("#current-contact-name").text(currentContactName);
+		
+		esmList.remove('esmHide', 'a');
+		$.get("esm/get?uid=" + $(this).attr('id'), function(resultDict, status){
+			for (var name in resultDict){
+				esmList.add({
+					esmSender: name,
+					esmNoneOfTime: resultDict[name],
+					esmHide: 'a'
+				});
+			}
+			refreshCallbacks();
+		});
+	});
+
 </script>
 {% endblock %}

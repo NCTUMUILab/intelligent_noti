@@ -5,25 +5,40 @@ from app import admin_only
 
 admin = Blueprint('admin', __name__)
 
+
 @admin.route('/esm')
 @admin_only
 def view_esm():
-    # esms = FormResult.query.all()
-    # users = User.query.all()
-    # id_name_dict = { user.phone_id : user.username for user in users }
-    
     users = User.query.all()
     esms = ESMCount.query.all()
-    # all_device_id = DeviceID.query.all()
     return render_template("admin/esm.html", esms=esms, users=users)
 
 
-@admin.route('/esm/get/deviceID')
-def get_device_id():
-    user_id = request.args.get('uid')
-    deviceID_list = DeviceID.query.filter_by(user_id=user_id).all()
-    result_list = [ entry.device_id for entry in deviceID_list ]
-    return jsonify(result_list)
+@admin.route('/esm/get')
+def get_esm():
+    user_id = request.args.get('uid');
+    if user_id:
+        device_id_list = DeviceID.query.filter_by(user_id=user_id).all()
+        result_dict = {}
+        for entry in device_id_list:
+            print("DeviceID:", entry.device_id)
+            esms = ESMCount.query.filter_by(device_id=entry.device_id).all()
+            for esm in esms:
+                if esm.name in result_dict:
+                    result_dict[esm.name] += 1
+                else:
+                    result_dict[esm.name] = 1
+        if None in result_dict:
+            result_dict['None'] = result_dict.pop(None)
+        return jsonify(result_dict)
+    return None
+    
+
+@admin.route('/esm/addNewContact')
+def add_new_contact():
+    new_contact_name = request.args.get('contact')
+    user_name = request.args.get('user')
+    return "success"
 
 
 @admin.route('/questionnaire')
