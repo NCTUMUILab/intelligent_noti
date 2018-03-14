@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, jsonify, request, jsonify
 from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, UserQuestionnaire, User, ESMCount, DeviceID
 from app import admin_only
+from json import loads
 
 admin = Blueprint('admin', __name__)
 
@@ -34,10 +35,11 @@ def get_esm():
     return None
     
 
-@admin.route('/esm/addNewContact')
+@admin.route('/esm/addNewContacts', methods=['POST'])
 def add_new_contact():
-    new_contact_name = request.args.get('contact')
-    user_name = request.args.get('user')
+    contact_list = loads(request.form['contacts'])
+    for name in contact_list:
+        print("name:", name)
     return "success"
 
 

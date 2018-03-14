@@ -20,8 +20,8 @@ ESM List
 			<h2>List of Users</h2>
 			<div class="table-responsive" id="users">
 				<input class="search" placeholder="Search Name" />
-				<button class="sort" data-sort="name">Sort by name</button>
-				<button class="sort" data-sort="id">Sort by id</button>
+				<button class="sort btn-default" data-sort="name">Sort by name</button>
+				<button class="sort btn-default" data-sort="id">Sort by id</button>
 				
 				<table class="table table-striped">
 					<thead>
@@ -51,7 +51,7 @@ ESM List
 				<table class="table table-striped">
 					<thead>
 						<th>Sender</th>
-						<th>Number of times</th>
+						<th>Times</th>
 						<th>Add Contact</th>
 					</thead>
 					<tbody class="list">
@@ -64,6 +64,10 @@ ESM List
 					</tbody>
 				</table>
 			</div>
+			<button id="addContactsBtn" class="btn btn-success btn-block">Submit</button>
+			<form id="addContactsForm" action="esm/addNewContacts" method="POST">
+				<input id="addContactsData" type="hidden" name="contacts">
+			</form>
 		</div>
 	</div>
 </div>
@@ -79,14 +83,20 @@ ESM List
 	
 	var addContactBtn = $(".add-contact-btn");
 	var searchEsmBtn = $(".search-esm-btn");
+	var submitBtn = $("#addContactsBtn");
+	
+	var addContactsList = [];
 	refreshCallbacks();
 	
 	function refreshCallbacks(){
 		addContactBtn = $(".add-contact-btn");
 		addContactBtn.click(function(){
+			$(this).removeClass("btn-primary");
+			$(this).addClass("btn-success disabled");
+			$(this).text("chosen");
+			
 			var name = $(this).closest('tr').find('.esmSender').text();
-			$.get("esm/addNewContact?contact="+name+"&user="+$("#current-contact-name").text(), function(result, status){
-			})
+			addContactsList.push(name);
 		});
 	};
 	
@@ -105,6 +115,12 @@ ESM List
 			}
 			refreshCallbacks();
 		});
+	});
+	
+	submitBtn.click(function(){
+		$("#addContactsData").val(JSON.stringify(addContactsList));
+		$("#addContactsForm").submit();
+		
 	});
 
 </script>
