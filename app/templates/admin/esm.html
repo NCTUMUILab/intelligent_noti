@@ -16,58 +16,69 @@ ESM List
 
 <div class="container">
 	<div class="row">
-		<div class="col-lg-6">
-			<h2>List of Users</h2>
-			<div class="table-responsive" id="users">
-				<input class="search" placeholder="Search Name" />
-				<button class="sort btn-default" data-sort="name">Sort by name</button>
-				<button class="sort btn-default" data-sort="id">Sort by id</button>
-				
-				<table class="table table-striped">
-					<thead>
-						<th>ID</th>
-						<th>User</th>
-						<th>ESM</th>
-					</thead>
-					<tbody class="list">
-						{% for user in users %}
-						<tr>
-							<td class="id">{{ user.id }}</td>
-							<td class="name">{{ user.username }}</td>
-							<td>
-								<button class="search-esm-btn btn btn-primary" id="{{user.id}}">Search</button>
-							</td>
-						</tr>
-						{% endfor %}
-					</tbody>
-				</table>
+		<div class="col-lg-6 form-group">
+			<div class="panel panel-default" style="margin-top: 20px">
+				<div class="panel-body">
+					<h2 style="text-align: center;">List of users</h2>
+					<div class="table-responsive" id="users">
+						<div class="col-xs-4" style="margin-left: 170px">
+							<input class="search form-control" placeholder="Search Name" />
+						</div>
+						<table class="table table-striped">
+							<thead>
+								<th>ID</th>
+								<th>User</th>
+								<th>ESM</th>
+							</thead>
+							<tbody class="list">
+								{% for user in users %}
+								<tr>
+									<td class="id">{{ user.id }}</td>
+									<td class="name">{{ user.username }}</td>
+									<td>
+										<button class="search-esm-btn btn btn-primary" id="{{user.id}}">Search</button>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class="col-lg-6">
-			<h2><span id="current-contact-name"></span><br>
-				<small>目前已選 <span>0</span>位</small>
-			</h2>
-			<div class="table-responsive" id="esms">
-				<table class="table table-striped">
-					<thead>
-						<th>Sender</th>
-						<th>Times</th>
-						<th>Add Contact</th>
-					</thead>
-					<tbody class="list">
-						<tr>
-							<td class="esmSender"></td>
-							<td class="esmNoneOfTime"></td>
-							<td><button class="add-contact-btn btn btn-primary">Add</button></td>
-							<td class="esmHide" hidden>a</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="panel panel-default" style="margin-top: 20px">
+				<div class="panel-body">
+					<h2 style="text-align: center;"><span id="current-user-name"></span><br>
+						<small>目前已選 <span id="chosenCount">0</span> 位</small>
+					</h2>
+					<div id="current-user-id" hidden></div>
+					<div class="table-responsive" id="esms">
+						<table class="table table-striped">
+							<thead>
+								<th>Name</th>
+								<th>App</th>
+								<th>Counts</th>
+								<th>Add Contact</th>
+							</thead>
+							<tbody class="list">
+								<tr class="trtr">
+									<td class="esmSender"></td>
+									<td class="esmApp"></td>
+									<td class="esmCount"></td>
+									<td class="esmTdBtn"><button class="add-contact-btn btn btn-primary">Add</button></td>
+									<td class="esmHide" hidden>a</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<button id="addContactsBtn" class="btn btn-success btn-block">Submit</button>
+					<form id="addContactsForm" action="esm/addNewContacts" method="POST">
+						<input id="addContactsData" type="hidden" name="contacts">
+						<input id="userIdInput" type="hidden" name="userID">
+					</form>
+				</div>
 			</div>
-			<button id="addContactsBtn" class="btn btn-success btn-block">Submit</button>
-			<form id="addContactsForm" action="esm/addNewContacts" method="POST">
-				<input id="addContactsData" type="hidden" name="contacts">
-			</form>
 		</div>
 	</div>
 </div>
@@ -78,7 +89,7 @@ ESM List
 	var contactListOptions = { valueNames: [ 'name', 'id' ] };
 	var contactList = new List('users', contactListOptions);
 	
-	var esmListOptions = { valueNames: [ 'esmSender', 'esmNoneOfTime', 'esmHide' ] };
+	var esmListOptions = { valueNames: [ 'esmSender', 'esmApp', 'esmCount', 'esmHide' ] };
 	var esmList = new List('esms', esmListOptions);
 	
 	var addContactBtn = $(".add-contact-btn");
@@ -86,6 +97,7 @@ ESM List
 	var submitBtn = $("#addContactsBtn");
 	
 	var addContactsList = [];
+	var chosenCount = 0;
 	refreshCallbacks();
 	
 	function refreshCallbacks(){
@@ -96,29 +108,63 @@ ESM List
 			$(this).text("chosen");
 			
 			var name = $(this).closest('tr').find('.esmSender').text();
-			addContactsList.push(name);
+			var app  = $(this).closest('tr').find('.esmApp').text();
+			addContactsList.push({'name': name, 'app': app});
+			
+			chosenCount += 1;
+			$("#chosenCount").text(chosenCount);
 		});
 	};
 	
 	searchEsmBtn.click(function(){
-		var currentContactName = $(this).closest('tr').find('.name').text();
-		$("#current-contact-name").text(currentContactName);
+		window.scrollTo(0, 0);
+		searchEsmBtn.addClass("disabled");
+		var currentUserName = $(this).closest('tr').find('.name').text();
+		var currentUserID = $(this).closest('tr').find('.id').text();
+		$("#current-user-name").text(currentUserName);
+		$("#current-user-id").text(currentUserID);
 		
 		esmList.remove('esmHide', 'a');
-		$.get("esm/get?uid=" + $(this).attr('id'), function(resultDict, status){
-			for (var name in resultDict){
+		$.get("esm/get?uid=" + $(this).attr('id'), function(result, status){
+			for (var key in result['esm']){
 				esmList.add({
-					esmSender: name,
-					esmNoneOfTime: resultDict[name],
+					esmSender: result['esm'][key]['name'],
+					esmApp: result['esm'][key]['app'],
+					esmCount: result['esm'][key]['count'],
 					esmHide: 'a'
 				});
 			}
+			checkExistContact(result['facebook'], result['line']);
 			refreshCallbacks();
 		});
 	});
 	
+	function checkExistContact(facebookList, lineList){
+		console.log(facebookList);
+		console.log(lineList);
+		$(".trtr").each(function(index){
+			var eachName = $(this).find(".esmSender").text();
+			var eachApp = $(this).find(".esmApp").text();
+			for (var key in facebookList){
+				if (eachApp == "facebook" && eachName == facebookList[key]){
+					console.log("match facebook:", eachName);
+					$(this).addClass("warning");
+					$(this).find(".esmTdBtn").find("button").addClass("disabled");
+				}
+			}
+			for (var key in lineList){
+				if (eachApp == "line" && eachName == lineList[key]){
+					console.log("match line:", eachName);
+					$(this).addClass("warning");
+					$(this).find(".esmTdBtn").find("button").addClass("disabled");
+				}
+			}
+		});
+	}
+	
 	submitBtn.click(function(){
 		$("#addContactsData").val(JSON.stringify(addContactsList));
+		$("#userIdInput").val($("#current-user-id").text());
 		$("#addContactsForm").submit();
 		
 	});

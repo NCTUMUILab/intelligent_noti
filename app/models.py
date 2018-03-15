@@ -96,3 +96,4 @@ class ESMCount(db.Model):
     device_id = db.Column(db.String(30))
     created_at = db.Column(db.DateTime, default=datetime.now)
     name = db.Column(db.String(30))
+    app = db.Column(db.String(10))

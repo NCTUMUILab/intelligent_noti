@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, jsonify, request, jsonify
+from flask import Blueprint, render_template, jsonify, request, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, UserQuestionnaire, User, ESMCount, DeviceID
-from app import admin_only
+from app import admin_only, db
 from json import loads
 
 admin = Blueprint('admin', __name__)
@@ -20,27 +20,42 @@ def get_esm():
     user_id = request.args.get('uid');
     if user_id:
         device_id_list = DeviceID.query.filter_by(user_id=user_id).all()
-        result_dict = {}
+        result_esm_list = []
         for entry in device_id_list:
             print("DeviceID:", entry.device_id)
             esms = ESMCount.query.filter_by(device_id=entry.device_id).all()
             for esm in esms:
-                if esm.name in result_dict:
-                    result_dict[esm.name] += 1
+                esm_name = esm.name or "None"
+                for entry in result_esm_list:
+                    if esm_name == entry["name"] and esm.app == entry["app"]:
+                        entry["count"] += 1
+                        break
                 else:
-                    result_dict[esm.name] = 1
-        if None in result_dict:
-            result_dict['None'] = result_dict.pop(None)
-        return jsonify(result_dict)
+                    new_entry = { "name": esm_name, "app": esm.app, "count": 1 }
+                    result_esm_list.append(new_entry)
+        
+        contacts = ContactQuestionnaire.query.filter_by(user_id=user_id).all()
+        result_facebook_list = [ contact.contact_name for contact in contacts ]
+        result_line_list = [ contact.contact_name_line for contact in contacts ]
+        
+        return jsonify({ "esm": result_esm_list, "facebook": result_facebook_list, "line": result_line_list })
     return None
     
 
 @admin.route('/esm/addNewContacts', methods=['POST'])
 def add_new_contact():
     contact_list = loads(request.form['contacts'])
-    for name in contact_list:
-        print("name:", name)
-    return "success"
+    user_id = int(request.form['userID'])
+    for entry in contact_list:
+        new_contact = ContactQuestionnaire(
+            contact_name = entry['name'] if entry['app'] == 'facebook' else None,
+            contact_name_line = entry['name'] if entry['app'] == 'line' else None,
+            user_id = user_id,
+            is_group = False,
+            completed = False)
+        db.session.add(new_contact)
+    db.session.commit()
+    return redirect(url_for('admin.view_esm'))
 
 
 @admin.route('/questionnaire')
