@@ -8,7 +8,9 @@ esm = Blueprint('esm', __name__)
 @esm.route('/count', methods=['GET'])
 def receive_count():
     device_id = request.args.get('device_id')
-    new_count = ESMCount(device_id=device_id)
+    contact_name = request.args.get('name')
+    app = request.args.get('app')
+    new_count = ESMCount(device_id=device_id, name=contact_name, app=app)
     db.session.add(new_count)
     db.session.commit()
     return redirect(url_for('esm.report', device_id=device_id))
@@ -32,11 +34,12 @@ def report():
 
     day_count = {}
     for esm in all_query.all():
-        time_str = esm.created_at.strftime('%y-%m-%d')
-        if time_str in day_count:
-            day_count[time_str] += 1
+        each_day_str = esm.created_at.strftime('%y-%m-%d')
+        if each_day_str in day_count:
+            day_count[each_day_str] += 1
         else:
-            day_count[time_str] = 1
+            day_count[each_day_str] = 1
+    
     day_valid = 0
     for day, count in day_count.items():
         day_valid += 1 if count >= 3 else 0

@@ -143,3 +143,4 @@ class ESMData(db.Model):
     test= db.Column(db.String(30))
     Q5Topics= db.Column(db.String(30))
     textTopics= db.Column(db.String(30))
+    app = db.Column(db.String(10))
