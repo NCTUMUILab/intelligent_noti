@@ -10,8 +10,8 @@ class Result(db.Model):
     user = db.Column(db.String(256)) # device_id
     r_id = db.Column(db.Integer)
     raw = db.Column(db.Text)
-    date = db.Column(db.DateTime)
-    created_at = db.Column(db.DateTime, default=datetime.now)
+    date = db.Column(db.DateTime) # time of get sensor data
+    created_at = db.Column(db.DateTime, default=datetime.now) # time of upload data
 
     def __init__(self, r):
         self.r_type = r['type']
@@ -57,6 +57,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(80))
     email = db.Column(db.String(50), unique=True)
     self_q_completed = db.Column(db.Boolean)
+    created_at = db.Column(db.DateTime, default=datetime.now)
 
 
 class ContactQuestionnaire(db.Model):
@@ -96,51 +97,19 @@ class ESMCount(db.Model):
     device_id = db.Column(db.String(30))
     created_at = db.Column(db.DateTime, default=datetime.now)
     name = db.Column(db.String(30))
-
-class ESMData(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    StartDate = db.Column(db.DateTime)
-    EndDate= db.Column(db.DateTime)
-    Status= db.Column(db.String(30))
-    IPAddress= db.Column(db.String(30))
-    Progress= db.Column(db.String(30))
-    Duration= db.Column(db.String(30))
-    Finished= db.Column(db.String(30))
-    RecordedDate= db.Column(db.DateTime)
-    ResponseId= db.Column(db.String(30))
-    RecipientLastName= db.Column(db.String(30))
-    RecipientFirstName= db.Column(db.String(30))
-    RecipientEmail= db.Column(db.String(30))
-    ExternalReference= db.Column(db.String(30))
-    LocationLatitude= db.Column(db.String(30))
-    LocationLongitude= db.Column(db.String(30))
-    DistributionChannel= db.Column(db.String(30))
-    UserLanguage= db.Column(db.String(30))
-    Q1= db.Column(db.String(30))
-    Q2= db.Column(db.String(30))
-    Q3= db.Column(db.String(30))
-    Q4= db.Column(db.String(30))
-    Q5= db.Column(db.String(30))
-    Q6= db.Column(db.String(30))
-    Q7= db.Column(db.String(30))
-    Q8= db.Column(db.String(30))
-    Q9= db.Column(db.String(30))
-    Q10= db.Column(db.String(30))
-    Q11= db.Column(db.String(30))
-    Q12= db.Column(db.String(30))
-    Q13= db.Column(db.String(30))
-    Q14= db.Column(db.String(30))
-    Q15= db.Column(db.String(30))
-    Q16= db.Column(db.String(30))
-    Q17= db.Column(db.String(30))
-    Q18= db.Column(db.String(30))
-    app= db.Column(db.String(30))
-    title= db.Column(db.String(1024))
-    text= db.Column(db.String(1024))
-    created_at= db.Column(db.String(30))
-    user= db.Column(db.String(30))
-    time= db.Column(db.String(30))
-    test= db.Column(db.String(30))
-    Q5Topics= db.Column(db.String(30))
-    textTopics= db.Column(db.String(30))
     app = db.Column(db.String(10))
+
+
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    device_id = db.Column(db.String(30))
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    timestamp = db.Column(db.String(16))
+    latitude  = db.Column(db.String(16))
+    longitude = db.Column(db.String(16))
+    app = db.Column(db.String(128))
+    title = db.Column(db.String(128)) # usually sender name
+    sub_text = db.Column(db.String(32)) # idk, usually none
+    text = db.Column(db.Text) # text
+    ticker_text = db.Column(db.Text) # text shown on screen (sender+text)
+    send_esm = db.Column(db.Boolean) # if esm is sent

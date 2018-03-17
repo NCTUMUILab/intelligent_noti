@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template
-from app.models import FormResult, Result, User, ContactQuestionnaire
+from app.models import FormResult, Result, User, ContactQuestionnaire, Notification
 from app import db
 from datetime import datetime, timedelta
 from sqlalchemy import desc
@@ -97,35 +97,59 @@ def add_form():
         db.session.commit()
         msg = 'ok'
     except Exception as e:
-         print(e)
-         db.session.rollback()
-         msg = 'error'
+        print(e)
+        db.session.rollback()
+        msg = 'error'
     return jsonify({'msg': msg})
 
 
 @mobile.route('/upload/', methods=['POST'])
 def add_result():
-     content = request.get_json(silent=True)
+    content = request.get_json(silent=True)
 
-     result = Result({
-         'type': "new",
-         'user': content['device_id'],
-         'id': 0,
-         'raw': json.dumps(content),
-         'date' : content['startTimeString']
-     })
-     db.session.add(result)
-     try:
-         db.session.commit()
-         msg = 'ok'
-     except Exception as e:
-         print(e)
-         db.session.rollback()
-         abort(404)
-     return jsonify({
-          'startTime': int(content['startTime']),
-          'endTime': int(content['endTime'] )
-      })
+    result = Result({
+        'type': "new",
+        'user': content['device_id'],
+        'id': 0,
+        'raw': json.dumps(content),
+        'date' : content['startTimeString'] })
+    db.session.add(result)
+    try:
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        db.session.rollback()
+        abort(404)
+    
+    raw = content.get('Notification')
+    if raw:
+        for lat, sub_text, app, timestamp, text, lon, title, ticker, send_esm in \
+            zip(raw['latitude_cols'], raw['subText_cols'], raw['app_cols'], raw['timestamps'], \
+                raw['n_text_cols'], raw['longitude_cols'], raw['title_cols'], raw['tickerText_cols'], \
+                raw['sendForm_cols']):
+            if app == 'edu.nctu.minuku_2' or not ticker:
+                continue
+            new_notification = Notification(
+                timestamp = timestamp,
+                device_id = content['device_id'],
+                latitude = lat,
+                longitude = lon,
+                app = app,
+                title = title,
+                sub_text = sub_text,
+                text = text,
+                ticker_text = ticker,
+                send_esm = True if send_esm == '1' else False)
+            db.session.add(new_notification)
+        try:
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            abort(404)
+    return jsonify({
+        'startTime': int(content['startTime']),
+        'endTime': int(content['endTime'] ) })
 
 @mobile.route('/last_form/')
 def lastform():
