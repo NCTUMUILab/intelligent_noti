@@ -21,9 +21,9 @@ def get_esm():
     if user_id:
         device_id_list = DeviceID.query.filter_by(user_id=user_id).all()
         result_esm_list = []
-        for entry in device_id_list:
-            print("DeviceID:", entry.device_id)
-            esms = ESMCount.query.filter_by(device_id=entry.device_id).all()
+        for device_id_user in device_id_list:
+            print("DeviceID:", device_id_user.device_id)
+            esms = ESMCount.query.filter_by(device_id=device_id_user.device_id).all()
             for esm in esms:
                 esm_name = esm.name or "None"
                 for entry in result_esm_list:
@@ -47,6 +47,7 @@ def add_new_contact():
     contact_list = loads(request.form['contacts'])
     user_id = int(request.form['userID'])
     for entry in contact_list:
+        print("entry['app']:", entry['app'])
         new_contact = ContactQuestionnaire(
             contact_name = entry['name'] if entry['app'] == 'facebook' else None,
             contact_name_line = entry['name'] if entry['app'] == 'line' else None,

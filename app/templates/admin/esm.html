@@ -129,7 +129,7 @@ ESM List
 			for (var key in result['esm']){
 				esmList.add({
 					esmSender: result['esm'][key]['name'],
-					esmApp: result['esm'][key]['app'],
+					esmApp: (result['esm'][key]['app'] == 'fb')? 'facebook' : (result['esm'][key]['app'] == 'line')? 'line' : 'unknown',
 					esmCount: result['esm'][key]['count'],
 					esmHide: 'a'
 				});
@@ -140,8 +140,8 @@ ESM List
 	});
 	
 	function checkExistContact(facebookList, lineList){
-		console.log(facebookList);
-		console.log(lineList);
+		console.log("facebook contacts:", facebookList);
+		console.log("line contacts:", lineList);
 		$(".trtr").each(function(index){
 			var eachName = $(this).find(".esmSender").text();
 			var eachApp = $(this).find(".esmApp").text();

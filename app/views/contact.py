@@ -95,7 +95,6 @@ def editName(questionnaire_id):
     return redirect(url_for('user.dashboard'))
 
 @contact.route('/add', methods=['GET', 'POST'])
-@on_local
 def addContact():
     if request.method == 'GET':
         return render_template('add_new_contact.html')

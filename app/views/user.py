@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, current_app, make_response
+from flask import Blueprint, render_template, redirect, url_for, flash, current_app, make_response, abort, request
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.forms import LoginForm, RegisterForm, ForgotPassword
@@ -14,7 +14,6 @@ def index():
 
 
 @user.route('/signup', methods=['GET', 'POST'])
-@on_local
 def signup():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -28,14 +27,17 @@ def signup():
         db.session.add(new_device)
         db.session.commit()
         return redirect(url_for('contact.addContact'))
-    return render_template('signup.html', form=form)
+    if request.args.get('token') == 'adminonly':
+        return render_template('signup.html', form=form)
+    else:
+        abort(403)
 
     
 @user.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if user:
             if check_password_hash(user.password, form.password.data):
                 login_user(user, remember=form.remember.data)
