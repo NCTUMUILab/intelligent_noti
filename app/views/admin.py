@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, jsonify, request, jsonify, redirect, url_for
 from flask_login import login_required, current_user
-from app.models import ContactQuestionnaire, UserQuestionnaire, User, ESMCount, DeviceID
+from app.models import ContactQuestionnaire, User, ESMCount, DeviceID, Notification
 from app import admin_only, db
 from json import loads
+from datetime import datetime
 
 admin = Blueprint('admin', __name__)
 
@@ -58,22 +59,27 @@ def add_new_contact():
     db.session.commit()
     return redirect(url_for('admin.view_esm'))
 
-
-@admin.route('/questionnaire')
-@admin_only
-def view_questionnaire():
-    users = User.query.all()
-    questionniares = ContactQuestionnaire.query.all()
+@admin.route('/daily')
+def daily_check():
+    users = User.query.filter_by(in_progress=True).all()
+    user_list = [ {
+        'name': user.username, 
+        'id': user.id, 
+        'day': (datetime.now()-user.created_at).days+1, 
+        'esm': 0,
+        'noti': 0 } for user in users ]
     
-    q_num, q_completed = {}, {}
-    for q in questionniares:
-        q_num[q.user_id] = q_num.get(q.user_id, 0) + 1
-        if q.completed:
-            q_completed[q.user_id] = q_completed.get(q.user_id, 0) + 1
-    
-    user_Qs = UserQuestionnaire.query.all()
-    user_Q_completed = []
-    for user_Q in user_Qs:
-        user_Q_completed.append(user_Q.user_id)
-    
-    return render_template("admin/questionnaire.html", users=users, q_num=q_num, q_completed=q_completed, user_Q_completed=user_Q_completed)
+    all_devices = DeviceID.query.all()
+    for user in user_list:
+        for device in all_devices:
+            if device.user_id == user['id']:
+                user['device_id'] = device.device_id
+                break
+        for esm in ESMCount.query.filter_by(device_id=user['device_id']).all():
+            if esm.created_at.date() == datetime.now().date():
+                user['esm'] += 1
+        
+        # for noti in Notification.query.filter_by(device_id=user['device_id']).all():
+        #     if noti.
+        
+    return render_template("admin/daily.html", users=user_list)

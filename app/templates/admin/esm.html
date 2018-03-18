@@ -1,14 +1,11 @@
 {% from "macros.html" import nav_bar with context %}
 {% extends "layout.html" %}
 
+
 {% block head %}
 {{ super() }}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-{% endblock %}
-
-{% block title %}
-ESM List
 {% endblock %}
 
 {% block content %}
@@ -85,6 +82,7 @@ ESM List
 {% endblock %}
 
 {% block scripts %}
+{{ super() }}
 <script>
 	var contactListOptions = { valueNames: [ 'name', 'id' ] };
 	var contactList = new List('users', contactListOptions);

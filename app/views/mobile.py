@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template
-from app.models import FormResult, Result, User, ContactQuestionnaire, Notification
+from app.models import Result, User, ContactQuestionnaire, Notification
 from app import db
 from datetime import datetime, timedelta
 from sqlalchemy import desc
@@ -88,20 +88,6 @@ def get_form_valid(notifications, user):
 
     return False
 
-@mobile.route('/form/', methods=['POST'])
-def add_form():
-    content = request.get_json(silent=True)
-    r = FormResult({'raw': json.dumps(content), 'wid': 0, 'user': content['user'], 'hash': '', 'sender': content['title'], 'app': content['app']})
-    db.session.add(r)
-    try:
-        db.session.commit()
-        msg = 'ok'
-    except Exception as e:
-        print(e)
-        db.session.rollback()
-        msg = 'error'
-    return jsonify({'msg': msg})
-
 
 @mobile.route('/upload/', methods=['POST'])
 def add_result():
@@ -131,6 +117,7 @@ def add_result():
                 continue
             new_notification = Notification(
                 timestamp = timestamp,
+                date = content['date'],
                 device_id = content['device_id'],
                 latitude = lat,
                 longitude = lon,
@@ -151,41 +138,5 @@ def add_result():
         'startTime': int(content['startTime']),
         'endTime': int(content['endTime'] ) })
 
-@mobile.route('/last_form/')
-def lastform():
-    user = request.args.get('user')
-    last_form = db.session.query(FormResult).filter(FormResult.user==user).order_by(desc(FormResult.created_at)).first()
-    if last_form:
-        c = int((last_form.created_at).timestamp())
-    else:
-        c = 0
-    return jsonify({'created_at': c})
-
-@mobile.route('/whitelist/')
-def whitelist():
-    user = request.args.get('user')
-    u = db.session.query(User).filter(User.phone_id==user).one_or_none()
-    contactQuestionnaire = db.session.query(ContactQuestionnaire).filter(ContactQuestionnaire.user_id==u.id)
-    result = []
-    for c in contactQuestionnaire:
-        if c.contact_name:
-            result.append({
-                'app': 'fb',
-                'name': c.contact_name,
-                'wid': c.id
-            })
-        if c.contact_name_line:
-            result.append({
-                'app': 'line',
-                'name': c.contact_name_line,
-                'wid': c.id
-            })
-    return jsonify(result)
 
 
-@mobile.route('/notification/')
-def get_notification():
-    data = request.args.get('data')
-    question_list = json.load(open("app/questionnaire/esm.json"))
-
-    return render_template('notification.html', data=json.loads(data), question_list=question_list)

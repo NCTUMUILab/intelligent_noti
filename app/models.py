@@ -24,33 +24,6 @@ class Result(db.Model):
         return '<Result %r>' % self.id
 
 
-class FormResult(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    wid = db.Column(db.Integer)
-    user = db.Column(db.String(256))
-    hash = db.Column(db.String(256))
-    sender = db.Column(db.String(256))
-    app = db.Column(db.String(256))
-    raw = db.Column(db.Text)
-    created_at = db.Column(db.DateTime, default=datetime.now)
-
-    def __init__(self, r):
-        self.wid = r['wid']
-        self.user = r['user']
-        self.raw = r['raw']
-        self.hash = r['hash']
-        self.sender = r['sender']
-        self.app = r['app']
-
-
-class WhiteList(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user = db.Column(db.String(256))
-    facebook = db.Column(db.String(256))
-    line = db.Column(db.String(256))
-    created_at = db.Column(db.DateTime, default=datetime.now)
-
-
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(15), unique=True)
@@ -58,6 +31,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(50), unique=True)
     self_q_completed = db.Column(db.Boolean)
     created_at = db.Column(db.DateTime, default=datetime.now)
+    in_progress = db.Column(db.Boolean)
 
 
 class ContactQuestionnaire(db.Model):
@@ -66,13 +40,6 @@ class ContactQuestionnaire(db.Model):
     contact_name_line = db.Column(db.String(50))
     user_id = db.Column(db.Integer)
     is_group = db.Column(db.Boolean) # deprecated
-    completed = db.Column(db.Boolean)
-    data = db.Column(db.Text)
-
-
-class UserQuestionnaire(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, unique=True)
     completed = db.Column(db.Boolean)
     data = db.Column(db.Text)
 
@@ -87,7 +54,7 @@ class GpsLabel(db.Model):
 
 class DeviceID(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     device_id = db.Column(db.String(30))
     is_active = db.Column(db.Boolean)
 
@@ -104,6 +71,7 @@ class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     device_id = db.Column(db.String(30))
     created_at = db.Column(db.DateTime, default=datetime.now)
+    date = db.Column(db.DateTime)
     timestamp = db.Column(db.String(16))
     latitude  = db.Column(db.String(16))
     longitude = db.Column(db.String(16))
