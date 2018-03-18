@@ -21,6 +21,8 @@
 					<th>device ID</th>
 					<th>day</th>
 					<th>esm</th>
+					<th>notification</th>
+					<th>data</th>
 				</thead>
 				<tbody>
 				{% for user in users %}
@@ -30,6 +32,8 @@
 						<td>{{ user.device_id }}</td>
 						<td>{{ user.day }}</td>
 						<td>{{ user.esm }}</td>
+						<td>{{ user.noti }}</td>
+						<td>{{ user.data }}</td>
 					</tr>
 				{% endfor %}
 				</tbody>

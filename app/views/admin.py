@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, jsonify, request, jsonify, redirect, url_for
 from flask_login import login_required, current_user
-from app.models import ContactQuestionnaire, User, ESMCount, DeviceID, Notification
+from app.models import ContactQuestionnaire, User, ESMCount, DeviceID, Notification, Result
 from app import admin_only, db
 from json import loads
-from datetime import datetime
+from datetime import date, timedelta, datetime
+from time import time
 
 admin = Blueprint('admin', __name__)
 
@@ -59,15 +60,18 @@ def add_new_contact():
     db.session.commit()
     return redirect(url_for('admin.view_esm'))
 
+
 @admin.route('/daily')
 def daily_check():
     users = User.query.filter_by(in_progress=True).all()
+    selected_date = date.today() if not request.args.get('yesterday') else date.today()-timedelta(1)
     user_list = [ {
         'name': user.username, 
         'id': user.id, 
         'day': (datetime.now()-user.created_at).days+1, 
         'esm': 0,
-        'noti': 0 } for user in users ]
+        'noti': 0,
+        'data': 0 } for user in users ]
     
     all_devices = DeviceID.query.all()
     for user in user_list:
@@ -75,11 +79,10 @@ def daily_check():
             if device.user_id == user['id']:
                 user['device_id'] = device.device_id
                 break
-        for esm in ESMCount.query.filter_by(device_id=user['device_id']).all():
-            if esm.created_at.date() == datetime.now().date():
-                user['esm'] += 1
-        
-        # for noti in Notification.query.filter_by(device_id=user['device_id']).all():
-        #     if noti.
+
+        user['esm']  = ESMCount.query.filter_by(device_id=user['device_id']).filter(ESMCount.created_at > selected_date).count()
+        user['noti'] = Notification.query.filter_by(device_id=user['device_id']).filter(Notification.created_at > selected_date).count()
+        user['data'] = Result.query.filter_by(user=user['device_id']).filter(Result.date > selected_date).count()
+
         
     return render_template("admin/daily.html", users=user_list)

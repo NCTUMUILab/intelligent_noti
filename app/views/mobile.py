@@ -113,8 +113,8 @@ def add_result():
             zip(raw['latitude_cols'], raw['subText_cols'], raw['app_cols'], raw['timestamps'], \
                 raw['n_text_cols'], raw['longitude_cols'], raw['title_cols'], raw['tickerText_cols'], \
                 raw['sendForm_cols']):
-            if app == 'edu.nctu.minuku_2' or not ticker:
-                continue
+            # if app == 'edu.nctu.minuku_2' or not ticker:
+            #     continue
             new_notification = Notification(
                 timestamp = timestamp,
                 date = content['date'],
