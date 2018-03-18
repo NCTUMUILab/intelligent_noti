@@ -71,7 +71,6 @@ class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     device_id = db.Column(db.String(30))
     created_at = db.Column(db.DateTime, default=datetime.now)
-    date = db.Column(db.DateTime)
     timestamp = db.Column(db.String(16))
     latitude  = db.Column(db.String(16))
     longitude = db.Column(db.String(16))

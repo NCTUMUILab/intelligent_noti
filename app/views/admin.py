@@ -64,7 +64,9 @@ def add_new_contact():
 @admin.route('/daily')
 def daily_check():
     users = User.query.filter_by(in_progress=True).all()
-    selected_date = date.today() if not request.args.get('yesterday') else date.today()-timedelta(1)
+    today = date.today()
+    timestamp = datetime.combine(today, datetime.min.time()).timestamp() * 1000
+    
     user_list = [ {
         'name': user.username, 
         'id': user.id, 
@@ -79,10 +81,9 @@ def daily_check():
             if device.user_id == user['id']:
                 user['device_id'] = device.device_id
                 break
-
-        user['esm']  = ESMCount.query.filter_by(device_id=user['device_id']).filter(ESMCount.created_at > selected_date).count()
-        user['noti'] = Notification.query.filter_by(device_id=user['device_id']).filter(Notification.created_at > selected_date).count()
-        user['data'] = Result.query.filter_by(user=user['device_id']).filter(Result.date > selected_date).count()
+        user['esm']  = ESMCount.query.filter_by(device_id=user['device_id']).filter(ESMCount.created_at > today).count()
+        user['noti'] = Notification.query.filter_by(device_id=user['device_id']).filter(Notification.timestamp > timestamp).count()
+        user['data'] = Result.query.filter_by(user=user['device_id']).filter(Result.date > today).count()
 
         
     return render_template("admin/daily.html", users=user_list)

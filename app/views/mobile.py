@@ -107,33 +107,30 @@ def add_result():
         db.session.rollback()
         abort(404)
     
-    # raw = content.get('Notification')
-    # if raw:
-    #     for lat, sub_text, app, timestamp, text, lon, title, ticker, send_esm in \
-    #         zip(raw['latitude_cols'], raw['subText_cols'], raw['app_cols'], raw['timestamps'], \
-    #             raw['n_text_cols'], raw['longitude_cols'], raw['title_cols'], raw['tickerText_cols'], \
-    #             raw['sendForm_cols']):
-    #         # if app == 'edu.nctu.minuku_2' or not ticker:
-    #         #     continue
-    #         new_notification = Notification(
-    #             timestamp = timestamp,
-    #             date = content['date'],
-    #             device_id = content['device_id'],
-    #             latitude = lat,
-    #             longitude = lon,
-    #             app = app,
-    #             title = title,
-    #             sub_text = sub_text,
-    #             text = text,
-    #             ticker_text = ticker,
-    #             send_esm = True if send_esm == '1' else False)
-    #         db.session.add(new_notification)
-    #     try:
-    #         db.session.commit()
-    #     except Exception as e:
-    #         print(e)
-    #         db.session.rollback()
-    #         abort(404)
+    raw = content.get('Notification')
+    if raw:
+        for lat, sub_text, app, timestamp, text, lon, title, ticker, send_esm in \
+            zip(raw['latitude_cols'], raw['subText_cols'], raw['app_cols'], raw['timestamps'], \
+                raw['n_text_cols'], raw['longitude_cols'], raw['title_cols'], raw['tickerText_cols'], \
+                raw['sendForm_cols']):
+            # if app == 'edu.nctu.minuku_2' or not ticker:
+            #     continue
+            new_notification = Notification(
+                timestamp = timestamp,
+                device_id = content['device_id'],
+                latitude = lat,
+                longitude = lon,
+                app = app,
+                title = title,
+                sub_text = sub_text,
+                text = text,
+                ticker_text = ticker,
+                send_esm = True if send_esm == '1' else False)
+            db.session.add(new_notification)
+        try:
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
     return jsonify({
         'startTime': int(content['startTime']),
         'endTime': int(content['endTime'] ) })
