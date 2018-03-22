@@ -6,6 +6,18 @@ import html
 db = MySQLdb.connect("ec2-18-220-229-235.us-east-2.compute.amazonaws.com","root","whomatter","who_matter2" )
 cursor = db.cursor()
 
+sql = "TRUNCATE TABLE esm_data "
+try:
+   # Execute the SQL command
+   cursor.execute(sql)
+   # Commit your changes in the database
+   db.commit()
+except:
+   # Rollback in case there is any error
+   print("delete fail")
+   db.rollback()
+
+
 add_data = ("INSERT INTO esm_data"
                "(StartDate, EndDate, Status, IPAddress, Progress, Duration, Finished, RecordedDate, ResponseId, RecipientLastName,RecipientFirstName, RecipientEmail,ExternalReference, LocationLatitude, LocationLongitude, DistributionChannel, UserLanguage, Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16,Q17,Q18,Q19,app,title,text,created_at,user,time,test,Q5Topics,textTopics) "
                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
@@ -58,10 +70,10 @@ with open(filename, 'r') as f:
             'Q13': row[29],
             'Q14': row[30],
             'Q15': row[31],
-            'Q16': row[32],
-            'Q17': row[33],
-            'Q18': row[34],
-            'Q19': row[35]
+            'Q15_other':row[32],
+            'Q16': row[33],
+            'Q17': row[34],
+            'Q17_other': row[35]
             'app': row[36],
             'title': row[37],
             'text': row[38],
