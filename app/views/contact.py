@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, make_response, request, redirect, url_for
+from flask import Blueprint, render_template, make_response, request, redirect, url_for, jsonify, abort
 from flask_login import login_required, current_user
-from app.models import ContactQuestionnaire
+from app.models import ContactQuestionnaire, User
 from app.forms import FacebookLoginForm, FacebookResultForm
 from app.get_facebook import fbMessenger, ThreadInfo
 from app.helpers import find_questionnaire
@@ -94,6 +94,7 @@ def editName(questionnaire_id):
     db.session.commit()
     return redirect(url_for('user.dashboard'))
 
+
 @contact.route('/add', methods=['GET', 'POST'])
 def addContact():
     if request.method == 'GET':
@@ -111,17 +112,15 @@ def addContact():
             db.session.add(new_questionnaire)
         db.session.commit()
         return redirect(url_for('user.dashboard'))
-        # result = request.form.to_dict()
-        # for name, app in result.items():
-        #     name_dict = {}
-        #     name_dict[app] = name
-            
-        #     new_questionnaire = ContactQuestionnaire(
-        #         contact_name = name_dict.get("facebook", ""),
-        #         contact_name_line = name_dict.get("line", ""),
-        #         user_id = current_user.id,
-        #         is_group = False,
-        #         completed = False)
-        #     db.session.add(new_questionnaire)
-        # db.session.commit()
-        # return redirect(url_for('user.dashboard'))
+
+
+@contact.route('/getJson')
+def get_contact_json():
+    email = request.args.get('email')
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        abort(403)
+    user_name = user.username
+    contacts = ContactQuestionnaire.query.join(User).filter(User.email == email).all()
+    contact_list = [ {'facebook': contact.contact_name, 'line': contact.contact_name_line} for contact in contacts ]
+    return jsonify({'name': user_name, 'list': contact_list})

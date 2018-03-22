@@ -19,7 +19,7 @@ except:
 
 
 add_data = ("INSERT INTO esm_data"
-               "(StartDate, EndDate, Status, IPAddress, Progress, Duration, Finished, RecordedDate, ResponseId, RecipientLastName,RecipientFirstName, RecipientEmail,ExternalReference, LocationLatitude, LocationLongitude, DistributionChannel, UserLanguage, Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q16,Q17,Q18,Q19,app,title,text,created_at,user,time,test,Q5Topics,textTopics) "
+               "(StartDate, EndDate, Status, IPAddress, Progress, Duration, Finished, RecordedDate, ResponseId, RecipientLastName,RecipientFirstName, RecipientEmail,ExternalReference, LocationLatitude, LocationLongitude, DistributionChannel, UserLanguage, Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q15_other,Q16,Q17,Q17_other,app,title,text,created_at,user,time,test,Q5Topics,textTopics) "
                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
 add_data2 = ("INSERT INTO esm_data"
                "(StartDate, EndDate) "
@@ -35,7 +35,7 @@ with open(filename, 'r') as f:
                 count = count + 1
                 continue
             data=(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15],row[16],row[17],row[18],row[19],row[20],row[21],row[22],row[23],row[24],row[25],row[26],row[27],row[28],row[29],row[30],row[31],row[32],row[33],row[34],row[35],row[36],html.unescape(row[37]),html.unescape(row[38]),row[39],row[40],row[41],row[42],row[43],row[44])
-            print(data)
+            # print(data)
             """
             data = {
             'StartDate': row[0],

@@ -4,6 +4,17 @@ from flask import Flask
 from datetime import datetime
 import dateutil.parser
 
+
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(15), unique=True)
+    password = db.Column(db.String(80))
+    email = db.Column(db.String(50), unique=True)
+    self_q_completed = db.Column(db.Boolean)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    in_progress = db.Column(db.Boolean)
+
+
 class Result(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     r_type = db.Column(db.String(256))
@@ -24,21 +35,11 @@ class Result(db.Model):
         return '<Result %r>' % self.id
 
 
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(15), unique=True)
-    password = db.Column(db.String(80))
-    email = db.Column(db.String(50), unique=True)
-    self_q_completed = db.Column(db.Boolean)
-    created_at = db.Column(db.DateTime, default=datetime.now)
-    in_progress = db.Column(db.Boolean)
-
-
 class ContactQuestionnaire(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     contact_name = db.Column(db.String(50))
     contact_name_line = db.Column(db.String(50))
-    user_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     is_group = db.Column(db.Boolean) # deprecated
     completed = db.Column(db.Boolean)
     data = db.Column(db.Text)
