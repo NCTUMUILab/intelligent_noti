@@ -51,7 +51,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
         in_list = False
 
         """
-        contact = ["name",interruptibility, respond, percept_count, total ESM, 立即回覆, 在數分鐘之內,在半小時以內,一小時以內,隔數小時之後，但會在當天回覆,不會在當天回覆,不會回覆,沒有預計]
+        contact = ["name",interruptibility, respond, percept_count, total ESM, 立即回覆, 在數分鐘之內,在半小時以內,一小時以內,隔數小時之後，但會在當天回覆,不會在當天回覆,不會回覆,沒有預計,closeness]
 
         """
 
@@ -66,6 +66,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
                     contact[1] += int(Q7)
                     contact[3] += 1
                 contact[4] +=1
+                contact[13] += int(Q13)
                 if(Q10=="立即回覆"):
                     contact[5]+=1
                 elif(Q10=="在數分鐘之內"):
@@ -86,11 +87,12 @@ with open(mobileID+".csv", 'w', newline='') as f:
                 in_list = True
         if(in_list == False):
             #print("add contact: ",contact_name)
-            data = [contact_name,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            data = [contact_name,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             if(Q7 != ''):
                 data[1] += int(Q7)
                 data[3] += 1
             data[4] += 1
+            data[13] += int(Q13)
             if(Q10=="立即回覆"):
                 data[5]+=1
             elif(Q10=="在數分鐘之內"):
@@ -116,7 +118,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
     writer.writerows(blank)
     writer.writerows(blank)
 
-    result = [["name","interruptibility", "percept_count", "total ESM", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
+    result = [["name","Closeness","Interruptibility", "感知到通知的次數", "total ESM", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
     writer.writerows(result)
 
     contact_list.sort(reverse=True, key=ESM_amount)
@@ -125,6 +127,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
             avg_intr = str(float(contact[1])/float(contact[3]))
         else:
             avg_intr = "no data"
+        avg_closeness = str(float(contact[13])/float(contact[4]))
         contact_5 = str(contact[5])+" ("+str(float(contact[5])/float(contact[4])*100)+"%)"
         contact_6 = str(contact[6])+" ("+str(float(contact[6])/float(contact[4])*100)+"%)"
         contact_7 = str(contact[7])+" ("+str(float(contact[7])/float(contact[4])*100)+"%)"
@@ -134,7 +137,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
         contact_11 = str(contact[11])+" ("+str(float(contact[11])/float(contact[4])*100)+"%)"
         contact_12 = str(contact[12])+" ("+str(float(contact[12])/float(contact[4])*100)+"%)"
 
-        result_data = [[contact[0],avg_intr,contact[3],contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
+        result_data = [[contact[0],avg_closeness,avg_intr,contact[3],contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
         writer.writerows(result_data)
 
 db.close()
