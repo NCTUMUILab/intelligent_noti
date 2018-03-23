@@ -13,7 +13,7 @@ cursor = db.cursor()
 mobileID = sys.argv[1]
 #mobileID = "869124021392335"
 
-sql = "SELECT * FROM esm_data WHERE user =" + mobileID
+sql = "SELECT * FROM esm_data WHERE user = " + mobileID
 print(sql)
 
 
@@ -24,6 +24,8 @@ with open(mobileID+".csv", 'w', newline='') as f:
     title = [["time","app","傳送者","內容","你有沒有在手機上感受或注意到通知來的瞬間","你如何感知到這則通知(複選)","在感受到通知的當下，你有沒有猜是誰傳的訊息？","請問你是否有猜對?","請問你剛剛猜的是誰？(請填你猜的人在通訊軟體上的名稱)","你是不是因為你所猜的那個人，而決定看不看這則通知？","你覺得這則通知的干擾程度(1:完全沒干擾；5:非常干擾)","你覺得這個時機點送這則通知如何","你有沒有立即去看這則通知？","這則訊息你預計什麼時候回覆？","這個通知的內容","這個通知的時效性(有急迫性)","你們的關係最可以用下列何者圖示表示","你當時正在做什麼事？","你當時正在做什麼事？-其他","你當時做這件事的專注(投入)程度？(1:非常不投入；5: 非常投入)","你當下在你身邊互動的有多少人？(不包含傳訊息、打電話等等)","你當下在你身邊互動的有誰？(選擇所有符合的身份)","你當下在你身邊互動的有誰?(選擇所有符合的身份)-其他"]]
     writer.writerows(title)
     for row in results:
+        if(row[6] == "False"):
+            continue
         time = row[42]
         app = row[37]
         contact_name = row[38]
