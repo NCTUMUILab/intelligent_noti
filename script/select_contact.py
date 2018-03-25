@@ -144,8 +144,8 @@ with open(mobileID+".csv", 'w', newline='') as f:
         if(motivation_sum == 0):
             response_motivation = "no data"
         else:
-            response_motivation = str(1 * float(contact[5])/float(motivation_sum) + 2 * float(contact[6])/float(motivation_sum) + 3 * float(contact[7])/float(motivation_sum) + 4 * float(contact[8])/float(motivation_sum) + 5 * float(contact[9])/float(motivation_sum) + 6 * float(contact[10])/float(motivation_sum) + 7 * float(contact[11])/float(motivation_sum))
-        
+            response_motivation = str(7 * float(contact[5])/float(motivation_sum) + 6 * float(contact[6])/float(motivation_sum) + 5 * float(contact[7])/float(motivation_sum) + 4 * float(contact[8])/float(motivation_sum) + 3 * float(contact[9])/float(motivation_sum) + 2 * float(contact[10])/float(motivation_sum) + 1 * float(contact[11])/float(motivation_sum))
+
         result_data = [[contact[0],avg_closeness,avg_intr,response_motivation,contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
         writer.writerows(result_data)
 
