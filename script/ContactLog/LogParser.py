@@ -1,5 +1,22 @@
 from bs4 import BeautifulSoup
 from json import dumps
+from re import match
+from datetime import datetime
+
+
+def encrpyt_raw_text(raw_text):
+	encrypt_str = ""
+	for char in raw_text:
+		if '\u4e00' <= char <= '\u9fff':
+			encrypt_str += 'C'
+		elif ('\u0041' <= char <= '\u005a') or ('\u0061' <= char <= '\u007a'):
+			encrypt_str += 'E'
+		elif '\u0030' <= char <= '\u0039':
+			encrypt_str += 'D'
+		else:
+			encrypt_str += char
+	return encrypt_str
+
 
 class Message:
 	def __init__(self):
@@ -10,6 +27,11 @@ class Message:
 	
 	def __repr__(self):
 		return "Message {}\n\tNAME: {}\n\tTIME: {}\n\tRAW : {}\n\tOTHE: {}".format(id(self), self.sender, self.time, self.raw, self.others)
+	
+	def clear(self):
+		self.time = None
+		self.raw = None
+		self.others = None
 	
 	def dict(self):
 		result = {'sender': self.sender,
@@ -69,3 +91,48 @@ class FacebookLogParser: # similar as Thread
 	def export(self):
 		return dumps(self.result_list)
 		
+
+class LineLogParser:
+	def __init__(self, file_path):
+		self.file_path = file_path
+		self.current_message = Message()
+		self.current_datetime = datetime(2000, 1, 1)
+		self.result_list = []
+		self._parse_file()
+		
+	def _parse_file(self):
+		with open(self.file_path) as file:
+			for line in file:
+				line = line.replace('\n', '')
+				print("'"+line+"'")
+				self._check_date(line)
+				self._check_content(line)
+				input()
+	
+	def _check_date(self, line):
+		if match('\d{4}\/\d{2}\/\d{2}\(\S{2}\)', line):
+			date_str = line[:-4]
+			year, month, day = [ int(i) for i in date_str.split('/') ]
+			self.current_datetime = self.current_datetime.replace(year=year, month=month, day=day)
+			print('time:', self.current_datetime)
+	
+	
+	def _check_content(self, line):
+		if match('\d{2}:\d{2}\s', line):
+			time_str, sender, raw = line.split('\t')
+			hour, minute = [ int(i) for i in time_str.split(':') ]
+			self.current_datetime = self.current_datetime.replace(hour=hour, minute=minute)
+			self._update_message(sender, raw)
+			
+	
+	def _update_message(self, sender, raw):
+		self.current_message.clear()
+		self.current_message.sender = sender
+		self.current_message.raw = encrpyt_raw_text(raw)
+		self.current_message.time = self.current_datetime.strftime("%y/%m/%d %H:%M")
+		self.result_list.append(self.current_message.dict())
+		print(self.current_message)
+		
+	
+	def export(self):
+		pass

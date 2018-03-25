@@ -5,7 +5,6 @@ from flask_wtf.file import FileField, FileRequired
 from .models import User
 
 class LoginForm(FlaskForm):
-	# username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
 	email = StringField('電子信箱', validators=[InputRequired(), Email(message="格式不符合"), Length(max=50)])
 	password = PasswordField('密碼', validators=[InputRequired()])
 	remember = BooleanField('記住我')
@@ -21,7 +20,7 @@ def unique_email(form, field):
 class RegisterForm(FlaskForm):
 	email = StringField('電子信箱', validators=[ InputRequired(), Email(message="Invalid email"), Length(max=50), unique_email ])
 	username = StringField('真實姓名', validators=[ InputRequired(), unique_username ])
-	password = PasswordField('密碼', validators=[ InputRequired(), Length(min=8, max=80), EqualTo('confirm', message='Passwords must match') ])
+	password = PasswordField('密碼', validators=[ InputRequired(), EqualTo('confirm', message='Passwords must match') ])
 	confirm = PasswordField('請再重複一次密碼')
 	device_id = StringField('Device ID', validators=[ InputRequired() ])
 	
