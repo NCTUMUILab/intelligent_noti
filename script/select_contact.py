@@ -55,7 +55,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
         in_list = False
 
         """
-        contact = ["name",interruptibility, respond, percept_count, total ESM, 立即回覆, 在數分鐘之內,在半小時以內,一小時以內,隔數小時之後，但會在當天回覆,不會在當天回覆,不會回覆,沒有預計,closeness]
+        contact = ["name",interruptibility, respond, percept_count, total ESM, 立即回覆, 在數分鐘之內,在半小時以內,一小時以內,隔數小時之後，但會在當天回覆,不會在當天回覆,不會回覆,沒有預計,closeness, importance, urgence]
 
         """
 
@@ -70,7 +70,29 @@ with open(mobileID+".csv", 'w', newline='') as f:
                     contact[1] += int(Q7)
                     contact[3] += 1
                 contact[4] +=1
-                contact[13] += int(Q13)
+                contact[13] += int(Q13) #closeness
+                if(Q11 == "沒看到沒有任何影響"):
+                    contact[14] += 1 #importance
+                elif(Q11 == "沒看到不會有太大影響"):
+                    contact[14] += 2
+                elif(Q11 == "沒看到會有影響"):
+                    contact[14] += 3
+                elif(Q11 == "沒看到會有明顯的影響"):
+                    contact[14] += 4
+                elif(Q11 == "非常重要，一定要看到的訊息"):
+                    contact[14] += 5
+
+                if(Q12 == "無論什麼時候看到都可以"):
+                    contact[15] += 1 #urgence
+                elif(Q12 == "當下沒看到不會有太大的影響"):
+                    contact[15] += 2
+                elif(Q12 == "如果當下沒有看到，會有一點的影響"):
+                    contact[15] += 3
+                elif(Q12 == "如果當下沒有看到，會有明顯的影響"):
+                    contact[15] += 4
+                elif(Q12 == "一定當下看到，完全不能延遲"):
+                    contact[15] += 5
+
                 if(Q10=="立即回覆"):
                     contact[5]+=1
                 elif(Q10=="在數分鐘之內"):
@@ -91,12 +113,34 @@ with open(mobileID+".csv", 'w', newline='') as f:
                 in_list = True
         if(in_list == False):
             #print("add contact: ",contact_name)
-            data = [contact_name,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            data = [contact_name,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             if(Q7 != ''):
                 data[1] += int(Q7)
                 data[3] += 1
             data[4] += 1
             data[13] += int(Q13)
+            if(Q11 == "沒看到沒有任何影響"):
+                data[14] += 1 #importance
+            elif(Q11 == "沒看到不會有太大影響"):
+                data[14] += 2
+            elif(Q11 == "沒看到會有影響"):
+                data[14] += 3
+            elif(Q11 == "沒看到會有明顯的影響"):
+                data[14] += 4
+            elif(Q11 == "非常重要，一定要看到的訊息"):
+                data[14] += 5
+
+            if(Q12 == "無論什麼時候看到都可以"):
+                data[15] += 1
+            elif(Q12 == "當下沒看到不會有太大的影響"):
+                data[15] += 2
+            elif(Q12 == "如果當下沒有看到，會有一點的影響"):
+                data[15] += 3
+            elif(Q12 == "如果當下沒有看到，會有明顯的影響"):
+                data[15] += 4
+            elif(Q12 == "一定當下看到，完全不能延遲"):
+                data[15] += 5
+
             if(Q10=="立即回覆"):
                 data[5]+=1
             elif(Q10=="在數分鐘之內"):
@@ -122,13 +166,34 @@ with open(mobileID+".csv", 'w', newline='') as f:
     writer.writerows(blank)
     writer.writerows(blank)
 
-    result = [["name","Closeness","Interruptibility", "回覆動機", "total ESM", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
+    final_closeness = 0
+    final_inter = 0
+    final_resp = 0
+    final_percept = 0
+    final_ESM_count = 0
+    final_contact_5 = 0
+    final_contact_6 = 0
+    final_contact_7 = 0
+    final_contact_8 = 0
+    final_contact_9 = 0
+    final_contact_10 = 0
+    final_contact_11 = 0
+    final_contact_12 = 0
+    final_motivation_count = 0
+
+    final_importance = 0
+    final_urgence = 0
+
+
+    result = [["name","Closeness","Interruptibility","回覆動機","重要程度","緊急程度", "total ESM", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
     writer.writerows(result)
 
     contact_list.sort(reverse=True, key=ESM_amount)
     for contact in contact_list:
         if(float(contact[3]) != 0):
             avg_intr = str(float(contact[1])/float(contact[3]))
+            final_closeness += float(contact[13])
+            final_percept += float(contact[3])
         else:
             avg_intr = "no data"
         avg_closeness = str(float(contact[13])/float(contact[4]))
@@ -141,12 +206,38 @@ with open(mobileID+".csv", 'w', newline='') as f:
         contact_10 = str(contact[10])+" ("+str(float(contact[10])/float(contact[4])*100)+"%)"
         contact_11 = str(contact[11])+" ("+str(float(contact[11])/float(contact[4])*100)+"%)"
         contact_12 = str(contact[12])+" ("+str(float(contact[12])/float(contact[4])*100)+"%)"
+
+        avg_importance = float(contact[14])/float(contact[4])
+        avg_urgence = float(contact[15])/float(contact[4])
+
+
         if(motivation_sum == 0):
             response_motivation = "no data"
         else:
             response_motivation = str(7 * float(contact[5])/float(motivation_sum) + 6 * float(contact[6])/float(motivation_sum) + 5 * float(contact[7])/float(motivation_sum) + 4 * float(contact[8])/float(motivation_sum) + 3 * float(contact[9])/float(motivation_sum) + 2 * float(contact[10])/float(motivation_sum) + 1 * float(contact[11])/float(motivation_sum))
+            final_resp += 7 * float(contact[5]) + 6 * float(contact[6])+ 5 * float(contact[7])+ 4 * float(contact[8]) + 3 * float(contact[9])+ 2 * float(contact[10]) + 1 * float(contact[11])
+            final_motivation_count += motivation_sum
 
-        result_data = [[contact[0],avg_closeness,avg_intr,response_motivation,contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
+        final_inter += float(contact[1])
+        final_ESM_count += float(contact[4])
+        final_contact_5 += int(contact[5])
+        final_contact_6 += int(contact[6])
+        final_contact_7 += int(contact[7])
+        final_contact_8 += int(contact[8])
+        final_contact_9 += int(contact[9])
+        final_contact_10 += int(contact[10])
+        final_contact_11 += int(contact[11])
+        final_contact_12 += int(contact[12])
+
+        final_importance += int(contact[14])
+        final_urgence += int(contact[15])
+
+        result_data = [[contact[0],avg_closeness,avg_intr,response_motivation,avg_importance,avg_urgence, contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
         writer.writerows(result_data)
+
+
+    final_data = [["Total",final_closeness/final_ESM_count,final_inter/final_percept,final_resp/final_motivation_count,float(final_importance)/final_ESM_count,float(final_urgence)/final_ESM_count,int(final_ESM_count), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
+    writer.writerows(final_data)
+
 
 db.close()
