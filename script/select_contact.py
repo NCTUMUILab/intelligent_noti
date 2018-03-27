@@ -14,9 +14,15 @@ cursor = db.cursor()
 mobileID = sys.argv[1]
 #mobileID = "869124021392335"
 
-sql = "SELECT * FROM esm_data WHERE user = " + mobileID
-print(sql)
+cursor.execute("SELECT user_id FROM deviceID WHERE device_id ="+mobileID)
+uid = str(cursor.fetchall()[0][0])
+print("User id: ",uid)
 
+cursor.execute("SELECT name,Q4,Q9,Q2_1,Q3 FROM contact WHERE uid ="+uid) #Q4: relationship, Q9: closeness, Q2_1: interruptibility, Q3: response,
+contact_questionniare= cursor.fetchall()
+
+
+sql = "SELECT * FROM esm_data WHERE user = " + mobileID
 
 cursor.execute(sql)
 results = cursor.fetchall()
@@ -166,6 +172,11 @@ with open(mobileID+".csv", 'w', newline='') as f:
     writer.writerows(blank)
     writer.writerows(blank)
 
+    final_self_closeness = 0
+    final_self_response = 0
+    final_self_inter = 0
+    questionniare_count = 0
+
     final_closeness = 0
     final_inter = 0
     final_resp = 0
@@ -185,7 +196,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
     final_urgence = 0
 
 
-    result = [["name","Closeness","Interruptibility","回覆動機","重要程度","緊急程度", "total ESM", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
+    result = [["name","關係","自評 Closeness","自評 Interruptibility","自評 回覆動機","Closeness","Interruptibility","回覆動機","重要程度","緊急程度", "total ESM", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
     writer.writerows(result)
 
     contact_list.sort(reverse=True, key=ESM_amount)
@@ -232,11 +243,40 @@ with open(mobileID+".csv", 'w', newline='') as f:
         final_importance += int(contact[14])
         final_urgence += int(contact[15])
 
-        result_data = [[contact[0],avg_closeness,avg_intr,response_motivation,avg_importance,avg_urgence, contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
+        relationship = ""
+        self_closeness = ""
+        self_interr = ""
+        self_response = ""
+        for questionniare in contact_questionniare:
+            if(questionniare[0] == contact[0]):
+                relationship = questionniare[1]
+                self_closeness = questionniare[2]
+                self_interr = questionniare[3]
+                self_response = questionniare[4]
+                final_self_inter += float(questionniare[3])
+
+                if(self_response=="通常立即回覆"):
+                    final_self_response += 7
+                elif(self_response=="通常間隔數分鐘"):
+                    final_self_response += 6
+                elif(self_response=="通常半小時以內"):
+                    final_self_response += 5
+                elif(self_response=="通常一小時以內"):
+                    final_self_response += 4
+                elif(self_response=="通常幾小時內（當天）"):
+                    final_self_response += 3
+                elif(self_response=="通常沒有在當天回覆"):
+                    final_self_response += 2
+                elif(self_response=="通常不回覆"):
+                    final_self_response += 1
+                final_self_closeness += float(questionniare[2])
+                questionniare_count += 1
+
+
+        result_data = [[contact[0],relationship,self_closeness,self_interr,self_response,avg_closeness,avg_intr,response_motivation,avg_importance,avg_urgence, contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
         writer.writerows(result_data)
 
-
-    final_data = [["Total",final_closeness/final_ESM_count,final_inter/final_percept,final_resp/final_motivation_count,float(final_importance)/final_ESM_count,float(final_urgence)/final_ESM_count,int(final_ESM_count), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
+    final_data = [["Total","",final_self_closeness/questionniare_count,float(final_self_inter)/questionniare_count,float(final_self_response)/questionniare_count,final_closeness/final_ESM_count,final_inter/final_percept,final_resp/final_motivation_count,float(final_importance)/final_ESM_count,float(final_urgence)/final_ESM_count,int(final_ESM_count), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
     writer.writerows(final_data)
 
 
