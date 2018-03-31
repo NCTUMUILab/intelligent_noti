@@ -6,8 +6,9 @@ class FacebookContactSoupGenerator:
 		self.directory_path = directory_path
 		self.contact_list = contact_list
 		self.soup_list = []
+		self.name_to_file_dict = {}
 		self.language = self._get_language()
-
+	
 
 	def find_all_soups(self):
 		for file_name in listdir(self.directory_path + "/messages/"):
@@ -19,6 +20,12 @@ class FacebookContactSoupGenerator:
 						break
 		print('\tDONE!!')				
 		return self.soup_list
+	
+	
+	def get_file_soup(self, file_name):
+		file_path = self.directory_path + "/messages/" + file_name
+		with open(file_path) as file:
+			return BeautifulSoup(file.read(), 'html.parser')
 	
 	
 	def _get_language(self):
@@ -50,9 +57,14 @@ class FacebookContactSoupGenerator:
 				contact_name = soup.title.string.replace("Conversation with ", "")
 			elif self.language == 'CH':
 				contact_name = soup.title.string.replace("與以下對象的對話： ", "")
-			print("name:", contact_name)
+			
+			if contact_name in self.name_to_file_dict:
+				self.name_to_file_dict[contact_name].append(file_name)
+			else:
+				self.name_to_file_dict[contact_name] = [ file_name ]
+			
 			if contact_name in self.contact_list:
-				print("\tFIND:", contact_name, file_name)
+				print("\tFIND:", contact_name, file_name, len(self.soup_list))
 				return True, soup, contact_name
 			else:
 				return False, None, None
