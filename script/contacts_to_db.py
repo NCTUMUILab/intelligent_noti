@@ -4,7 +4,7 @@ import csv, sys
 import html
 import secrete as secrete
 
-db = MySQLdb.connect(secrete.db_url,secrete.user_name,secrete.password,secrete.password)
+db = MySQLdb.connect(secrete.db_url,secrete.user_name,secrete.password,secrete.db)
 cursor = db.cursor()
 
 sql = "TRUNCATE TABLE contact"
