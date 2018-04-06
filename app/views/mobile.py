@@ -113,20 +113,19 @@ def add_result():
             zip(raw['latitude_cols'], raw['subText_cols'], raw['app_cols'], raw['timestamps'], \
                 raw['n_text_cols'], raw['longitude_cols'], raw['title_cols'], raw['tickerText_cols'], \
                 raw['sendForm_cols']):
-            # if app == 'edu.nctu.minuku_2' or not ticker:
-            #     continue
-            new_notification = Notification(
-                timestamp = timestamp,
-                device_id = content['device_id'],
-                latitude = lat,
-                longitude = lon,
-                app = app,
-                title = title,
-                sub_text = sub_text,
-                text = text,
-                ticker_text = ticker,
-                send_esm = True if send_esm == '1' else False)
-            db.session.add(new_notification)
+            if app == 'com.facebook.orca' or app == 'jp.naver.line.android':
+                new_notification = Notification(
+                    timestamp = timestamp,
+                    device_id = content['device_id'],
+                    latitude = lat,
+                    longitude = lon,
+                    app = app,
+                    title = title,
+                    sub_text = sub_text,
+                    text = text,
+                    ticker_text = ticker,
+                    send_esm = True if send_esm == '1' else False)
+                db.session.add(new_notification)
         try:
             db.session.commit()
         except Exception as e:

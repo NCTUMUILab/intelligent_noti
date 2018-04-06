@@ -1,10 +1,6 @@
 __pycache__*
 database.db
-result.csv
-app/result.txt
 *sublime*
-result_facebook.txt
-result_line.txt
 instance/config.py
 userdata/
-secrete.py
+script/secrete.py

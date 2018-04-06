@@ -17,12 +17,17 @@ def unique_email(form, field):
 	if User.query.filter_by(email=field.data).first():
 		raise ValidationError('Email has been used')
 
+def signup_secret_token(form, field):
+	if not field.data == 'adminonly':
+		raise ValidationError('No Permission')
+
 class RegisterForm(FlaskForm):
 	email = StringField('電子信箱', validators=[ InputRequired(), Email(message="Invalid email"), Length(max=50), unique_email ])
 	username = StringField('真實姓名', validators=[ InputRequired(), unique_username ])
 	password = PasswordField('密碼', validators=[ InputRequired(), EqualTo('confirm', message='Passwords must match') ])
-	confirm = PasswordField('請再重複一次密碼')
+	confirm = PasswordField('請再重複一次密碼', validators=[ InputRequired() ])
 	device_id = StringField('Device ID', validators=[ InputRequired() ])
+	secret_token = PasswordField('Secret Token', validators=[ InputRequired(), signup_secret_token ])
 	
 class FacebookLoginForm(FlaskForm):
 	account = StringField('Email or Phone number', validators=[ InputRequired() ])
