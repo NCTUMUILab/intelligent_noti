@@ -113,7 +113,7 @@ def add_result():
             zip(raw['latitude_cols'], raw['subText_cols'], raw['app_cols'], raw['timestamps'], \
                 raw['n_text_cols'], raw['longitude_cols'], raw['title_cols'], raw['tickerText_cols'], \
                 raw['sendForm_cols']):
-            if app == 'com.facebook.orca' or app == 'jp.naver.line.android':
+            if ticker and (app=='com.facebook.orca' or app=='jp.naver.line.android'):
                 new_notification = Notification(
                     timestamp = timestamp,
                     device_id = content['device_id'],
