@@ -106,7 +106,7 @@ def add_result():
         print(e)
         db.session.rollback()
         abort(404)
-    
+
     raw = content.get('Notification')
     if raw:
         for lat, sub_text, app, timestamp, text, lon, title, ticker, send_esm in \
@@ -135,4 +135,12 @@ def add_result():
         'endTime': int(content['endTime'] ) })
 
 
-
+@mobile.route('/state/', methods=['GET'])
+def get_state():
+     content = request.get_json(silent=True)
+     user = request.args.get('user')
+     last_result = db.session.query(Result).filter(Result.user==user).order_by(desc(Result.created_at)).first()
+     if last_result:
+        return str(int(datetime.fromtimestamp(int(json.loads(last_result.raw)['endTime'])/1000).replace(minute=0, second=0).strftime('%s'))*1000)
+     else:
+        return '0'
