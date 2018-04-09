@@ -20,8 +20,8 @@ def report():
     device_id = request.args.get('device_id')
     if not device_id:
         return "bad request"
-    if not DeviceID.query.filter_by(device_id=device_id).first():
-        return "invalid device ID"
+    # if not DeviceID.query.filter_by(device_id=device_id).first():
+    #     return "invalid device ID"
     
     report = {}
     all_query = ESMCount.query.filter_by(device_id=device_id)
