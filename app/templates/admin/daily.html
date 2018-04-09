@@ -19,26 +19,40 @@
 					<th>ID</th>
 					<th>name</th>
 					<th>device ID</th>
-					<th>day</th>
-					<th>esm</th>
+					<th>days</th>
+					<th>send esm</th>
+					<th>esm done</th>
 					<th>notification</th>
-					<th>data</th>
+					<th>phone data count</th>
+					<th>VALID</th>
+					<th>warning</th>
 				</thead>
 				<tbody>
 				{% for user in users %}
 					<tr>
-						<td>{{ user.id }}</td>
+						<td>{{ user.user_id }}</td>
 						<td>{{ user.name }}</td>
 						<td>{{ user.device_id }}</td>
 						<td>{{ user.day }}</td>
-						<td>{{ user.esm }}</td>
-						<td>{{ user.noti }}</td>
-						<td>{{ user.data }}</td>
+						<td>{{ user.send_esm_count }}</td>
+						<td>{{ user.esm_done_count }}</td>
+						<td>{{ user.im_notification_count }}</td>
+						<td>{{ user.phone_data_count }}</td>
+						<td>{{ user.all_valid }}</td>
+						<td>{{ user.warning }}</td>
 					</tr>
 				{% endfor %}
 				</tbody>
 			</table>
 		</div>
+	</div>
+	<div class="row">
+		<form action="{{ url_for('admin.daily_check_post') }}" method="POST">
+			<div class="form-group">
+				<input type="hidden" name="check" value='{{ users|tojson|safe }}'>
+				<button type="submit" class="btn btn-primary" {{ 'disabled' if is_today_checked }}>Chectout</button>
+			</div>
+		</form>
 	</div>
 </div>
 {% endblock %}

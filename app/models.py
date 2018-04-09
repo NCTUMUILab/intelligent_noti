@@ -81,3 +81,15 @@ class Notification(db.Model):
     text = db.Column(db.Text) # text
     ticker_text = db.Column(db.Text) # text shown on screen (sender+text)
     send_esm = db.Column(db.Boolean) # if esm is sent
+
+class DailyCheck(db.Model):
+    __tablename__ = 'daily_check'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    date = db.Column(db.Date)
+    send_esm_count = db.Column(db.Integer)
+    esm_done_count = db.Column(db.Integer)
+    im_notification_count = db.Column(db.Integer)
+    phone_data_count = db.Column(db.Integer)
+    all_valid = db.Column(db.Boolean)
+    created_at = db.Column(db.DateTime, default=datetime.now)

@@ -43,18 +43,30 @@ ESM Report
                 </tbody>
             </table>
         </div>
-        {# <hr>
-        <h5>Today's ESM Count</h5>
-        <div class="progress">
-            <div class="progress-bar {{ 'progress-bar-success' if result['today'] >= 10 }}" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:{{ '100' if result['today'] >= 10 else result['today']|int * 10  }}%">
-                {{ result['today'] }}/10
-                <span class="sr-only">70% Complete</span>
-            </div>
-        </div> #}
-        <hr>
-        <canvas id="week"></canvas>
+        
         <hr>
         <canvas id="appType"></canvas>
+        
+        <hr>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>傳送者</th>
+                        <th>次數</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in sender_count|sort(attribute='count', reverse=True) %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.count }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
     </div>
 </div>
 {% endblock %}
@@ -62,26 +74,6 @@ ESM Report
 {% block scripts %}
 {{ super() }}
 <script>
-    var weekContext = document.getElementById('week').getContext('2d');
-    var chart = new Chart(weekContext, {
-        type: 'bar',
-        data: {
-            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-            datasets: [{
-                label: "count",
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: [8, 10, 5, 2, 13, 5, 5],
-            }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Weekly Count'
-            }
-        }
-    });
-    
     var appTypeContext = document.getElementById('appType').getContext('2d');
     var chart2 = new Chart(appTypeContext, {
         type: 'pie',
@@ -90,13 +82,13 @@ ESM Report
             datasets: [{
                 label: "Types of App",
                 backgroundColor: ['rgb(255, 99, 132)', 'rgb(0, 180, 175)'],
-                data: [13, 58],
+                data: [{{ app_count['fb'] }}, {{ app_count['line'] }} ],
             }]
         },
         options: {
             title: {
                 display: true,
-                text: 'Types of App received messages'
+                text: 'App'
             }
         }
     });

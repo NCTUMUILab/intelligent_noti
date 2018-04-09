@@ -1,7 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for
 from app.models import DeviceID, ESMCount
 from app import db
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 esm = Blueprint('esm', __name__)
 
@@ -18,30 +18,29 @@ def receive_count():
 @esm.route('/report')
 def report():
     device_id = request.args.get('device_id')
-    result = {}
-    all_query = ESMCount.query.filter_by(device_id=device_id)
-    if not device_id or not all_query:
+    if not device_id:
         return "bad request"
-    result['total'] = len(all_query.all())
+    if not DeviceID.query.filter_by(device_id=device_id).first():
+        return "invalid device ID"
+    
+    report = {}
+    all_query = ESMCount.query.filter_by(device_id=device_id)
+    report['total'] = all_query.count()
 
-    today_threshold = datetime.now() - timedelta(days=1)
-    esm_one_day_all = all_query.filter(ESMCount.created_at > today_threshold).all()
-    result['today'] = len(esm_one_day_all)
+    today_threshold = datetime.combine(date.today(), datetime.min.time())
+    report['today'] = all_query.filter(ESMCount.created_at > today_threshold).count()
 
     week_threshold = datetime.now() - timedelta(days=7)
-    esm_one_week_all = all_query.filter(ESMCount.created_at > week_threshold).all()
-    result['7_days'] = len(esm_one_week_all)
-
-    day_count = {}
-    for esm in all_query.all():
-        each_day_str = esm.created_at.strftime('%y-%m-%d')
-        if each_day_str in day_count:
-            day_count[each_day_str] += 1
-        else:
-            day_count[each_day_str] = 1
+    report['7_days'] = esm_one_week_all = all_query.filter(ESMCount.created_at > week_threshold).count()
     
-    day_valid = 0
-    for day, count in day_count.items():
-        day_valid += 1 if count >= 3 else 0
-    result['day_valid'] = day_valid
-    return render_template('report.html', result=result, device_id=device_id)
+    app_count = { 'fb': 0, 'line': 0 }
+    sender_count = {}
+    for esm in all_query.all():
+        app_count[esm.app] += 1
+        if esm.name in sender_count:
+            sender_count[esm.name] += 1
+        else:
+            sender_count[esm.name] = 1
+    sender_count = [ {"name":sender, "count":value} for sender, value in sender_count.items() ]
+    
+    return render_template('report.html', result=report, device_id=device_id, app_count=app_count, sender_count=sender_count)
