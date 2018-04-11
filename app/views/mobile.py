@@ -106,27 +106,26 @@ def add_result():
         print(e)
         db.session.rollback()
         abort(404)
-    
+
     raw = content.get('Notification')
     if raw:
         for lat, sub_text, app, timestamp, text, lon, title, ticker, send_esm in \
             zip(raw['latitude_cols'], raw['subText_cols'], raw['app_cols'], raw['timestamps'], \
                 raw['n_text_cols'], raw['longitude_cols'], raw['title_cols'], raw['tickerText_cols'], \
                 raw['sendForm_cols']):
-            # if app == 'edu.nctu.minuku_2' or not ticker:
-            #     continue
-            new_notification = Notification(
-                timestamp = timestamp,
-                device_id = content['device_id'],
-                latitude = lat,
-                longitude = lon,
-                app = app,
-                title = title,
-                sub_text = sub_text,
-                text = text,
-                ticker_text = ticker,
-                send_esm = True if send_esm == '1' else False)
-            db.session.add(new_notification)
+            if ticker and (app=='com.facebook.orca' or app=='jp.naver.line.android'):
+                new_notification = Notification(
+                    timestamp = timestamp,
+                    device_id = content['device_id'],
+                    latitude = lat,
+                    longitude = lon,
+                    app = app,
+                    title = title,
+                    sub_text = sub_text,
+                    text = text,
+                    ticker_text = ticker,
+                    send_esm = True if send_esm == '1' else False)
+                db.session.add(new_notification)
         try:
             db.session.commit()
         except Exception as e:
@@ -136,4 +135,12 @@ def add_result():
         'endTime': int(content['endTime'] ) })
 
 
-
+@mobile.route('/state/', methods=['GET'])
+def get_state():
+     content = request.get_json(silent=True)
+     user = request.args.get('user')
+     last_result = db.session.query(Result).filter(Result.user==user).order_by(desc(Result.created_at)).first()
+     if last_result:
+        return str(int(datetime.fromtimestamp(int(json.loads(last_result.raw)['endTime'])/1000).replace(minute=0, second=0).strftime('%s'))*1000)
+     else:
+        return '0'

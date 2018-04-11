@@ -27,10 +27,7 @@ def signup():
         db.session.add(new_device)
         db.session.commit()
         return redirect(url_for('contact.addContact'))
-    if request.args.get('token') == 'adminonly':
-        return render_template('signup.html', form=form)
-    else:
-        abort(403)
+    return render_template('signup.html', form=form)
 
     
 @user.route('/login', methods=['GET', 'POST'])
