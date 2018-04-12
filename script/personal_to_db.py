@@ -3,6 +3,12 @@ import MySQLdb
 import csv, sys
 import html
 import secrete as secrete
+from tkinter import filedialog
+from tkinter import *
+
+root = Tk().withdraw()
+filename =  filedialog.askopenfilename(initialdir = "/",title = "Select Personal File",filetypes = (("csv files","*.csv"),("all files","*.*")))
+print(filename)
 
 db = MySQLdb.connect(secrete.db_url,secrete.user_name,secrete.password,secrete.db)
 cursor = db.cursor()
@@ -23,7 +29,6 @@ add_data = ("INSERT INTO personal"
                "(StartDate,EndDate,Status,IPAddress,Progress,Duration,Finished,RecordedDate,ResponseId,RecipientLastName,RecipientFirstName,RecipientEmail,ExternalReference,LocationLatitude,LocationLongitude,DistributionChannel,UserLanguage,Q2_1,Q2_2,Q2_3,Q2_4,Q2_5,Q2_6,Q2_7,Q2_8,Q2_9,Q2_10,Q2_11,Q2_12,Q2_13,Q2_14,Q2_15,Q2_16,Q2_17,Q2_18,Q2_19,Q3_1,Q3_2,Q3_3,Q3_4,Q3_5,Q3_6,Q3_7,Q3_8,Q3_9,Q3_10,Q3_11,Q3_12,Q3_13,Q3_14,Q3_15,Q3_16,Q3_17,Q3_18,Q3_19,Q3_20,Q4_1,Q4_2,Q4_3,Q4_4,Q4_5,Q4_6,Q4_7,Q4_8,Q4_9,Q4_10,name,uid,name_Topics) "
                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
 
-filename = 'personal.csv'
 count = 0
 with open(filename, 'r') as f:
     reader = csv.reader(f)

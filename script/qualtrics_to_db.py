@@ -3,6 +3,12 @@ import MySQLdb
 import csv, sys
 import html
 import secrete as secrete
+from tkinter import filedialog
+from tkinter import *
+
+root = Tk().withdraw()
+filename =  filedialog.askopenfilename(initialdir = "/",title = "Select ESM file",filetypes = (("csv files","*.csv"),("all files","*.*")))
+
 
 db = MySQLdb.connect(secrete.db_url,secrete.user_name,secrete.password,secrete.db)
 
@@ -27,7 +33,6 @@ add_data2 = ("INSERT INTO esm_data"
                "(StartDate, EndDate) "
                "VALUES (%s,%s)")
 
-filename = 'input.csv'
 count = 0
 with open(filename, 'r') as f:
     reader = csv.reader(f)

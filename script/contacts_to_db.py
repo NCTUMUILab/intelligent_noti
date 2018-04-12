@@ -3,6 +3,12 @@ import MySQLdb
 import csv, sys
 import html
 import secrete as secrete
+from tkinter import filedialog
+from tkinter import *
+
+root = Tk().withdraw()
+filename =  filedialog.askopenfilename(initialdir = "/",title = "Select Contact File",filetypes = (("csv files","*.csv"),("all files","*.*")))
+print(filename)
 
 db = MySQLdb.connect(secrete.db_url,secrete.user_name,secrete.password,secrete.db)
 cursor = db.cursor()
@@ -23,7 +29,6 @@ add_data = ("INSERT INTO contact"
                "(            StartDate,EndDate,Status,IPAddress,Progress,Duration,Finished,RecordedDate,ResponseId,RecipientLastName,RecipientFirstName,RecipientEmail,ExternalReference,LocationLatitude,LocationLongitude,DistributionChannel,UserLanguage,Q2_1,Q3,Q4,Q4_11_TEXT,Q5_1,Q6,Q7,Q8,Q9,Q10_1,Q10_2,Q10_3,Q10_4,Q10_5,Q10_6,Q10_7,Q10_8,Q10_9,Q10_10,Q10_11,Q10_12,Q11_1,Q11_2,Q11_3,Q11_4,Q11_5,Q11_6,Q11_7,Q12_1,Q12_2,Q12_3,Q12_4,Q12_5,Q12_6,Q12_7,Q12_8,Q12_9,Q13_1,Q13_2,Q13_3,Q13_4,Q13_5,Q13_6,Q14_1,Q14_2,Q14_3,Q14_4,Q14_5,Q14_6,name,uid,cid) "
                "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)")
 
-filename = 'contact.csv'
 count = 0
 with open(filename, 'r') as f:
     reader = csv.reader(f)
