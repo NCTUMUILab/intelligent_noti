@@ -19,13 +19,15 @@
 					<th>ID</th>
 					<th>name</th>
 					<th>device ID</th>
-					<th>days</th>
-					<th>send esm</th>
-					<th>esm done</th>
-					<th>notification</th>
-					<th>phone data count</th>
+					<th>Days</th>
+					<th>送ESM數</th>
+					<th>完成ESM數</th>
+					<th>通知數</th>
+					<th>Accessibility</th>
+					<th>No result lost</th>
 					<th>VALID</th>
-					<th>warning</th>
+					<th>Warning</th>
+					<th>失敗原因</th>
 				</thead>
 				<tbody>
 				{% for user in users %}
@@ -37,9 +39,11 @@
 						<td>{{ user.send_esm_count }}</td>
 						<td>{{ user.esm_done_count }}</td>
 						<td>{{ user.im_notification_count }}</td>
-						<td>{{ user.phone_data_count }}</td>
+						<td>{{ user.accessibility }}</td>
+						<td>{{ user.no_result_lost }}</td>
 						<td>{{ user.all_valid }}</td>
 						<td>{{ user.warning }}</td>
+						<td>{{ user.fail_list }}</td>
 					</tr>
 				{% endfor %}
 				</tbody>
