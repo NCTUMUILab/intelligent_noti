@@ -119,8 +119,11 @@
     }).addTo(mymap);
 
     var heat = L.heatLayer(data, {
-                //radius: 10,
-                //blur: 1
+                //scaleRadius: true,
+                //useLocalExtrema: true,
+                //radius: 20,
+                //maxOpacity: .8,
+                blur: 0
             }).addTo(mymap);
     var popup = L.popup();
 
