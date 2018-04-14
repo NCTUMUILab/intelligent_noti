@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import desc
 import hashlib
 import json
+import time
 from datetime import timezone
 
 from sqlalchemy.exc import IntegrityError
@@ -143,4 +144,4 @@ def get_state():
      if last_result:
         return str(int(datetime.fromtimestamp(int(json.loads(last_result.raw)['endTime'])/1000).replace(minute=0, second=0).strftime('%s'))*1000)
      else:
-        return '0'
+        return str((int(datetime.fromtimestamp(time.time()).replace(minute=0, second=0). strftime('%s'))-3600)*1000)
