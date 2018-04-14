@@ -1,24 +1,41 @@
 from app.models import DailyCheck
 from datetime import datetime
+from json import dumps
 
-def check_valid(check):
-    record_valid = True
-    if check['im_notification_count'] <= 10:
-        record_valid = False
-        check['fail_list'].append('im_notification_count')
-    if check['send_esm_count'] <= 5:
-        record_valid = False
-        check['fail_list'].append('send_esm_count')
-    if check['esm_done_count'] <= 5:
-        record_valid = False
-        check['fail_list'].append('esm_done_count')
-    if not check['accessibility']:
-        record_valid = False
-        check['fail_list'].append('accessibility')
-    if not check['no_result_lost']:
-        record_valid = False
-        check['fail_list'].append('no_result_lost')
-    return record_valid
+class Check:
+    def __init__(self, name, user_id, created_at):
+        self.name = name
+        self.user_id = user_id
+        self.device_id = ''
+        self.day = (datetime.now()-created_at).days + 1
+        self.send_esm_count = 0
+        self.esm_done_count = 0
+        self.im_notification_count = 0
+        self.accessibility = False
+        self.no_result_lost = None
+        self.all_valid = True
+        self.warning = False
+        self.fail_list = []
+    
+    def toJSON(self):
+         return dumps(self, default=lambda o: o.__dict__)
+        
+    def check_valid(self):
+        if self.im_notification_count <= 10:
+            self.all_valid = False
+            self.fail_list.append('im_notification_count')
+        if self.send_esm_count <= 5:
+            self.all_valid = False
+            self.fail_list.append('send_esm_count')
+        if self.esm_done_count <= 5:
+            self.all_valid = False
+            self.fail_list.append('esm_done_count')
+        if not self.accessibility:
+            self.all_valid = False
+            self.fail_list.append('accessibility')
+        if not self.no_result_lost:
+            self.all_valid = False
+            self.fail_list.append('no_result_lost')
 
     
 def is_today_checked():

@@ -1,11 +1,29 @@
 from flask import Blueprint, render_template, jsonify, request, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, User, ESMCount, DeviceID, Notification, Result, DailyCheck
-from app.daily_check import check_valid, is_today_checked, two_days_fail, check_result_lost
+from app.daily_check import is_today_checked, two_days_fail, check_result_lost, Check
 from app import admin_only, db
 from json import loads, dumps
 from datetime import date, timedelta, datetime
 admin = Blueprint('admin', __name__)
+
+
+@admin.route('/')
+@admin_only
+def admin_dashboard():
+    result_list = []
+    users = User.query.all()
+    for user in users:
+        current = {}
+        print("test", user)
+        current['id'] = user.id
+        current['name'] = user.username
+        current['in_progress'] = user.in_progress
+        d = DeviceID.query.filter_by(user_id=user.id).first()
+        if d:
+            current['device_id'] = d.device_id
+        result_list.append(current)
+    return render_template("admin/admin_dashboard.html", users=result_list)
 
 
 @admin.route('/esm')
@@ -65,43 +83,30 @@ def add_new_contact():
 def daily_check():
     users = User.query.filter_by(in_progress=True).all()
     today_timestamp = datetime.combine(date.today(), datetime.min.time()).timestamp() * 1000
-    
-    ## init check list
-    check_list = [ {
-        'name': user.username, 
-        'user_id': user.id, 
-        'device_id': '',
-        'day': (datetime.now()-user.created_at).days+1, 
-        'send_esm_count': 0,
-        'esm_done_count': 0,
-        'im_notification_count': 0,
-        'all_valid': True,
-        'warning': False,
-        'fail_list': [] } for user in users ]
+    check_list = [ Check(user.username, user.id, user.created_at) for user in users ]
     
     ### for each user ###
     for check in check_list:
-        device_entry = DeviceID.query.filter_by(user_id=check['user_id']).first()
-        check['device_id'] = device_entry.device_id
-        check['esm_done_count'] = ESMCount.query.filter_by(device_id=check['device_id']).filter(ESMCount.created_at > date.today()).count()
-        noti_today_query = Notification.query.filter_by(device_id=check['device_id']).filter(Notification.timestamp > today_timestamp)
-        check['send_esm_count'] = noti_today_query.filter_by(send_esm=True).count()
-        check['im_notification_count'] = noti_today_query.count() - check['send_esm_count']
+        device_entry = DeviceID.query.filter_by(user_id=check.user_id).first()
+        check.device_id = device_entry.device_id
+        check.esm_done_count = ESMCount.query.filter_by(device_id=check.device_id).filter(ESMCount.created_at > date.today()).count()
+        noti_today_query = Notification.query.filter_by(device_id=check.device_id).filter(Notification.timestamp > today_timestamp)
+        check.send_esm_count = noti_today_query.filter_by(send_esm=True).count()
+        check.im_notification_count = noti_today_query.count() - check.send_esm_count
         
-        today_all_result = Result.query.filter_by(user=check['device_id']).filter(Result.date >= datetime.combine(date.today(), datetime.min.time())).all()
-        check['accessibility'] = False
-        check['no_result_lost'] = check_result_lost(today_all_result)
+        today_all_result = Result.query.filter_by(user=check.device_id).filter(Result.date >= datetime.combine(date.today(), datetime.min.time())).all()
+        check.no_result_lost = check_result_lost(today_all_result)
         for each in today_all_result:
             if loads(each.raw).get("Accessibility"):
-                check['accessibility'] = True
+                check.accessibility = True
         
-        check['all_valid'] = check_valid(check)
-        check['fail_list'] = dumps(check['fail_list'])
-        print("{}: {}, {}".format(check['name'], check['all_valid'], check['fail_list']))
-        if not check['all_valid']:
-            check['warning'] = two_days_fail(check['user_id'])
+        check.check_valid()
+        check.fail_list = dumps(check.fail_list)
+        print("{}: {}, {}".format(check.name, check.all_valid, check.fail_list))
+        if not check.all_valid:
+            check.warning = two_days_fail(check.user_id)
         
-    return render_template("admin/daily.html", users=check_list, is_today_checked=is_today_checked())
+    return render_template("admin/daily.html", users=check_list, is_today_checked=is_today_checked(), check_json=[ c.__dict__ for c in check_list ])
 
 
 @admin.route('/daily/post', methods=['POST'])

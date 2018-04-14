@@ -1,0 +1,39 @@
+{% from "macros.html" import nav_bar with context %}
+{% extends "layout.html" %}
+
+
+{% block head %}
+{{ super() }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+{% endblock %}
+
+{% block content %}
+{{ nav_bar() }}
+<div class="container">
+	<div class="row">
+		<h2>Admin Dashboard</h2>
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<th>ID</th>
+					<th>name</th>
+					<th>device ID</th>
+					<th>on going</th>
+				</thead>
+				<tbody>
+				{% for user in users %}
+					<tr>
+						<td>{{ user.id }}</td>
+						<td>{{ user.name }}</td>
+						<td>{{ user.device_id }}</td>
+						<td>{{ user.in_progress }}</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
