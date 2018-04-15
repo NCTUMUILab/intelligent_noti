@@ -111,7 +111,7 @@
     var mymap = L.map('mapid').setView([24.7872632,120.9973644], 13);
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-    maxZoom: 18,
+    maxZoom: 21,
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
         'Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -119,8 +119,12 @@
     }).addTo(mymap);
 
     var heat = L.heatLayer(data, {
-                radius: 10,
-                blur: 5
+                //scaleRadius: true,
+                //useLocalExtrema: true,
+                //radius: 20,
+                //maxOpacity: .8,
+                //maxZoom: 18,
+                blur: 0
             }).addTo(mymap);
     var popup = L.popup();
 
