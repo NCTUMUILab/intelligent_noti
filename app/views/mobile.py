@@ -144,4 +144,4 @@ def get_state():
      if last_result:
         return str(int(datetime.fromtimestamp(int(json.loads(last_result.raw)['endTime'])/1000).replace(minute=0, second=0).strftime('%s'))*1000)
      else:
-        return str((int(datetime.fromtimestamp(time.time()).replace(minute=0, second=0). strftime('%s'))-86400)*1000)
+        return str((int(datetime.fromtimestamp(time.time()).replace(minute=0, second=0). strftime('%s'))-172800)*1000)
