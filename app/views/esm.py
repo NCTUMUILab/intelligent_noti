@@ -30,12 +30,14 @@ def report():
     today_threshold = datetime.combine(date.today(), datetime.min.time())
     report['today'] = all_query.filter(ESMCount.created_at > today_threshold).count()
 
-    week_threshold = datetime.now() - timedelta(days=7)
+    week_threshold = today_threshold - timedelta(days=7)
     report['7_days'] = esm_one_week_all = all_query.filter(ESMCount.created_at > week_threshold).count()
     
     app_count = { 'fb': 0, 'line': 0 }
     sender_count = {}
     for esm in all_query.all():
+        if esm.name == 'null':
+            continue
         app_count[esm.app] += 1
         if esm.name in sender_count:
             sender_count[esm.name] += 1
