@@ -15,7 +15,6 @@ def admin_dashboard():
     users = User.query.all()
     for user in users:
         current = {}
-        print("test", user)
         current['id'] = user.id
         current['name'] = user.username
         current['in_progress'] = user.in_progress
@@ -81,6 +80,7 @@ def add_new_contact():
 @admin.route('/daily')
 @admin_only
 def daily_check():
+    print("START TO QUERY...")
     users = User.query.filter_by(in_progress=True).all()
     today_timestamp = datetime.combine(date.today(), datetime.min.time()).timestamp() * 1000
     check_list = [ Check(user.username, user.id, user.created_at) for user in users ]
@@ -90,15 +90,13 @@ def daily_check():
         device_entry = DeviceID.query.filter_by(user_id=check.user_id).first()
         check.device_id = device_entry.device_id
         check.esm_done_count = ESMCount.query.filter_by(device_id=check.device_id).filter(ESMCount.created_at > date.today()).count()
+        
         noti_today_query = Notification.query.filter_by(device_id=check.device_id).filter(Notification.timestamp > today_timestamp)
         check.send_esm_count = noti_today_query.filter_by(send_esm=True).count()
         check.im_notification_count = noti_today_query.count() - check.send_esm_count
         
         today_all_result = Result.query.filter_by(user=check.device_id).filter(Result.date >= datetime.combine(date.today(), datetime.min.time())).all()
-        check.no_result_lost = check_result_lost(today_all_result)
-        for each in today_all_result:
-            if loads(each.raw).get("Accessibility"):
-                check.accessibility = True
+        check.check_data(today_all_result)
         
         check.check_valid()
         check.fail_list = dumps(check.fail_list)
