@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify, render_template
 from app.models import Result, User, ContactQuestionnaire, Notification
 from app.helpers.valid_notification import valid_notification
-from app import db, app
+from app import db
+from app import app as flask_app
 from datetime import datetime, timedelta
 from sqlalchemy import desc
 import hashlib
@@ -116,7 +117,8 @@ def add_result():
                 raw['n_text_cols'], raw['longitude_cols'], raw['title_cols'], raw['tickerText_cols'], \
                 raw['sendForm_cols']):
             # if ticker and (app=='com.facebook.orca' or app=='jp.naver.line.android'):
-            app.logger.info('<Noti> {}:{}, RESULT={}'.format(content['device_id'], ticker, valid_notification(app, ticker, title, text, sub_text)))
+            try:
+                flask_app.logger.info('<Noti> {}:{}, RESULT={}'.format(content['device_id'], ticker, valid_notification(app, ticker, title, text, sub_text)))
             if valid_notification(app, ticker, title, text, sub_text):
                 new_notification = Notification(
                     timestamp = timestamp,
