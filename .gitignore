@@ -4,3 +4,4 @@ database.db
 instance/config.py
 userdata/
 script/secrete.py
+app/log
