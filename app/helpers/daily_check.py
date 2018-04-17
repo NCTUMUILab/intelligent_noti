@@ -50,10 +50,10 @@ class Check:
         if self.im_notification_count <= 10:
             self.all_valid = False
             self.fail_list.append('im_notification_count')
-        if self.send_esm_count <= 5:
+        if self.send_esm_count < 5:
             self.all_valid = False
             self.fail_list.append('send_esm_count')
-        if self.esm_done_count <= 5:
+        if self.esm_done_count < 5:
             self.all_valid = False
             self.fail_list.append('esm_done_count')
         if not self.accessibility:
@@ -76,18 +76,3 @@ def two_days_fail(user_id):
     if last_check and not last_check.all_valid:
         return True
     return False
-
-
-def check_result_lost(today_all_result):
-    time_list = [ 0 for i in range(24) ]
-    for each_result in today_all_result:
-        hour = int(each_result.date.strftime("%H"))
-        time_list[hour] += 1
-    zero_start = False
-    for time in time_list:
-        if time == 0:
-            zero_start = True
-        elif time != 0 and zero_start:
-            print('error in result:', time_list)
-            return False
-    return True

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, jsonify, request, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, User, ESMCount, DeviceID, Notification, Result, DailyCheck
-from app.daily_check import is_today_checked, two_days_fail, check_result_lost, Check
+from app.helpers.daily_check import is_today_checked, two_days_fail, Check
 from app import admin_only, db
 from json import loads, dumps
 from datetime import date, timedelta, datetime

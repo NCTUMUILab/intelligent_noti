@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, User
 from app.forms import FacebookLoginForm, FacebookResultForm
 from app.get_facebook import fbMessenger, ThreadInfo
-from app.helpers import find_questionnaire
+# from app.helpers import find_questionnaire
 from app import db, on_local
 from json import loads, dumps
 
@@ -79,20 +79,20 @@ def uploadFacebookResult():
     return render_template('upload_result.html', form=form)
 
 
-@contact.route('/editName/<int:questionnaire_id>', methods=['POST'])
-@login_required
-def editName(questionnaire_id):
-    error, message, questionnaire = find_questionnaire(current_user=current_user, questionnaire_id=questionnaire_id)
-    if error:
-        return message
+# @contact.route('/editName/<int:questionnaire_id>', methods=['POST'])
+# @login_required
+# def editName(questionnaire_id):
+#     error, message, questionnaire = find_questionnaire(current_user=current_user, questionnaire_id=questionnaire_id)
+#     if error:
+#         return message
     
-    contact = ContactQuestionnaire.query.filter_by(id=questionnaire_id).first()
-    if request.form['appNewName'] == "facebook":
-        contact.contact_name = request.form['name']
-    elif request.form['appNewName'] == "line":
-        contact.contact_name_line = request.form['name']
-    db.session.commit()
-    return redirect(url_for('user.dashboard'))
+#     contact = ContactQuestionnaire.query.filter_by(id=questionnaire_id).first()
+#     if request.form['appNewName'] == "facebook":
+#         contact.contact_name = request.form['name']
+#     elif request.form['appNewName'] == "line":
+#         contact.contact_name_line = request.form['name']
+#     db.session.commit()
+#     return redirect(url_for('user.dashboard'))
 
 
 @contact.route('/add', methods=['GET', 'POST'])
