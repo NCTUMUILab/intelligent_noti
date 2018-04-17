@@ -117,8 +117,7 @@ def add_result():
                 raw['n_text_cols'], raw['longitude_cols'], raw['title_cols'], raw['tickerText_cols'], \
                 raw['sendForm_cols']):
             # if ticker and (app=='com.facebook.orca' or app=='jp.naver.line.android'):
-            try:
-                flask_app.logger.info('<Noti> {}:{}, RESULT={}'.format(content['device_id'], ticker, valid_notification(app, ticker, title, text, sub_text)))
+            flask_app.logger.info('<Noti> {}:{}, RESULT={}'.format(content['device_id'], ticker, valid_notification(app, ticker, title, text, sub_text)))
             if valid_notification(app, ticker, title, text, sub_text):
                 new_notification = Notification(
                     timestamp = timestamp,
