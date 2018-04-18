@@ -22,7 +22,7 @@ def report():
         return "bad request"
     # if not DeviceID.query.filter_by(device_id=device_id).first():
     #     return "invalid device ID"
-    
+
     report = {}
     all_query = ESMCount.query.filter_by(device_id=device_id)
     report['total'] = all_query.count()
@@ -32,17 +32,17 @@ def report():
 
     week_threshold = today_threshold - timedelta(days=7)
     report['7_days'] = esm_one_week_all = all_query.filter(ESMCount.created_at > week_threshold).count()
-    
+
     app_count = { 'fb': 0, 'line': 0 }
+
     sender_count = {}
     for esm in all_query.all():
         if esm.name == 'null':
             continue
-        app_count[esm.app] += 1
-        if esm.name in sender_count:
-            sender_count[esm.name] += 1
-        else:
-            sender_count[esm.name] = 1
-    sender_count = [ {"name":sender, "count":value} for sender, value in sender_count.items() ]
-    
-    return render_template('report.html', result=report, device_id=device_id, app_count=app_count, sender_count=sender_count)
+        if esm.app == 'fb_lite':
+            esm.app = 'fb'
+        app_count[esm.app] = app_count.get(esm.app, 0) + 1
+        sender_count[esm.name] = sender_count.get(esm.name, 0) + 1
+    sender_count_list = [ {"name":sender, "count":value} for sender, value in sender_count.items() ]
+
+    return render_template('report.html', result=report, device_id=device_id, app_count=app_count, sender_count=sender_count_list)
