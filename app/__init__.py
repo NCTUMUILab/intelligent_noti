@@ -7,6 +7,14 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
 
+print("debug", app.debug)
+import logging
+file_handler = logging.FileHandler('app/log/error.log')
+formatter = logging.Formatter('\n%(asctime)s [%(levelname)s] %(message)s')
+file_handler.setFormatter(formatter)
+file_handler.setLevel(logging.DEBUG)
+app.logger.addHandler(file_handler)
+
 Bootstrap(app)
 db = SQLAlchemy(app)
 
@@ -61,11 +69,3 @@ app.register_blueprint(heatmap)
 app.register_blueprint(mobile)
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(esm, url_prefix='/esm')
-
-print("debug", app.debug)
-import logging
-file_handler = logging.FileHandler('app/log/error.log')
-formatter = logging.Formatter('\n%(asctime)s [%(levelname)s] %(message)s')
-file_handler.setFormatter(formatter)
-file_handler.setLevel(logging.DEBUG)
-app.logger.addHandler(file_handler)
