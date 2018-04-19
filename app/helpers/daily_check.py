@@ -3,7 +3,10 @@ from datetime import datetime
 from json import dumps, loads
 
 class Check:
-    def __init__(self, name, user_id, user_created_at):
+    def __init__(self, name, user_id, user_created_at, start_time, end_time):
+        self.start_time = start_time
+        self.end_time = end_time
+        
         self.name = name
         self.user_id = user_id
         self.device_id = ''
@@ -22,9 +25,9 @@ class Check:
          return dumps(self, default=lambda o: o.__dict__)
     
     
-    def check_data(self, today_all_result):
+    def check_data(self, day_all_result):
         time_list = [ 0 for i in range(24) ]
-        for each_result in today_all_result:
+        for each_result in day_all_result:
             hour = int(each_result.date.strftime("%H"))
             time_list[hour] += 1
             if loads(each_result.raw).get("Accessibility"):
@@ -64,16 +67,16 @@ class Check:
             self.all_valid = False
             self.fail_list.append('no_result_lost')
         
+        if not self.all_valid:
+            last_check = DailyCheck.query.filter_by(user_id=self.user_id).order_by(DailyCheck.created_at.desc()).first()
+            if last_check and not last_check.all_valid:
+                self.warning = True
+            else:
+                self.warning = False
+        
     
 def is_today_checked():
     last_check = DailyCheck.query.order_by(DailyCheck.created_at.desc()).first()
     if last_check and last_check.created_at.date() == datetime.now().date():
-        return True
-    return False
-
-
-def two_days_fail(user_id):
-    last_check = DailyCheck.query.filter_by(user_id=user_id).order_by(DailyCheck.created_at.desc()).first()
-    if last_check and not last_check.all_valid:
         return True
     return False

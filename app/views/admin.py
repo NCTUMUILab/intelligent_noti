@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, jsonify, request, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, User, ESMCount, DeviceID, Notification, Result, DailyCheck
-from app.helpers.daily_check import is_today_checked, two_days_fail, Check
+from app.helpers.daily_check import is_today_checked, Check
+from app.helpers.valid_notification import valid_notification
 from app import admin_only, db
 from json import loads, dumps
 from datetime import date, timedelta, datetime
@@ -82,27 +83,40 @@ def add_new_contact():
 def daily_check():
     print("START TO QUERY...")
     users = User.query.filter_by(in_progress=True).all()
-    today_timestamp = datetime.combine(date.today(), datetime.min.time()).timestamp() * 1000
-    check_list = [ Check(user.username, user.id, user.created_at) for user in users ]
+    # today_timestamp = datetime.combine(date.today(), datetime.min.time()).timestamp() * 1000
+    if request.args.get('d') == 'y':
+        start_time = datetime.combine(date.today() - timedelta(1), datetime.min.time())
+        end_time = datetime.combine(date.today(), datetime.min.time())
+    else:
+        start_time = datetime.combine(date.today(), datetime.min.time())
+        end_time = datetime.now()
+    print("day start: {}\nday end  : {}".format(start_time, end_time))
+    check_list = [ Check(user.username, user.id, user.created_at, start_time, end_time) for user in users ]
     
     ### for each user ###
     for check in check_list:
+        print("<{}>".format(check.name))
         device_entry = DeviceID.query.filter_by(user_id=check.user_id).first()
         check.device_id = device_entry.device_id
-        check.esm_done_count = ESMCount.query.filter_by(device_id=check.device_id).filter(ESMCount.created_at > date.today()).count()
+        check.esm_done_count = ESMCount.query.filter_by(device_id=check.device_id).filter(ESMCount.created_at > check.start_time).filter(ESMCount.created_at <= check.end_time).count()
         
-        noti_today_query = Notification.query.filter_by(device_id=check.device_id).filter(Notification.timestamp > today_timestamp)
-        check.send_esm_count = noti_today_query.filter_by(send_esm=True).count()
-        check.im_notification_count = noti_today_query.count() - check.send_esm_count
+        ### noti: im_notification_count, send_esm_count ###
+        noti_day_query = Notification.query.filter_by(device_id=check.device_id).filter(Notification.timestamp > check.start_time.timestamp() * 1000).filter(Notification.timestamp <= check.end_time.timestamp() * 1000)
+        check.send_esm_count = noti_day_query.filter_by(send_esm=True).count()
+        for each_noti in noti_day_query.all():
+            if valid_notification(each_noti.app, each_noti.ticker_text, each_noti.title, each_noti.text, each_noti.sub_text):
+                check.im_notification_count += 1
+        # check.im_notification_count = noti_today_query.count() - check.send_esm_count
         
-        today_all_result = Result.query.filter_by(user=check.device_id).filter(Result.date >= datetime.combine(date.today(), datetime.min.time())).all()
-        check.check_data(today_all_result)
+        ### result: accessibility, no_result_lost ###
+        day_all_result = Result.query.filter_by(user=check.device_id).filter(Result.date >= check.start_time).filter(Result.date < check.end_time).all()
+        check.check_data(day_all_result)
         
         check.check_valid()
         check.fail_list = dumps(check.fail_list)
-        print("{}: {}, {}".format(check.name, check.all_valid, check.fail_list))
-        if not check.all_valid:
-            check.warning = two_days_fail(check.user_id)
+        print("\t{}, {}\n".format(check.all_valid, check.fail_list))
+        # if not check.all_valid:
+        #     check.warning = two_days_fail(check.user_id)
         
     return render_template("admin/daily.html", users=check_list, is_today_checked=is_today_checked(), check_json=[ c.__dict__ for c in check_list ])
 
