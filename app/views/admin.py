@@ -80,11 +80,10 @@ def add_new_contact():
 
 @admin.route('/daily')
 @admin_only
-def daily_check():
-    print("START TO QUERY...")
+def daily_check_get():
     users = User.query.filter_by(in_progress=True).all()
-    # today_timestamp = datetime.combine(date.today(), datetime.min.time()).timestamp() * 1000
-    if request.args.get('d') == 'y':
+    yesterday_record = request.args.get('d') == 'y'
+    if yesterday_record:
         start_time = datetime.combine(date.today() - timedelta(1), datetime.min.time())
         end_time = datetime.combine(date.today(), datetime.min.time())
     else:
@@ -103,32 +102,30 @@ def daily_check():
         ### noti: im_notification_count, send_esm_count ###
         noti_day_query = Notification.query.filter_by(device_id=check.device_id).filter(Notification.timestamp > check.start_time.timestamp() * 1000).filter(Notification.timestamp <= check.end_time.timestamp() * 1000)
         check.send_esm_count = noti_day_query.filter_by(send_esm=True).count()
-        for each_noti in noti_day_query.all():
+        for each_noti in noti_day_query.filter_by(send_esm=False).all():
             if valid_notification(each_noti.app, each_noti.ticker_text, each_noti.title, each_noti.text, each_noti.sub_text):
                 check.im_notification_count += 1
-        # check.im_notification_count = noti_today_query.count() - check.send_esm_count
         
         ### result: accessibility, no_result_lost ###
-        day_all_result = Result.query.filter_by(user=check.device_id).filter(Result.date >= check.start_time).filter(Result.date < check.end_time).all()
-        check.check_data(day_all_result)
+        result_day_query = Result.query.filter_by(user=check.device_id).filter(Result.date >= check.start_time).filter(Result.date < check.end_time)
+        check.check_data(result_day_query.all())
         
         check.check_valid()
         check.fail_list = dumps(check.fail_list)
         print("\t{}, {}\n".format(check.all_valid, check.fail_list))
-        # if not check.all_valid:
-        #     check.warning = two_days_fail(check.user_id)
         
-    return render_template("admin/daily.html", users=check_list, is_today_checked=is_today_checked(), check_json=[ c.__dict__ for c in check_list ])
+    return render_template("admin/daily.html", users=check_list, is_today_checked=is_today_checked(), check_json=[ c.__dict__ for c in check_list ], yesterday=yesterday_record )
 
 
 @admin.route('/daily/post', methods=['POST'])
 @admin_only
 def daily_check_post():
     data_list = loads(request.form['check'])
+    day = date.today() - timedelta(1) if request.form['yesterday'] == 'True' else date.today()
     for check in data_list:
         new_check = DailyCheck(
             user_id = check['user_id'],
-            date = datetime.now().today(),
+            date = day,
             send_esm_count = check['send_esm_count'],
             esm_done_count = check['esm_done_count'],
             accessibility = check['accessibility'],
@@ -139,3 +136,9 @@ def daily_check_post():
         db.session.add(new_check)
     db.session.commit()
     return "checked!"
+
+@admin.route('/daily/user/<int:user_id>')
+@admin_only
+def check_user_daily(user_id):
+    user_daily = DailyCheck.query.filter_by(user_id=user_id).all()
+    return render_template("admin/each_user_daily.html", checks=user_daily)

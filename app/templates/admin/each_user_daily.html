@@ -5,7 +5,6 @@
 {% block head %}
 {{ super() }}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -16,18 +15,24 @@
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
-					<th>ID</th>
 					<th>name</th>
-					<th>device ID</th>
-					<th>on going</th>
+					<th>date</th>
+					<th>send esm count</th>
+					<th>esm done count</th>
+					<th>im noti count</th>
+					<th>all valid</th>
+					<th>fail items</th>
 				</thead>
 				<tbody>
-				{% for user in users %}
+				{% for check in checks %}
 					<tr>
-						<td>{{ user.id }}</td>
-						<td><a href="/admin/daily/user/{{user.id}}">{{ user.name }}</a></td>
-						<td>{{ user.device_id }}</td>
-						<td>{{ user.in_progress }}</td>
+						<td>{{ check.user_id }}</td>
+						<td>{{ check.date }}</td>
+						<td>{{ check.send_esm_count }}</td>
+						<td>{{ check.esm_done_count }}</td>
+						<td>{{ check.im_notification_count }}</td>
+						<td>{{ check.all_valid }}</td>
+						<td>{{ check.fail_list }}</td>
 					</tr>
 				{% endfor %}
 				</tbody>
