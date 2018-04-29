@@ -36,12 +36,14 @@ with open(mobileID+".csv", 'w', newline='') as f:
     for row in results:
         if(row[7] == "False"):
             continue
-        time = row[42]
-        app = row[37]
-        contact_name = row[38]
-        text = row[39]
+        time = row[44]
+        app = row[39]
+        contact_name = row[40]
+        text = row[41]
         Q1 = row[18]
         Q2 = row[19]
+        Q2_2 = row[27]
+        Q2_2_other = row[28]
         Q3 =row[20]
         Q4 =row[21]
         Q5 =row[22]
@@ -49,17 +51,16 @@ with open(mobileID+".csv", 'w', newline='') as f:
         Q7 =row[24]
         Q8 =row[25]
         Q9 =row[26]
-        Q10 =row[27]
-        Q11 = row[28]
-        Q12 = row[29]
-        Q13 =row[30]
-        Q14 =row[31]
-        Q15 =row[32]
-        Q15_other=row[33]
-        Q16 =row[34]
-        Q17 =row[35]
-        Q17_other =row[36]
-        #print(text)
+        Q10 =row[29]
+        Q11 = row[30]
+        Q12 = row[31]
+        Q13 =row[32]
+        Q14 =row[33]
+        Q15 =row[34]
+        Q15_other=row[35]
+        Q16 =row[36]
+        Q17 =row[37]
+        Q17_other =row[38]
         in_list = False
 
         """
@@ -283,6 +284,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
         result_data = [[contact[0],noti_count,relationship,self_closeness,self_interr,self_response,avg_closeness,avg_intr,response_motivation,avg_importance,avg_urgence, contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
         writer.writerows(result_data)
 
+    print("conact: ",str(questionniare_count))
     final_data = [["Total",final_notification_count,"",final_self_closeness/questionniare_count,float(final_self_inter)/questionniare_count,float(final_self_response)/questionniare_count,final_closeness/final_ESM_count,final_inter/final_percept,final_resp/final_motivation_count,float(final_importance)/final_ESM_count,float(final_urgence)/final_ESM_count,int(final_ESM_count), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
     writer.writerows(final_data)
 
