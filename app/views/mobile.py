@@ -113,7 +113,7 @@ def add_result():
         abort(404)
     
     # if date of this result repeat one date of result from the user: skip
-    if Result.query.filter_by(date=result.date).filter_by(user=result.user).first():
+    if Result.query.filter_by(date=result.date).filter_by(user=result.user).count() > 1:
         flask_app.logger.debug("REPEAT DATE: {} at {}".format(result.user, result.date))
         return jsonify({
             'startTime': int(content['startTime']),
