@@ -9,6 +9,7 @@ import hashlib
 import json
 import time
 from datetime import timezone
+from dateutil.parser import parse
 
 from sqlalchemy.exc import IntegrityError
 import uuid
@@ -95,7 +96,8 @@ def get_form_valid(notifications, user):
 @mobile.route('/upload/', methods=['POST'])
 def add_result():
     content = request.get_json(silent=True)
-
+    
+    # result
     result = Result({
         'type': "new",
         'user': content['device_id'],
@@ -109,7 +111,15 @@ def add_result():
         print(e)
         db.session.rollback()
         abort(404)
-
+    
+    # if date of this result repeat one date of result from the user: skip
+    if Result.query.filter_by(date=result.date).filter_by(user=result.user).first():
+        flask_app.logger.debug("REPEAT DATE: {} at {}".format(result.user, result.date))
+        return jsonify({
+            'startTime': int(content['startTime']),
+            'endTime': int(content['endTime'] ) })
+    
+    # notification
     raw = content.get('Notification')
     if raw:
         for lat, sub_text, app, timestamp, text, lon, title, ticker, send_esm in \
@@ -117,7 +127,6 @@ def add_result():
                 raw['n_text_cols'], raw['longitude_cols'], raw['title_cols'], raw['tickerText_cols'], \
                 raw['sendForm_cols']):
             if ticker and (app=='com.facebook.orca' or app=='jp.naver.line.android'):
-            # if valid_notification(app, ticker, title, text, sub_text):
                 new_notification = Notification(
                     timestamp = timestamp,
                     device_id = content['device_id'],
@@ -134,6 +143,7 @@ def add_result():
             db.session.commit()
         except Exception as e:
             db.session.rollback()
+    
     return jsonify({
         'startTime': int(content['startTime']),
         'endTime': int(content['endTime'] ) })

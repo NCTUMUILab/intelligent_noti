@@ -7,13 +7,17 @@ app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
 app.config.from_pyfile('config.py')
 
-print("debug", app.debug)
-import logging
-file_handler = logging.FileHandler('app/log/error.log')
-formatter = logging.Formatter('\n%(asctime)s [%(levelname)s] %(message)s')
-file_handler.setFormatter(formatter)
-file_handler.setLevel(logging.DEBUG)
-app.logger.addHandler(file_handler)
+try:
+    print("DEBUG:", app.debug)
+    from logging import FileHandler, Formatter, DEBUG
+    formatter = Formatter('\n%(asctime)s [%(levelname)s] %(message)s')
+    
+    file_handler = FileHandler('app/log/error.log')
+    file_handler.setFormatter(formatter)
+    file_handler.setLevel(DEBUG)
+    app.logger.addHandler(file_handler)
+except FileNotFoundError:
+    pass
 
 Bootstrap(app)
 db = SQLAlchemy(app)
