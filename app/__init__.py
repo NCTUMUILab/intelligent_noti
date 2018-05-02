@@ -8,7 +8,6 @@ app.config.from_object('config')
 app.config.from_pyfile('config.py')
 
 try:
-    print("DEBUG:", app.debug)
     from logging import FileHandler, Formatter, DEBUG
     formatter = Formatter('\n%(asctime)s [%(levelname)s] %(message)s')
     

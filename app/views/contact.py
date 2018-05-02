@@ -79,39 +79,45 @@ def uploadFacebookResult():
     return render_template('upload_result.html', form=form)
 
 
-# @contact.route('/editName/<int:questionnaire_id>', methods=['POST'])
-# @login_required
-# def editName(questionnaire_id):
-#     error, message, questionnaire = find_questionnaire(current_user=current_user, questionnaire_id=questionnaire_id)
-#     if error:
-#         return message
-    
-#     contact = ContactQuestionnaire.query.filter_by(id=questionnaire_id).first()
-#     if request.form['appNewName'] == "facebook":
-#         contact.contact_name = request.form['name']
-#     elif request.form['appNewName'] == "line":
-#         contact.contact_name_line = request.form['name']
-#     db.session.commit()
-#     return redirect(url_for('user.dashboard'))
-
-
 @contact.route('/add', methods=['GET', 'POST'])
+@login_required
 def addContact():
     if request.method == 'GET':
-        return render_template('add_new_contact.html')
+        contact_list = ContactQuestionnaire.query.filter_by(user_id=current_user.id).all()
+        return render_template('add_new_contact.html', contact_list=contact_list)
     
     elif request.method == 'POST':
-        result_list = loads(request.form['contacts'])
-        for contact in result_list:
-            new_questionnaire = ContactQuestionnaire(
-                contact_name = contact['facebook'],
-                contact_name_line = contact['line'],
-                user_id = current_user.id,
-                is_group = False,
-                completed = False)
-            db.session.add(new_questionnaire)
+        print("fff")
+        print("<{}>".format(request.form['facebook']))
+        print("<{}>".format(request.form['line']))
+        new_contact = ContactQuestionnaire(
+            contact_name = request.form['facebook'],
+            contact_name_line = request.form['line'],
+            user_id = current_user.id,
+            is_group = False,
+            completed = False )
+        print(1)
+        db.session.add(new_contact)
+        print(2)
         db.session.commit()
-        return redirect(url_for('user.dashboard'))
+        print(new_contact)
+        return redirect(url_for('contact.addContact'))
+
+
+@contact.route('/remove/<int:qid>', methods=['POST'])
+@login_required
+def remove_contact(qid):
+    contact = ContactQuestionnaire.query.filter_by(id=qid).first()
+    if contact and contact.user_id == current_user.id:
+        db.session.delete(contact)
+        try:
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+    else:
+        abort(403)
+    return redirect(url_for('contact.addContact'))
 
 
 @contact.route('/getJson')

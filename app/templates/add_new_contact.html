@@ -32,54 +32,57 @@ Add Contacts
 		<div class="panel panel-default" style="margin-top: 20px">
 			<div class="panel-heading"><b>新增聯絡人</b></div>
 			<div class="panel-body">
-				<div class="col-xs-4">
-					<input type="text" class="form-control" id="name-field-facebook" placeholder="Facebook Name">
-				</div>
-				<div class="col-xs-4">
-					<input type="text" class="form-control" id="name-field-line" placeholder="Line Name">
-					{# <select id="app-field" class="form-control">
-						<option value="facebook">facebook</option>
-						<option value="line">line</option>
-					</select>
- #}				</div>
-				<div class="col-xs-4">
-					<button id="add-btn" class="btn btn-success">新增</button>
-				</div>
-				
+				<form method="POST" action="{{url_for('contact.addContact')}}">
+					<div class="col-xs-4">
+						<input type="text" class="form-control" name="facebook" placeholder="Facebook Name">
+					</div>
+					<div class="col-xs-4">
+						<input type="text" class="form-control" name="line" placeholder="Line Name">
+					</div>
+					<div class="col-xs-4">
+						<button id="add-btn" class="btn btn-success">新增</button>
+					</div>
+				</form>
 			</div>
 				
 		</div>
 	</div>
 	
 	<div class="row">
-		<form id="addForm" action="{{ url_for('contact.addContact') }}" method="POST">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<h3><div class="selected"></div></h3>
-					<div id="contacts">	
-						<div class="table-responsive">
-							<table class="table table-striped">
-								<thead>
-									<tr>
-										<th class="facebookName">Facebook</th>
-										<th class="lineName">Line</th>
-									</tr>
-								</thead>
-								<tbody class="list" id="result">
-									<tr id="initItem" hidden>
-										<td class="facebookName">Alex (Example)</td>
-										<td class="lineName">Cowbon (Example)</td>
-										<td class="remove" id="removeInit">
-											<button class="remove-btn btn btn-danger btn-sm" type="button">刪除</button></td>
-										<td class="id" hidden>-1</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
+		<div class="panel panel-default">
+			<div class="panel-body">
+				<h3><div class="selected"></div></h3>
+				<div id="contacts">	
+					<div class="table-responsive">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Facebook</th>
+									<th>Line</th>
+								</tr>
+							</thead>
+							<tbody class="list" id="result">
+								{% for contact in contact_list %}
+								<tr>
+									<td>{{loop.index}}</td>
+									<td>{{contact.contact_name}}</td>
+									<td>{{contact.contact_name_line}}</td>
+									<td>
+										<form method="POST" action="{{url_for('contact.remove_contact', qid=contact.id)}}">
+											<button class="remove-btn btn btn-danger btn-sm">刪除</button>
+										</form>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
 					</div>
 				</div>
 			</div>
-			<button id="submit-btn" type="button" class="btn btn-primary btn-block">Submit</button>
+		</div>
+		<form action="{{url_for('user.dashboard')}}">
+			<button id="submit-btn" class="btn btn-primary btn-block">完成</button>
 		</form>
 	</div>
 </div>
@@ -87,7 +90,7 @@ Add Contacts
 
 {% block scripts %}
 {{ super() }}
-<script>
+<!-- <script>
 	var options = { valueNames: ['id', 'facebookName', 'lineName'] };
 	var total = 0;
 	var contactList = new List('contacts', options);
@@ -151,5 +154,5 @@ Add Contacts
 			contactList.remove('id', itemId);
 		});
 	}
-</script>
+</script> -->
 {% endblock %}
