@@ -69,6 +69,7 @@ class ESMCount(db.Model):
 
 
 class Notification(db.Model):
+    __tablename__ = 'notification'
     id = db.Column(db.Integer, primary_key=True)
     device_id = db.Column(db.String(30))
     created_at = db.Column(db.DateTime, default=datetime.now)

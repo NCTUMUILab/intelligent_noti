@@ -6,6 +6,7 @@ from app.helpers.valid_notification import valid_notification
 from app import admin_only, db
 from json import loads, dumps
 from datetime import date, timedelta, datetime
+import numpy as np
 admin = Blueprint('admin', __name__)
 
 
@@ -23,7 +24,10 @@ def admin_dashboard():
         if d:
             current['device_id'] = d.device_id
         result_list.append(current)
-    return render_template("admin/admin_dashboard.html", users=result_list)
+    
+    all_esm_done_mean = np.mean([ i.esm_done_count for i in DailyCheck.query.all() ])
+    week_esm_done_mean = np.mean([ i.esm_done_count for i in DailyCheck.query.filter(DailyCheck.date >= date.today() - timedelta(7)).all() ])
+    return render_template("admin/admin_dashboard.html", users=result_list, all_mean=all_esm_done_mean, week_mean=week_esm_done_mean)
 
 
 @admin.route('/esm')
@@ -85,6 +89,7 @@ def daily_check_get():
     yesterday_record = request.args.get('d') == 'y'
     if yesterday_record:
         start_time = datetime.combine(date.today() - timedelta(1), datetime.min.time())
+        # end_time = datetime.combine(date.today() - timedelta(1), datetime.min.time())
         end_time = datetime.combine(date.today(), datetime.min.time())
     else:
         start_time = datetime.combine(date.today(), datetime.min.time())
@@ -96,15 +101,16 @@ def daily_check_get():
     for check in check_list:
         print("<{}>".format(check.name))
         device_entry = DeviceID.query.filter_by(user_id=check.user_id).first()
-        check.device_id = device_entry.device_id
-        check.esm_done_count = ESMCount.query.filter_by(device_id=check.device_id).filter(ESMCount.created_at > check.start_time).filter(ESMCount.created_at <= check.end_time).count()
+        if device_entry:
+            check.device_id = device_entry.device_id
+        
+        check.count_esm_done()
         
         ### noti: im_notification_count, send_esm_count ###
         noti_day_query = Notification.query.filter_by(device_id=check.device_id).filter(Notification.timestamp > check.start_time.timestamp() * 1000).filter(Notification.timestamp <= check.end_time.timestamp() * 1000)
-        check.send_esm_count = noti_day_query.filter_by(send_esm=True).count()
-        for each_noti in noti_day_query.filter_by(send_esm=False).all():
-            if valid_notification(each_noti.app, each_noti.ticker_text, each_noti.title, each_noti.text, each_noti.sub_text):
-                check.im_notification_count += 1
+        check.count_send_esm(noti_day_query)
+        check.count_im_noti(noti_day_query)
+        
         
         ### result: accessibility, no_result_lost ###
         result_day_query = Result.query.filter_by(user=check.device_id).filter(Result.date >= check.start_time).filter(Result.date < check.end_time)
@@ -140,5 +146,6 @@ def daily_check_post():
 @admin.route('/daily/user/<int:user_id>')
 @admin_only
 def check_user_daily(user_id):
-    user_daily = DailyCheck.query.filter_by(user_id=user_id).all()
-    return render_template("admin/each_user_daily.html", checks=user_daily)
+    user_daily = DailyCheck.query.filter_by(user_id=user_id).order_by(DailyCheck.date.asc()).all()
+    esm_done_mean = np.mean([ i.esm_done_count for i in user_daily ])
+    return render_template("admin/each_user_daily.html", checks=user_daily, username=User.query.filter_by(id=user_id).first().username, mean=esm_done_mean)

@@ -1,8 +1,12 @@
-from app.models import DailyCheck
+from app.models import DailyCheck, ESMCount
+from app.helpers.valid_notification import valid_notification
 from datetime import datetime
 from json import dumps, loads
 
 class Check:
+    """
+    check record for each day of each user
+    """
     def __init__(self, name, user_id, user_created_at, start_time, end_time):
         self.start_time = start_time
         self.end_time = end_time
@@ -21,9 +25,19 @@ class Check:
         self.fail_list = []
     
     
-    def toJSON(self):
-         return dumps(self, default=lambda o: o.__dict__)
+    def count_esm_done(self):
+        """
+        filter condition: 1. device_id  2. in the time slot 
+        """
+        self.esm_done_count = ESMCount.query.filter_by(device_id=self.device_id).filter(ESMCount.created_at > self.start_time).filter(ESMCount.created_at <= self.end_time).count()
     
+    def count_send_esm(self, noti_day_query):
+        self.send_esm_count = noti_day_query.filter_by(send_esm=True).count()
+    
+    def count_im_noti(self, noti_day_query):
+        for each_noti in noti_day_query.filter_by(send_esm=False).all():
+            if valid_notification(each_noti.app, each_noti.ticker_text, each_noti.title, each_noti.text, each_noti.sub_text):
+                self.im_notification_count += 1
     
     def check_data(self, day_all_result):
         time_list = [ 0 for i in range(24) ]
@@ -68,7 +82,7 @@ class Check:
             self.fail_list.append('no_result_lost')
         
         if not self.all_valid:
-            last_check = DailyCheck.query.filter_by(user_id=self.user_id).order_by(DailyCheck.created_at.desc()).first()
+            last_check = DailyCheck.query.filter_by(user_id=self.user_id).order_by(DailyCheck.date.desc()).first()
             if last_check and not last_check.all_valid:
                 self.warning = True
             else:
