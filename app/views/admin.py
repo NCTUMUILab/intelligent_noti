@@ -6,9 +6,10 @@ from app.helpers.valid_notification import valid_notification
 from app import admin_only, db
 from json import loads, dumps
 from datetime import date, timedelta, datetime
-import numpy as np
 admin = Blueprint('admin', __name__)
 
+def mean(l):
+    return sum(l) / len(l)
 
 @admin.route('/')
 @admin_only
@@ -25,8 +26,8 @@ def admin_dashboard():
             current['device_id'] = d.device_id
         result_list.append(current)
     
-    all_esm_done_mean = np.mean([ i.esm_done_count for i in DailyCheck.query.all() ])
-    week_esm_done_mean = np.mean([ i.esm_done_count for i in DailyCheck.query.filter(DailyCheck.date >= date.today() - timedelta(7)).all() ])
+    all_esm_done_mean = mean([ i.esm_done_count for i in DailyCheck.query.all() ])
+    week_esm_done_mean = mean([ i.esm_done_count for i in DailyCheck.query.filter(DailyCheck.date >= date.today() - timedelta(7)).all() ])
     return render_template("admin/admin_dashboard.html", users=result_list, all_mean=all_esm_done_mean, week_mean=week_esm_done_mean)
 
 
@@ -147,5 +148,5 @@ def daily_check_post():
 @admin_only
 def check_user_daily(user_id):
     user_daily = DailyCheck.query.filter_by(user_id=user_id).order_by(DailyCheck.date.asc()).all()
-    esm_done_mean = np.mean([ i.esm_done_count for i in user_daily ])
+    esm_done_mean = mean([ i.esm_done_count for i in user_daily ])
     return render_template("admin/each_user_daily.html", checks=user_daily, username=User.query.filter_by(id=user_id).first().username, mean=esm_done_mean)
