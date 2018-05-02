@@ -87,20 +87,14 @@ def addContact():
         return render_template('add_new_contact.html', contact_list=contact_list)
     
     elif request.method == 'POST':
-        print("fff")
-        print("<{}>".format(request.form['facebook']))
-        print("<{}>".format(request.form['line']))
         new_contact = ContactQuestionnaire(
             contact_name = request.form['facebook'],
             contact_name_line = request.form['line'],
             user_id = current_user.id,
             is_group = False,
-            completed = False )
-        print(1)
+            completed = False)
         db.session.add(new_contact)
-        print(2)
         db.session.commit()
-        print(new_contact)
         return redirect(url_for('contact.addContact'))
 
 
