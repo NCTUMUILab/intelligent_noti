@@ -8,7 +8,12 @@ import secrete as secrete
 def ESM_amount(ele):
     return int(ele[4])
 
+def Noti_amount(ele):
+    return ele["count"]
+
 contact_list = []
+notification_list = []
+
 db = MySQLdb.connect(secrete.db_url,secrete.user_name,secrete.password,secrete.db)
 
 
@@ -24,6 +29,19 @@ print("User id: ",uid)
 cursor.execute("SELECT name,Q4,Q9,Q2_1,Q3 FROM contact WHERE uid ="+uid) #Q4: relationship, Q9: closeness, Q2_1: interruptibility, Q3: response,
 contact_questionniare= cursor.fetchall()
 
+cursor.execute("SELECT * FROM notification WHERE device_id  ="+mobileID)
+notifications = cursor.fetchall()
+
+for noti in notifications:
+    contained_in_list = False
+    for contact_noti in notification_list:
+        if(noti[7] == contact_noti["name"]):
+            contact_noti["count"] += 1
+            contained_in_list = True
+            break
+    if(contained_in_list == False):
+        data = {"name":noti[7],"count":1,"selected": False}
+        notification_list.append(data)
 
 sql = "SELECT * FROM esm_data WHERE user = " + mobileID
 
@@ -277,6 +295,10 @@ with open(mobileID+".csv", 'w', newline='') as f:
                 final_self_closeness += float(questionniare[2])
                 questionniare_count += 1
         print(contact[0])
+        for data in notification_list:
+            if (data["name"] == contact[0]):
+                data["selected"] = True
+
         sql = "SELECT COUNT(*) FROM notification WHERE title = \""+contact[0]+"\""
         cursor.execute(sql)
         noti_count= cursor.fetchall()[0][0]
@@ -284,7 +306,14 @@ with open(mobileID+".csv", 'w', newline='') as f:
         result_data = [[contact[0],noti_count,relationship,self_closeness,self_interr,self_response,avg_closeness,avg_intr,response_motivation,avg_importance,avg_urgence, contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
         writer.writerows(result_data)
 
-    print("conact: ",str(questionniare_count))
+    notification_list.sort(reverse=True, key=Noti_amount)
+    for data in notification_list:
+        if (data["selected"] == False):
+            print(data["name"])
+            final_notification_count += data["count"]
+            writer.writerows([[data["name"],data["count"]]])
+
+    #print("conact: ",str(questionniare_count))
     final_data = [["Total",final_notification_count,"",final_self_closeness/questionniare_count,float(final_self_inter)/questionniare_count,float(final_self_response)/questionniare_count,final_closeness/final_ESM_count,final_inter/final_percept,final_resp/final_motivation_count,float(final_importance)/final_ESM_count,float(final_urgence)/final_ESM_count,int(final_ESM_count), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
     writer.writerows(final_data)
 
