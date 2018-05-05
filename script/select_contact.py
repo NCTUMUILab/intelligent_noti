@@ -3,7 +3,9 @@ import csv, sys
 import html
 import requests
 import secrete as secrete
-
+import sys, os
+sys.path.append(os.path.abspath(os.path.join('..')))
+from app.helpers.valid_notification import valid_notification
 
 def ESM_amount(ele):
     return int(ele[4])
@@ -33,6 +35,9 @@ cursor.execute("SELECT * FROM notification WHERE device_id  ="+mobileID)
 notifications = cursor.fetchall()
 
 for noti in notifications:
+    if(valid_notification(noti[6],noti[10],noti[7],noti[9],noti[8]) == False):
+        #print(noti)
+        continue
     contained_in_list = False
     for contact_noti in notification_list:
         if(noti[7] == contact_noti["name"]):
@@ -298,10 +303,9 @@ with open(mobileID+".csv", 'w', newline='') as f:
         for data in notification_list:
             if (data["name"] == contact[0]):
                 data["selected"] = True
-
-        sql = "SELECT COUNT(*) FROM notification WHERE title = \""+contact[0]+"\""
-        cursor.execute(sql)
-        noti_count= cursor.fetchall()[0][0]
+                noti_count = data["count"]
+                break
+        
         final_notification_count += noti_count
         result_data = [[contact[0],noti_count,relationship,self_closeness,self_interr,self_response,avg_closeness,avg_intr,response_motivation,avg_importance,avg_urgence, contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
         writer.writerows(result_data)
