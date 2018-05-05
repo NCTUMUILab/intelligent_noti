@@ -100,7 +100,10 @@ def daily_check_get():
     
     ### for each user ###
     for check in check_list:
-        print("<{}>".format(check.name))
+        try:
+            print("<{}>".format(check.name))
+        except UnicodeError:
+            print("<{}>".format(check.user_id))
         device_entry = DeviceID.query.filter_by(user_id=check.user_id).first()
         if device_entry:
             check.device_id = device_entry.device_id
@@ -121,7 +124,7 @@ def daily_check_get():
         check.fail_list = dumps(check.fail_list)
         print("\t{}, {}\n".format(check.all_valid, check.fail_list))
         
-    return render_template("admin/daily.html", users=check_list, is_today_checked=is_today_checked(), check_json=[ c.__dict__ for c in check_list ], yesterday=yesterday_record )
+    return render_template("admin/daily.html", users=check_list, is_today_checked=is_today_checked(), check_json=[ c.__dict__ for c in check_list ], yesterday=yesterday_record, date=start_time )
 
 
 @admin.route('/daily/post', methods=['POST'])
