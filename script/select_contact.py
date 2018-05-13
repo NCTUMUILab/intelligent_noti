@@ -93,8 +93,15 @@ with open(mobileID+".csv", 'w', newline='') as f:
 
         data = [[time,app,contact_name,text,Q1,Q2,Q3,Q4,Q5,Q6,Q7,Q8,Q9,Q10,Q11,Q12,Q13,Q14,Q15,Q15_other,Q16,Q17,Q17_other]]
         writer.writerows(data)
+
+
+        if(Q10 == ""):
+            #print(Q1)
+            continue
+        """
         if(Q1 == "沒有，但已經在其他裝置上看到內容"):
             continue
+        """
         for contact in contact_list:
             if(contact_name == contact[0]):
                 #print("exist contact: ",contact_name)
@@ -192,7 +199,6 @@ with open(mobileID+".csv", 'w', newline='') as f:
                 #print(data)
             contact_list.append(data)
 
-
     blank = [[]]
     writer.writerows(blank)
     writer.writerows(blank)
@@ -202,6 +208,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
     final_self_response = 0
     final_self_inter = 0
     questionniare_count = 0
+    answered_questionniare = 0
 
     final_closeness = 0
     final_inter = 0
@@ -225,6 +232,8 @@ with open(mobileID+".csv", 'w', newline='') as f:
 
     result = [["name","notification 總量","關係","自評 Closeness","自評 Interruptibility","自評 回覆動機","Closeness","Interruptibility","回覆動機","重要程度","緊急程度", "total ESM", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
     writer.writerows(result)
+
+    #contact = ["name",interruptibility, respond, percept_count, total ESM, 立即回覆, 在數分鐘之內,在半小時以內,一小時以內,隔數小時之後，但會在當天回覆,不會在當天回覆,不會回覆,沒有預計,closeness, importance, urgence]
 
     contact_list.sort(reverse=True, key=ESM_amount)
     for contact in contact_list:
@@ -305,7 +314,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
                 data["selected"] = True
                 noti_count = data["count"]
                 break
-        
+
         final_notification_count += noti_count
         result_data = [[contact[0],noti_count,relationship,self_closeness,self_interr,self_response,avg_closeness,avg_intr,response_motivation,avg_importance,avg_urgence, contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
         writer.writerows(result_data)
@@ -317,7 +326,9 @@ with open(mobileID+".csv", 'w', newline='') as f:
             final_notification_count += data["count"]
             writer.writerows([[data["name"],data["count"]]])
 
-    #print("conact: ",str(questionniare_count))
+    print("questionnarie conact: ",str(questionniare_count))
+    if(questionniare_count==0):
+        questionniare_count = 1
     final_data = [["Total",final_notification_count,"",final_self_closeness/questionniare_count,float(final_self_inter)/questionniare_count,float(final_self_response)/questionniare_count,final_closeness/final_ESM_count,final_inter/final_percept,final_resp/final_motivation_count,float(final_importance)/final_ESM_count,float(final_urgence)/final_ESM_count,int(final_ESM_count), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
     writer.writerows(final_data)
 
