@@ -15,23 +15,23 @@
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
-					<th>name</th>
+					<th>id</th>
 					<th>date</th>
 					<th>send esm count</th>
 					<th>esm done count</th>
 					<th>im noti count</th>
-					<th>all valid</th>
+					<th>result_incomplete</th>
 					<th>fail items</th>
 				</thead>
 				<tbody>
 				{% for check in checks %}
 					<tr>
-						<td>{{ check.user_id }}</td>
+						<td>{{ check.id }}</td>
 						<td>{{ check.date }}</td>
 						<td>{{ check.send_esm_count }}</td>
 						<td>{{ check.esm_done_count }}</td>
 						<td>{{ check.im_notification_count }}</td>
-						<td>{{ check.all_valid }}</td>
+						<td>{{ check.result_incomplete }}</td>
 						<td>{{ check.fail_list }}</td>
 					</tr>
 				{% endfor %}

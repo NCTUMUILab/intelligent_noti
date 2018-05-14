@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, jsonify, request, jsonify, redirect, url_for
 from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, User, ESMCount, DeviceID, Notification, Result, DailyCheck
-from app.helpers.daily_check import is_today_checked, Check
+from app.helpers.daily_check import Check
 from app.helpers.valid_notification import valid_notification
 from app import admin_only, db
 from json import loads, dumps
@@ -86,45 +86,18 @@ def add_new_contact():
 @admin.route('/daily')
 @admin_only
 def daily_check_get():
-    users = User.query.filter_by(in_progress=True).all()
     yesterday_record = request.args.get('d') == 'y'
     if yesterday_record:
         start_time = datetime.combine(date.today() - timedelta(1), datetime.min.time())
-        # end_time = datetime.combine(date.today() - timedelta(1), datetime.min.time())
-        end_time = datetime.combine(date.today(), datetime.min.time())
     else:
         start_time = datetime.combine(date.today(), datetime.min.time())
-        end_time = datetime.now()
-    print("day start: {}\nday end  : {}".format(start_time, end_time))
-    check_list = [ Check(user.username, user.id, user.created_at, start_time, end_time) for user in users ]
+    print("day start: {}\n".format(start_time))
     
-    ### for each user ###
-    for check in check_list:
-        try:
-            print("<{}>".format(check.name))
-        except UnicodeError:
-            print("<{}>".format(check.user_id))
-        device_entry = DeviceID.query.filter_by(user_id=check.user_id).first()
-        if device_entry:
-            check.device_id = device_entry.device_id
+    users = User.query.filter_by(in_progress=True)
+    check_list = [ Check(user.username, user.id, user.created_at, start_time) for user in users ]
+    [ check.run() for check in check_list ]
         
-        check.count_esm_done()
-        
-        ### noti: im_notification_count, send_esm_count ###
-        noti_day_query = Notification.query.filter_by(device_id=check.device_id).filter(Notification.timestamp > check.start_time.timestamp() * 1000).filter(Notification.timestamp <= check.end_time.timestamp() * 1000)
-        check.count_send_esm(noti_day_query)
-        check.count_im_noti(noti_day_query)
-        
-        
-        ### result: accessibility, no_result_lost ###
-        result_day_query = Result.query.filter_by(user=check.device_id).filter(Result.date >= check.start_time).filter(Result.date < check.end_time)
-        check.check_data(result_day_query.all())
-        
-        check.check_valid()
-        check.fail_list = dumps(check.fail_list)
-        print("\t{}, {}\n".format(check.all_valid, check.fail_list))
-        
-    return render_template("admin/daily.html", users=check_list, is_today_checked=is_today_checked(), check_json=[ c.__dict__ for c in check_list ], yesterday=yesterday_record, date=start_time )
+    return render_template("admin/daily.html", users=check_list, is_today_checked=False, check_json=[ c.__dict__ for c in check_list ], yesterday=yesterday_record, date=start_time )
 
 
 @admin.route('/daily/post', methods=['POST'])
@@ -140,8 +113,10 @@ def daily_check_post():
             esm_done_count = check['esm_done_count'],
             accessibility = check['accessibility'],
             no_result_lost = check['no_result_lost'],
+            time_list = check['time_list'],
             im_notification_count = check['im_notification_count'],
             all_valid = check['all_valid'],
+            result_incomplete = check['result_incomplete'],
             fail_list = check['fail_list'])
         db.session.add(new_check)
     db.session.commit()

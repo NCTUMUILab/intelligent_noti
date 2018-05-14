@@ -2,53 +2,67 @@ from datetime import datetime, date, timedelta
 from json import dumps
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..')))
+from app import db
 from app.models import DailyCheck, User, DeviceID, Notification, Result, DailyCheck
 from app.helpers.daily_check import Check
+from sys import argv
 
-user_list = User.query.filter(User.id >= 5).filter(User.id < 6).all()
-for user in user_list:
-    print(user.id)
-    start_time = datetime.combine(user.created_at, datetime.min.time())
-    while start_time != datetime.combine(date.today(), datetime.min.time()):
-        print("STARTTIME:", start_time)
-        check = Check(user.username, user.id, user.created_at, start_time)
-        try:
-            print("<{}>".format(check.name))
-        except UnicodeError:
-            print("<{}>".format(check.user_id))
+def get_new_dailycheck(check):
+    return DailyCheck(
+        user_id = check.user_id,
+        date = check.start_time,
+        send_esm_count = check.send_esm_count,
+        esm_done_count = check.esm_done_count,
+        accessibility = check.accessibility,
+        no_result_lost = check.no_result_lost,
+        time_list = check.time_list,
+        im_notification_count = check.im_notification_count,
+        all_valid = check.all_valid,
+        result_incomplete = check.result_incomplete,
+        fail_list = check.fail_list)
+
+def iterate_all_user():   
+    user_list = User.query.filter(User.id >= 5).filter(User.id <= 10).filter_by(in_progress=True)
+    for user in user_list:
+        start_time = datetime.combine(user.created_at + timedelta(days=1), datetime.min.time())
+        while start_time != datetime.combine(date.today(), datetime.min.time()):
+            print("DATE:", start_time.strftime("%Y-%m-%d"))
+            check = Check(user.username, user.id, user.created_at, start_time)
+            check.run()
+            
+            new_daily = get_new_dailycheck(check)
+            db.session.add(new_daily)
+                       
+            start_time += timedelta(days=1)
+        db.session.commit()
+
+def one_user(user_id, start_date, end_date, commit=True):
+    date = datetime(2018, *start_date)
+    while date != datetime(2018, *end_date):
+        user = User.query.filter_by(id=user_id).first()
+        if not user:
+            raise Exception
+        previous_check = DailyCheck.query.filter_by(user_id=user_id, date=date).first()
+        if previous_check:
+            print(previous_check)
+            db.session.delete(previous_check)
+                
+        check = Check(user.username, user_id, user.created_at, date)
+        check.run()
+        new_daily = get_new_dailycheck(check)
+        db.session.add(new_daily)
+        if commit:
+            db.session.commit()
         
-        device_entry = DeviceID.query.filter_by(user_id=check.user_id).first()
-        if device_entry:
-            check.device_id = device_entry.device_id
-        
-        check.count_esm_done()
-        
-        noti_day_query = Notification.query.filter_by(device_id=check.device_id).filter(Notification.timestamp > check.start_time.timestamp() * 1000).filter(Notification.timestamp <= check.end_time.timestamp() * 1000)
-        check.count_send_esm(noti_day_query)
-        check.count_im_noti(noti_day_query)
-        
-        # result_day_query = Result.query.filter_by(user=check.device_id).filter(Result.date >= check.start_time).filter(Result.date < check.end_time)
-        result_list = []
-        result_prequery = Result.query.filter_by(user=check.device_id)
-        for t in range(24):
-            result_list.append(result_prequery.filter_by(date=check.start_time+timedelta(hours=t)).first())
-        check.check_data(result_list)
-        
-        check.check_valid()
-        check.fail_list = dumps(check.fail_list)
-        print("\t{}, {}\n".format(check.all_valid, check.fail_list))
-        
-        new_daily = DailyCheck(user_id = check.user_id,
-            date = check.start_time,
-            send_esm_count = check.send_esm_count,
-            esm_done_count = check.esm_done_count,
-            accessibility = check.accessibility)
-        # db.session.add(new_daily)
-        
-        
-        start_time += timedelta(1)
-# db.session.commit()
+        date += timedelta(days=1)
 
 
+if __name__ == '__main__':
+    input("Check that db get all result packages\nPRESS ENTER TO CONT...")
+    if len(argv) >= 5 and argv[1] == 'oneuser':
+        start_date = [ int(i) for i in argv[3].split('/') ]
+        end_date   = [ int(i) for i in argv[4].split('/') ]
+        commit = False if len(argv) == 6 and argv[5] == 'nocommit' else True
+        one_user(int(argv[2]), tuple(start_date), tuple(end_date), commit=commit)
 
 
