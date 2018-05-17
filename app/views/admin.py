@@ -91,7 +91,7 @@ def daily_check_get():
         start_time = datetime.combine(date.today() - timedelta(1), datetime.min.time())
     else:
         start_time = datetime.combine(date.today(), datetime.min.time())
-    print("day start: {}\n".format(start_time))
+    print("DAY START: {}\n".format(start_time))
     
     users = User.query.filter_by(in_progress=True)
     check_list = [ Check(user.username, user.id, user.created_at, start_time) for user in users ]
@@ -127,4 +127,7 @@ def daily_check_post():
 def check_user_daily(user_id):
     user_daily = DailyCheck.query.filter_by(user_id=user_id).order_by(DailyCheck.date.asc()).all()
     esm_done_mean = mean([ i.esm_done_count for i in user_daily ])
-    return render_template("admin/each_user_daily.html", checks=user_daily, username=User.query.filter_by(id=user_id).first().username, mean=esm_done_mean)
+    contacts_query = ContactQuestionnaire.query.filter_by(user_id=user_id)
+    contacts_count = contacts_query.count()
+    completed_count = contacts_query.filter_by(completed=True).count()
+    return render_template("admin/each_user_daily.html", checks=user_daily, username=User.query.filter_by(id=user_id).first().username, mean=esm_done_mean, contacts_count=contacts_count, completed_count=completed_count)
