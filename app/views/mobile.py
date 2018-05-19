@@ -1,4 +1,4 @@
-Gfrom flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint, request, jsonify, render_template
 from app.models import Result, User, ContactQuestionnaire, Notification, ESMCount, APPState
 from app.helpers.valid_notification import valid_notification
 from app import db
