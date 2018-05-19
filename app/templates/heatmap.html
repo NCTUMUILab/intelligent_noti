@@ -117,7 +117,6 @@
         'Imagery © <a href="http://mapbox.com">Mapbox</a>',
     id: 'mapbox.streets'
     }).addTo(mymap);
-
     var heat = L.heatLayer(data, {
                 //scaleRadius: true,
                 //useLocalExtrema: true,
@@ -187,6 +186,7 @@
 
 
     mymap.on('click', onMapClick);
+    L.control.scale().addTo(mymap);
 
 </script>
 
