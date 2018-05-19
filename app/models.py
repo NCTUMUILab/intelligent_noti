@@ -244,3 +244,19 @@ class DailyCheck(db.Model):
     result_incomplete = db.Column(db.String(512))
     time_list = db.Column(db.String(128))
     created_at = db.Column(db.DateTime, default=datetime.now)
+
+
+class APPState(db.Model):
+    __tablename__ = 'app_state'
+    id = db.Column(db.Integer, primary_key=True)
+    device_id = db.Column(db.String(30))
+    state_accessibility = db.Column(db.DateTime)
+    state_main = db.Column(db.DateTime)
+    state_esm_done = db.Column(db.DateTime)
+    state_esm_create = db.Column(db.DateTime)
+    state_bootcomplete = db.Column(db.DateTime)
+    state_notification_listen = db.Column(db.DateTime)
+    state_notification_sent_esm = db.Column(db.DateTime)
+    state_wifi_upload = db.Column(db.DateTime)
+    state_stream = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default=datetime.now)

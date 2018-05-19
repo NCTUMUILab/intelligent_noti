@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template
-from app.models import Result, User, ContactQuestionnaire, Notification, ESMCount
+from app.models import Result, User, ContactQuestionnaire, Notification, ESMCount, APPState
 from app.helpers.valid_notification import valid_notification
 from app import db
 from app import app as flask_app
@@ -168,3 +168,36 @@ def get_blacklist():
         if b[1] > 5:
             result.append(b[0])
     return json.dumps(result)
+
+@mobile.route('/setState/', methods=['GET'])
+def set_state():
+    state_accessibility = datetime.fromtimestamp(int(request.args.get('state_accessibility')))
+    state_main = datetime.fromtimestamp(int(request.args.get('state_main')))
+    state_esm_done = datetime.fromtimestamp(int(request.args.get('state_esm_done')))
+    state_esm_create = datetime.fromtimestamp(int(request.args.get('state_esm_create')))
+    state_bootcomplete = datetime.fromtimestamp(int(request.args.get('state_bootcomplete')))
+    state_notification_listen = datetime.fromtimestamp(int(request.args.get('state_notification_listen')))
+    state_notification_sent_esm = datetime.fromtimestamp(int(request.args.get('state_notification_sent_esm')))
+    state_wifi_upload = datetime.fromtimestamp(int(request.args.get('state_wifi_upload')))
+    state_stream = datetime.fromtimestamp(int(request.args.get('state_stream')))
+    deviceId = request.args.get('deviceId')
+    result = APPState(**{
+        'state_accessibility': state_accessibility,
+        'state_main': state_main,
+        'state_esm_done': state_esm_done,
+        'state_esm_create' : state_esm_create,
+        'state_bootcomplete' : state_bootcomplete,
+        'state_notification_listen' : state_notification_listen,
+        'state_notification_sent_esm' : state_notification_sent_esm,
+        'state_wifi_upload' : state_wifi_upload,
+        'state_stream' : state_stream,
+        'device_id' : deviceId
+    })
+    db.session.add(result)
+    try:
+        db.session.commit()
+        return 'ok'
+    except Exception as e:
+        print(e)
+        db.session.rollback()
+        abort(404)
