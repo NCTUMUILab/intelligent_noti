@@ -167,4 +167,4 @@ def get_blacklist():
     for b in blacklists:
         if b[1] > 5:
             result.append(b[0])
-    return json.dumps(result)
+    return '@'.join(result)
