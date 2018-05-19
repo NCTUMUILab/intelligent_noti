@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template
+Gfrom flask import Blueprint, request, jsonify, render_template
 from app.models import Result, User, ContactQuestionnaire, Notification, ESMCount, APPState
 from app.helpers.valid_notification import valid_notification
 from app import db
@@ -167,7 +167,7 @@ def get_blacklist():
     for b in blacklists:
         if b[1] > 5:
             result.append(b[0])
-    return json.dumps(result)
+    return '@'.join(result)
 
 @mobile.route('/setState/', methods=['GET'])
 def set_state():
