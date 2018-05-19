@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template
-from app.models import Result, User, ContactQuestionnaire, Notification
+from app.models import Result, User, ContactQuestionnaire, Notification, ESMCount
 from app.helpers.valid_notification import valid_notification
 from app import db
 from app import app as flask_app
@@ -10,7 +10,7 @@ import json
 import time
 from datetime import timezone
 from dateutil.parser import parse
-
+from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 import uuid
 from flask_cors import CORS, cross_origin
@@ -96,7 +96,7 @@ def get_form_valid(notifications, user):
 @mobile.route('/upload/', methods=['POST'])
 def add_result():
     content = request.get_json(silent=True)
-    
+
     # result
     result = Result({
         'type': "new",
@@ -111,14 +111,14 @@ def add_result():
         print(e)
         db.session.rollback()
         abort(404)
-    
+
     # if date of this result repeat one date of result from the user: skip
     if Result.query.filter_by(date=result.date).filter_by(user=result.user).count() > 1:
         flask_app.logger.debug("REPEAT DATE: {} at {}".format(result.user, result.date))
         return jsonify({
             'startTime': int(content['startTime']),
             'endTime': int(content['endTime'] ) })
-    
+
     # notification
     raw = content.get('Notification')
     if raw:
@@ -143,7 +143,7 @@ def add_result():
             db.session.commit()
         except Exception as e:
             db.session.rollback()
-    
+
     return jsonify({
         'startTime': int(content['startTime']),
         'endTime': int(content['endTime'] ) })
@@ -158,3 +158,13 @@ def get_state():
         return str(int(datetime.fromtimestamp(int(json.loads(last_result.raw)['endTime'])/1000).replace(minute=0, second=0).strftime('%s'))*1000)
      else:
         return str((int(datetime.fromtimestamp(time.time()).replace(minute=0, second=0). strftime('%s'))-172800)*1000)
+
+@mobile.route('/blacklist/', methods=['GET'])
+def get_blacklist():
+    user = request.args.get('user')
+    blacklists = db.session.query(ESMCount.name, func.count(ESMCount.name)).filter(ESMCount.device_id==user).group_by(ESMCount.name).order_by(desc(func.count(ESMCount.name))).limit(2).all()
+    result = []
+    for b in blacklists:
+        if b[1] > 5:
+            result.append(b[0])
+    return json.dumps(result)
