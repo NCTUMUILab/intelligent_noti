@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.forms import LoginForm, RegisterForm, ForgotPassword
 from app.models import User, ContactQuestionnaire, DeviceID
-from app import db, on_local, load_user
+from app import db, on_local, load_user, admin_only
 
 user = Blueprint('user', __name__)
 
@@ -68,3 +68,12 @@ def logout():
 def dashboard():
     questionnaires = ContactQuestionnaire.query.filter_by(user_id=current_user.id).all()
     return render_template('dashboard.html', current_user=current_user, questionnaires=questionnaires)
+
+
+@user.route('/change/<int:user_id>')
+@admin_only
+def change_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    logout_user()
+    login_user(user)
+    return redirect(url_for('user.dashboard'))
