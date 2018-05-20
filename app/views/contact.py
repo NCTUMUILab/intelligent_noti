@@ -116,11 +116,16 @@ def remove_contact(qid):
 
 @contact.route('/getJson')
 def get_contact_json():
-    email = request.args.get('email')
-    user = User.query.filter_by(email=email).first()
+    user_id = request.args.get('user_id')
+    user = User.query.filter_by(id=user_id).first()
     if not user:
         abort(403)
     user_name = user.username
-    contacts = ContactQuestionnaire.query.join(User).filter(User.email == email).all()
-    contact_list = [ {'facebook': contact.contact_name, 'line': contact.contact_name_line} for contact in contacts ]
-    return jsonify({'name': user_name, 'list': contact_list})
+    contacts = ContactQuestionnaire.query.join(User).filter(User.id == user_id)
+    fb_list, line_list = [], []
+    for contact in contacts:
+        if contact.contact_name:
+            fb_list.append(contact.contact_name)
+        if contact.contact_name_line:
+            line_list.append(contact.contact_name_line)
+    return jsonify({'name': user_name, 'fb_list': fb_list, 'line_list': line_list})

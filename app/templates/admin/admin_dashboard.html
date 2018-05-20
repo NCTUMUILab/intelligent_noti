@@ -20,6 +20,7 @@
 					<th>name</th>
 					<th>device ID</th>
 					<th>on going</th>
+					<th>state</th>
 				</thead>
 				<tbody>
 				{% for user in users %}
@@ -28,6 +29,17 @@
 						<td><a href="/admin/daily/user/{{user.id}}">{{ user.name }}</a></td>
 						<td>{{ user.device_id }}</td>
 						<td>{{ user.in_progress }}</td>
+						<td>
+							{% for s in user.state %}
+								{{ s.key}}: {{ s.date }}
+								{% if s.alert %}
+									<span class="label label-danger">{{s.label}}</span>
+								{% else %}
+									<span class="label label-primary">{{s.label}}</span>
+								{% endif %}
+								<br>
+							{% endfor %}
+						</td>
 					</tr>
 				{% endfor %}
 				</tbody>
@@ -41,4 +53,3 @@
 	</div>
 </div>
 {% endblock %}
-

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify, request, jsonify, redirect, url_for
 from flask_login import login_required, current_user
-from app.models import ContactQuestionnaire, User, ESMCount, DeviceID, Notification, Result, DailyCheck
+from app.models import ContactQuestionnaire, User, ESMCount, DeviceID, Notification, Result, DailyCheck, APPState
 from app.helpers.daily_check import Check
 from app.helpers.valid_notification import valid_notification
 from app import admin_only, db
@@ -24,8 +24,49 @@ def admin_dashboard():
         d = DeviceID.query.filter_by(user_id=user.id).first()
         if d:
             current['device_id'] = d.device_id
+        s = APPState.query.filter_by(device_id=d.device_id).order_by(APPState.created_at.desc()).first()
+        if s:
+            current['state'] = [
+                {
+                    'key': 'accessibility',
+                    'date': s.state_accessibility,
+                    'label': '1hr',
+                    'alert': (datetime.now() - s.state_accessibility) > timedelta(hours=1)
+                },
+                {
+                    'key': 'stream',
+                    'date': s.state_stream,
+                    'label': '1hr',
+                    'alert': (datetime.now() - s.state_stream) > timedelta(hours=1)
+                },
+                {
+                    'key': 'notification_listen',
+                    'date': s.state_notification_listen,
+                    'label': '1hr',
+                    'alert': (datetime.now() - s.state_notification_listen) > timedelta(hours=1)
+                },
+                {
+                    'key': 'notification_sent_esm',
+                    'date': s.state_notification_sent_esm,
+                    'label': '12hr',
+                    'alert': (datetime.now() - s.state_notification_sent_esm) > timedelta(hours=12)
+                },
+                {
+                    'key': 'esm_done',
+                    'date': s.state_esm_done,
+                    'label': '24hr',
+                    'alert': (datetime.now() - s.state_esm_done) > timedelta(hours=24)
+                },
+                {
+                    'key': 'wifi_upload',
+                    'date': s.state_wifi_upload,
+                    'label': '24hr',
+                    'alert': (datetime.now() - s.state_wifi_upload) > timedelta(hours=24)
+                }
+            ]
+
         result_list.append(current)
-    
+
     all_esm_done_mean = mean([ i.esm_done_count for i in DailyCheck.query.all() ])
     week_esm_done_mean = mean([ i.esm_done_count for i in DailyCheck.query.filter(DailyCheck.date >= date.today() - timedelta(7)).all() ])
     return render_template("admin/admin_dashboard.html", users=result_list, all_mean=all_esm_done_mean, week_mean=week_esm_done_mean)
@@ -57,14 +98,14 @@ def get_esm():
                 else:
                     new_entry = { "name": esm_name, "app": esm.app, "count": 1 }
                     result_esm_list.append(new_entry)
-        
+
         contacts = ContactQuestionnaire.query.filter_by(user_id=user_id).all()
         result_facebook_list = [ contact.contact_name for contact in contacts ]
         result_line_list = [ contact.contact_name_line for contact in contacts ]
-        
+
         return jsonify({ "esm": result_esm_list, "facebook": result_facebook_list, "line": result_line_list })
     return None
-    
+
 
 @admin.route('/esm/addNewContacts', methods=['POST'])
 def add_new_contact():
@@ -92,11 +133,11 @@ def daily_check_get():
     else:
         start_time = datetime.combine(date.today(), datetime.min.time())
     print("DAY START: {}\n".format(start_time))
-    
+
     users = User.query.filter_by(in_progress=True)
     check_list = [ Check(user.username, user.id, user.created_at, start_time) for user in users ]
     [ check.run() for check in check_list ]
-        
+
     return render_template("admin/daily.html", users=check_list, is_today_checked=False, check_json=[ c.__dict__ for c in check_list ], yesterday=yesterday_record, date=start_time )
 
 

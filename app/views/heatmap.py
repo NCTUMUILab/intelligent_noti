@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, jsonify, request
 from flask_login import login_required, current_user
 from app import db
-from app.models import Result, GpsLabel, DeviceID
+from app.models import Notification, GpsLabel, DeviceID
 from sqlalchemy import desc
 from flask import request
 from json import loads
@@ -17,24 +17,10 @@ def show_heatmap():
 @heatmap.route('/getLocations', methods=['GET', 'POST'])
 def getLocationsTest():
 	device_user = DeviceID.query.filter_by(user_id=current_user.id).first()
-	all_result = Result.query.filter_by(user=device_user.device_id).all()
-	marks = []
-	for result in all_result:
-		try:
-			result_dict = loads(result.raw)
-		except Exception as e:
-			print("id:", result.id)
-			print(e)
-			continue
-		if result_dict.get('Notification'):
-			notification = result_dict['Notification']
-			for app_source, lng, lag in zip(notification['app_cols'], notification['longitude_cols'], notification['latitude_cols']):
-				if app_source == 'com.facebook.orca' or app_source == 'jp.naver.line.android':
-					location = (lag, lng)
-					marks.append(location)
-					print(app_source, lag, lng)
-	result_marks = {'marks': marks}
-	return jsonify(result_marks)
+	notis = Notification.query.filter_by(device_id=device_user.device_id)
+	print("NOTI COUNT:", notis.count())
+	marks = [ (noti.latitude, noti.longitude) for noti in notis ]
+	return jsonify({'marks': marks})
 	
 
 @heatmap.route('/createGpsLabel', methods=['POST'])

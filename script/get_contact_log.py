@@ -1,87 +1,61 @@
-from ContactLog.LogParser import FacebookLogParser, LineLogParser
-from ContactLog.FacebookContactSoupGenerator import FacebookContactSoupGenerator
+from ContactLog.LogParser import FacebookJSONFilesFinder, FacebookLogParser, LineLogParser
 from requests import get
 from os import makedirs, path
 from tkinter import Tk, filedialog
 
-####################### user info #######################
-email = input("Please enter your email: ")
-request = get("http://localhost:5000/contact/getJson?email=" + email)
-name = request.json()['name']
-if not path.exists("../userdata/{}".format(name)):
-	makedirs("../userdata/{}".format(name))
+def gui_get_path(choose_type):
+    window = Tk()
+    window.withdraw()
+    if choose_type == 'd':
+        print("Please choose the facebook backup directory.\n"
+          "eg. /Users/alex/Downloads/messages")
+        path = filedialog.askdirectory()
+        window.update()
+        return path
+    elif choose_type == 'f':
+        print("Please choose your Line backup files")
+        path_tuple = filedialog.askopenfilenames()
+        window.update()
+        return path_tuple
+    raise ValueError
 
-########################## line ##########################
-### 1. get all the paths of backup files
-print("Please choose your Line backup files")
-window = Tk()
-window.withdraw()
-file_path_tuple = filedialog.askopenfilenames()
-window.update()
 
-### 2. parse and export to JSON file
-for file_path in file_path_tuple:
-	parser = LineLogParser(file_path)
-	with open("../userdata/{}/{}".format(name, parser.export_file_name), 'w') as file:
-		file.write(parser.export())
-print("\tComplete parsing line files")
+def get_userinfo_from_server():
+    user_id = input("Please enter User ID: ")
+    request = get("http://who.nctu.me:8000//contact/getJson?user_id=" + user_id)
+    name = request.json()['name']
+    fb_list = request.json()['fb_list']
+    line_list = request.json()['line_list']
+    if not path.exists("../userdata/{}".format(name)):
+        makedirs("../userdata/{}".format(name))
+    return name, fb_list, line_list
 
-######################## facebook ########################
 
-### 1. get facebook backup directory path
-print("Please choose the facebook backup directory.\n"
-      "eg. /Users/alex/Downloads/facebook-cowbonlin")
-window = Tk()
-window.withdraw()
-directory_path = filedialog.askdirectory()
-window.update()
+def get_facebook_log(username, fb_list):
+    print("FB CONTACT:", fb_list)
+    fb_homedir_path = gui_get_path('d')
+    finder = FacebookJSONFilesFinder(fb_list, fb_homedir_path)
+    file_path_list = finder.export()
+    print("PARSING...")
+    for file_path in file_path_list:
+        parser = FacebookLogParser(file_path)
+        with open("../userdata/{}/fb-{}.json".format(username, parser.sender_name), 'w') as export_file:
+            export_file.write(parser.export())
+    print("Complete parsing facebook files")
+    
 
-### 2. get the list of facebook contact name
-facebook_contact_list = []
-for name_dict in request.json()['list']:
-	if name_dict['facebook']:
-		facebook_contact_list.append(name_dict['facebook'])
-print(facebook_contact_list)
 
-### 3. find out all html files of contact
-generator = FacebookContactSoupGenerator(directory_path, facebook_contact_list)
-facebook_thread_list = generator.find_all_soups()
-if len(facebook_thread_list) == len(facebook_contact_list):
-	print('Find all soups, start to parse')
-else:
-	print('Iterate all files, {} remains left'.format(abs(len(facebook_thread_list)-len(facebook_contact_list))))
+def get_line_log(username, line_list):
+    path_tuple = gui_get_path('f')
+    for file_path in path_tuple:
+        parser = LineLogParser(file_path)
+        with open("../userdata/{}/line-{}.json".format(username, parser.export_file_name), 'w') as file:
+            file.write(parser.export())
+    print("Complete parsing line files")
 
-### delete unwanted file
-while True:
-	delete_index_number = input("Is any file that is not correct? Enter its index number: ")
-	if not delete_index_number:
-		break
-	else:
-		facebook_thread_list.pop(int(delete_index_number))
-		print([ item['name'] for item in facebook_thread_list ])
 
-while True:
-	checkout_contact_name = input("Any one not in the list? Type his/her name: ")
-	if not checkout_contact_name:
-		break
-	else:
-		file_name_list = generator.name_to_file_dict.get(checkout_contact_name)
-		if not file_name_list:
-			print("\tSorry, Can't found it")
-			print(generator.name_to_file_dict)
-			continue
-		else:
-			print("\tFind:", file_name_list)
-			index_number = int(input("Choose index number: "))
-			soup = generator.get_file_soup(file_name_list[index_number])
-			facebook_thread_list.append({ 'name':checkout_contact_name, 'soup':soup })
-			print("\tAdd successfully!")
-			
-
-### 4. for each file: parse and export to json file
-for thread in facebook_thread_list:
-	print("\tParsing the chat history of", thread['name'], "...")
-	file = open("../userdata/{}/{}.json".format(name, thread['name']), 'w')
-	parser = FacebookLogParser(thread['soup'])
-	file.write(parser.export())
-print("FINISH")
+if __name__ == '__main__':
+    username, fb_list, line_list = get_userinfo_from_server()
+    get_facebook_log(username, fb_list)
+    # get_line_log(username, line_list)
+    
