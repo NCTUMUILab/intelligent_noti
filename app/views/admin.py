@@ -15,7 +15,7 @@ def mean(l):
 @admin_only
 def admin_dashboard():
     result_list = []
-    users = User.query.all()
+    users = User.query.filter_by(in_progress=True)
     for user in users:
         current = {}
         current['id'] = user.id
