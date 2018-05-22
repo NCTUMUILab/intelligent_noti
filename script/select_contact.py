@@ -35,17 +35,17 @@ cursor.execute("SELECT * FROM notification WHERE device_id  ="+mobileID)
 notifications = cursor.fetchall()
 
 for noti in notifications:
-    if(valid_notification(noti[6],noti[10],noti[7],noti[9],noti[8]) == False):
+    if(valid_notification(noti[7],noti[11],noti[8],noti[10],noti[9]) == False):
         #print(noti)
         continue
     contained_in_list = False
     for contact_noti in notification_list:
-        if(noti[7] == contact_noti["name"]):
+        if(noti[8] == contact_noti["name"]):
             contact_noti["count"] += 1
             contained_in_list = True
             break
     if(contained_in_list == False):
-        data = {"name":noti[7],"count":1,"selected": False}
+        data = {"name":noti[8],"count":1,"selected": False}
         notification_list.append(data)
 
 sql = "SELECT * FROM esm_data WHERE user = " + mobileID
