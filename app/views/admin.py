@@ -12,13 +12,13 @@ from sqlalchemy import desc
 admin = Blueprint('admin', __name__)
 
 def mean(l):
-    return sum(l) / len(l)
+    return sum(l) / len(l) if len(l) else 0
 
 @admin.route('/')
 @admin_only
 def admin_dashboard():
     result_list = []
-    users = User.query.all()
+    users = User.query.filter_by(in_progress=True)
     for user in users:
         current = {}
         current['id'] = user.id
@@ -169,6 +169,8 @@ def daily_check_post():
 @admin.route('/daily/user/<int:user_id>')
 @admin_only
 def check_user_daily(user_id):
+    if not User.query.filter_by(id=user_id).first():
+        return "invalid user id"
     user_daily = DailyCheck.query.filter_by(user_id=user_id).order_by(DailyCheck.date.asc()).all()
     esm_done_mean = mean([ i.esm_done_count for i in user_daily ])
     contacts_query = ContactQuestionnaire.query.filter_by(user_id=user_id)

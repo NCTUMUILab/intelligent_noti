@@ -36,12 +36,11 @@ def get_facebook_log(username, fb_list):
     fb_homedir_path = gui_get_path('d')
     finder = FacebookJSONFilesFinder(fb_list, fb_homedir_path)
     file_path_list = finder.export()
-    print("PARSING...")
     for file_path in file_path_list:
         parser = FacebookLogParser(file_path)
         with open("../userdata/{}/fb-{}.json".format(username, parser.sender_name), 'w') as export_file:
             export_file.write(parser.export())
-    print("Complete parsing facebook files")
+    print("Complete parsing facebook files\n")
     
 
 
@@ -57,5 +56,5 @@ def get_line_log(username, line_list):
 if __name__ == '__main__':
     username, fb_list, line_list = get_userinfo_from_server()
     get_facebook_log(username, fb_list)
-    # get_line_log(username, line_list)
+    get_line_log(username, line_list)
     

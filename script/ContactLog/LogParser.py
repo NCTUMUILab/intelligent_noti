@@ -1,9 +1,7 @@
-from bs4 import BeautifulSoup
 from json import dumps, load
 from re import match
 from datetime import datetime, date
 from os import listdir, path
-from pypinyin import lazy_pinyin
 from urllib.parse import unquote
 
 
@@ -48,7 +46,6 @@ class FacebookJSONFilesFinder:
         self._name_path_dict = {}
         self._get_name_path_dict()
         self._find_dirs(contact_list)
-        
     
     def _get_name_path_dict(self):
         for subdir in self._msg_dir_list:
@@ -60,38 +57,28 @@ class FacebookJSONFilesFinder:
                     contact_name = to_unicode(file_content_dict['title'])
                     self._name_path_dict[contact_name] = json_path
                 except KeyError:
-                    print("NOTITLE:", subdir)
-    
+                    pass
     
     def _find_dirs(self, contact_list):
+        remain_contact_set = set(contact_list)
         for contact_name in contact_list:
             if contact_name in self._name_path_dict:
                 self._target_dir_list.append(self._name_path_dict[contact_name])
+                remain_contact_set.discard(contact_name)
         
-        if len(self._target_dir_list) != len(contact_list):
-            print("NOTFOUND", self._target_dir_list, contact_list)
+        if len(remain_contact_set):
+            print("\tSOME CONTACTS CAN NOT BE FOUND:\n\tREMAINS: {}".format(remain_contact_set))
             while True:
                 name = input("ADD MORE CONTACT?: ")
                 if not name:
                     break
                 if name in self._name_path_dict:
                     self._target_dir_list.append(self._name_path_dict[name])
-                    print("FOUND AND ADDED:", self._name_path_dict[name])
+                    print("\tFOUND AND ADDED:", self._name_path_dict[name])
+                else:
+                    print("\t{} NOT FOUND".format(name))
         else:
-            print("FOUND ALL CONTACTS:", self._target_dir_list)
-        # contact_pinyin_list = [ ''.join(lazy_pinyin(name)).lower().replace(' ', '') for name in contact_list ]
-        # contact_dir_found = [ False for i in contact_list ]
-        # for each_dir_name in self._msg_dir_list:
-        #     for i, pinyin in enumerate(contact_pinyin_list):
-        #         pinyin += '_'
-        #         if each_dir_name.find(pinyin) == 0:
-        #             self._target_dir_list.append(each_dir_name)
-        #             contact_dir_found[i] = True 
-        
-        # if len(self._target_dir_list) != len(contact_list):
-        #     for pinyin, name, found in zip(contact_pinyin_list, contact_list, contact_dir_found):
-        #         if not found:
-        #             print("\t{} not found: {}".format(name, pinyin))
+            print("\tFOUND ALL CONTACTS:", self._target_dir_list)
         
     def search(self, pinyin):
         search_result = []
@@ -112,7 +99,6 @@ class FacebookJSONFilesFinder:
             
     
     def export(self):
-        # return [ "{}/{}/message.json".format(self._homedir_path, wanted_dir) for wanted_dir in self._target_dir_list ]
         return self._target_dir_list
 
 
@@ -122,8 +108,10 @@ class FacebookLogParser:
         with open(json_path) as file:
             ori_dict = load(file)
         self.sender_name = to_unicode(ori_dict['title'])
+        print("\tPARSING {}'S LOG ... ".format(self.sender_name), end='')
         for msg_dict in ori_dict['messages']:
             self._result_list.append( self._convert_msg_dict(msg_dict) )
+        print("COMPLETE")
     
     def _convert_msg_dict(self, msg_dict):
         message = Message()
@@ -165,10 +153,12 @@ class LineLogParser:
         self.current_message = Message()
         self.current_date = "2000/1/1"
         self.result_list = []
-        self._parse_file()
+        print("\tPARSING {}'S LOG ... ".format(self.file_path), end='')
+        self._parse()
+        print("COMPLETE")
       
         
-    def _parse_file(self):
+    def _parse(self):
         with open(self.file_path) as file:
             for line in file:
                 line = line.replace('\n', '')
@@ -180,18 +170,15 @@ class LineLogParser:
     
     
     def _check_date(self, line):
-        if match('^\d{4}\/\d{2}\/\d{2}\(\S{2}\)', line): # 3
+        if match('^\d{4}\/\d{2}\/\d{2}\(\S{2}\)', line): # 2018/04/23(週一)
             self.current_date = line[:-4]
-            print("DATE1:", self.current_date)
             return True
-        elif match('^\d{4}\/\d{2}\/\d{2}\(\S{3}\)', line): # 3
+        elif match('^\d{4}\/\d{2}\/\d{2}\(\S{3}\)', line): # 2018/04/23(Mon)
             self.current_date = line[:-5]
-            print("DATE2:", self.current_date)
             return True
-        elif match('^[A-Z][a-z]{2}, \d{2}\/\d{2}\/\d{4}', line):
+        elif match('^[A-Z][a-z]{2}, \d{2}\/\d{2}\/\d{4}', line): # ??, 04/23/2018
             month_str, day_str, year_str = line[5:].split('/')
             self.current_date = "{}/{}/{}".format(year_str, month_str, day_str)
-            print("DATE3:", self.current_date)
             return True
         else:
             return False

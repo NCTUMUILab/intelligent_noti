@@ -3,12 +3,11 @@ from app.models import Result, User, ContactQuestionnaire, Notification, ESMCoun
 from app.helpers.valid_notification import valid_notification
 from app import db
 from app import app as flask_app
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from sqlalchemy import desc
 import hashlib
 import json
 import time
-from datetime import timezone
 from dateutil.parser import parse
 from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
@@ -112,7 +111,7 @@ def add_result():
         db.session.rollback()
         abort(404)
 
-    # if date of this result repeat one date of result from the user: skip
+    # if `date` of the result repeat one `date` of the user's results: skip
     if Result.query.filter_by(date=result.date).filter_by(user=result.user).count() > 1:
         flask_app.logger.debug("REPEAT DATE: {} at {}".format(result.user, result.date))
         return jsonify({
@@ -126,9 +125,10 @@ def add_result():
             zip(raw['latitude_cols'], raw['subText_cols'], raw['app_cols'], raw['timestamps'], \
                 raw['n_text_cols'], raw['longitude_cols'], raw['title_cols'], raw['tickerText_cols'], \
                 raw['sendForm_cols']):
-            if ticker and (app=='com.facebook.orca' or app=='jp.naver.line.android'):
+            if ticker and (app=='com.facebook.orca' or app=='jp.naver.line.android' or app=='com.linecorp.linelite' or app=='com.facebook.mlite'):
                 new_notification = Notification(
                     timestamp = timestamp,
+                    datetime = datetime.fromtimestamp(int(timestamp)/1000),
                     device_id = content['device_id'],
                     latitude = lat,
                     longitude = lon,
