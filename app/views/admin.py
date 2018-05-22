@@ -6,6 +6,9 @@ from app.helpers.valid_notification import valid_notification
 from app import admin_only, db
 from json import loads, dumps
 from datetime import date, timedelta, datetime
+from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy import desc
 admin = Blueprint('admin', __name__)
 
 def mean(l):
@@ -173,4 +176,11 @@ def check_user_daily(user_id):
     contacts_query = ContactQuestionnaire.query.filter_by(user_id=user_id)
     contacts_count = contacts_query.count()
     completed_count = contacts_query.filter_by(completed=True).count()
-    return render_template("admin/each_user_daily.html", checks=user_daily, username=User.query.filter_by(id=user_id).first().username, mean=esm_done_mean, contacts_count=contacts_count, completed_count=completed_count)
+    d = DeviceID.query.filter_by(user_id=user_id).first()
+    if d:
+        blacklists = db.session.query(ESMCount.name, func.count(ESMCount.name)).filter(ESMCount.device_id==d.device_id).group_by(ESMCount.name). order_by(desc(func.count(ESMCount.name))).limit(2).all()
+        blacklist = []
+        for b in blacklists:
+         if b[1] > 5:
+             blacklist.append(b[0])
+    return render_template("admin/each_user_daily.html", blacklist=str(blacklist), checks=user_daily, username=User.query.filter_by(id=user_id).first().username, mean=esm_done_mean, contacts_count=contacts_count, completed_count=completed_count)
