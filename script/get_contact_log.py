@@ -55,6 +55,6 @@ def get_line_log(username, line_list):
 
 if __name__ == '__main__':
     username, fb_list, line_list = get_userinfo_from_server()
-    # get_facebook_log(username, fb_list)
+    get_facebook_log(username, fb_list)
     get_line_log(username, line_list)
     
