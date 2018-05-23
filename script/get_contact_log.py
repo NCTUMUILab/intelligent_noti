@@ -48,13 +48,13 @@ def get_line_log(username, line_list):
     path_tuple = gui_get_path('f')
     for file_path in path_tuple:
         parser = LineLogParser(file_path)
-        with open("../userdata/{}/line-{}.json".format(username, parser.export_file_name), 'w') as file:
+        with open("../userdata/{}/line-{}.json".format(username, parser.contact_name), 'w') as file:
             file.write(parser.export())
     print("Complete parsing line files")
 
 
 if __name__ == '__main__':
     username, fb_list, line_list = get_userinfo_from_server()
-    get_facebook_log(username, fb_list)
+    # get_facebook_log(username, fb_list)
     get_line_log(username, line_list)
     

@@ -21,8 +21,8 @@ class Result(db.Model):
     user = db.Column(db.String(256)) # device_id
     r_id = db.Column(db.Integer)
     raw = db.Column(db.Text)
-    date = db.Column(db.DateTime) # time of get sensor data
-    created_at = db.Column(db.DateTime, default=datetime.now) # time of upload data
+    date = db.Column(db.DateTime) # time of getting sensor data in cellphone
+    created_at = db.Column(db.DateTime, default=datetime.now) # time of uploading data to server
 
     def __init__(self, r):
         self.r_type = r['type']
