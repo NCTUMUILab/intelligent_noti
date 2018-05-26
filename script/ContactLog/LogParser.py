@@ -108,10 +108,13 @@ class FacebookLogParser:
         with open(json_path) as file:
             ori_dict = load(file)
         self.sender_name = to_unicode(ori_dict['title'])
-        print("\tPARSING {}'S LOG ... ".format(self.sender_name), end='')
+        print("\tPARSING {}'S LOG ... ".format(self.sender_name))
+        if not ori_dict.get('messages'):
+            print("\n\t\tERROR: on messages in JSON")
+            return
         for msg_dict in ori_dict['messages']:
             self._result_list.append( self._convert_msg_dict(msg_dict) )
-        print("COMPLETE")
+        print("\tCOMPLETE")
     
     def _convert_msg_dict(self, msg_dict):
         message = Message()
@@ -135,10 +138,12 @@ class FacebookLogParser:
             message.others = "plan"
         elif 'audio_files' in msg_dict:
             message.others = "audio"
+        elif 'reactions' in msg_dict:
+            message.others = "reaction"
         elif len(msg_dict) == 3:
             message.others = "empty"
         else:
-            print("Attention:", msg_dict)
+            print("OTHER TYPE OF MESSAGE:", msg_dict)
         
         return message.dict()
     
@@ -149,79 +154,121 @@ class FacebookLogParser:
 class LineLogParser:
     def __init__(self, file_path):
         self.file_path = file_path
-        self.export_file_name = None
-        self.current_message = Message()
+        self.import_file_name = file_path.split('/')[-1]
+        self.contact_name = input("File: {}, Name: ".format(self.import_file_name))
         self.current_date = "2000/1/1"
-        self.result_list = []
-        print("\tPARSING {}'S LOG ... ".format(self.file_path), end='')
+        self._result_list = []
+        self._special_case = False
+        print("\tPARSING {}'S LOG ... ".format(self.contact_name))
         self._parse()
-        print("COMPLETE")
-      
-        
+        print("COMPLETE")    
+    
+    
     def _parse(self):
         with open(self.file_path) as file:
             for line in file:
-                line = line.replace('\n', '')
-                is_date = self._check_date(line)
-                if not is_date:
-                    is_content = self._check_new_content(line)
-                    if not is_content:
-                        self._check_cont_content(line)
+                line = line.replace('\n', '').replace('\ufeff', '') # Zero Width No-Break Space
+                if self._check_date(line):
+                    continue
+                elif self._check_new_message(line):
+                    continue
+                elif self._check_others(line):
+                    continue
+                else:
+                    continue
     
     
     def _check_date(self, line):
-        if match('^\d{4}\/\d{2}\/\d{2}\(\S{2}\)', line): # 2018/04/23(週一)
-            self.current_date = line[:-4]
+        ymd = match('^\d{4}\/\d{2}\/\d{2}', line) # 2018/04/23(週一), 2018/03/19（一）, 2018/04/23(Mon)
+        if ymd:
+            self.current_date = ymd.group(0)
             return True
-        elif match('^\d{4}\/\d{2}\/\d{2}\(\S{3}\)', line): # 2018/04/23(Mon)
-            self.current_date = line[:-5]
-            return True
-        elif match('^[A-Z][a-z]{2}, \d{2}\/\d{2}\/\d{4}', line): # ??, 04/23/2018
+        
+        mdy = match('^[A-Z][a-z]{2}, \d{2}\/\d{2}\/\d{4}', line) # Thu, 04/23/2018
+        if mdy:
             month_str, day_str, year_str = line[5:].split('/')
             self.current_date = "{}/{}/{}".format(year_str, month_str, day_str)
             return True
-        else:
-            return False
+        
+        ymd_dot =  match('^\d{4}.\d{2}.\d{2} ', line) # 2017.12.22 星期五
+        if ymd_dot:
+            self._special_case = True
+            self.current_date = ymd_dot.group(0).replace('.', '/')
+            return True
+        
+        return False
     
     
-    def _check_new_content(self, line):
+    def _check_new_message(self, line):
         if match('^\d{1,2}:\d{2}\t', line):
             time_str, sender, raw = line.split('\t')
-        elif match('^\d{2}:\d{2} [AP]M\t', line):
+            self._append_new_message(time_str, sender, raw)
+            return True
+        
+        elif match('^\d{2}:\d{2} [AP]M\t', line): # 01:22 PM
             try:
                 time_str, sender, raw = line.split('\t')
+                self._append_new_message(time_str, sender, raw)
             except ValueError:
-                print("!!! ISSUE:'{}' !!!".format(line))
-                return True
+                print("3", line)
+                # pass
+            return True
+        
+        elif match('^\S{2}\d{2}:\d{2}\t', line): #下午02:04    sender CCCCC
+            try:
+                time_str, sender, raw = line.split('\t')
+                self._append_new_message(time_str, sender, raw)
+            except ValueError: # 下午02:09    您已收回訊息
+                print("2", line)
+                # pass
+            return True 
+        
+        elif self._special_case and match('^\d{2}:\d{2} ', line): # 01:22 Kevin Goodbye
+            try:
+                time_str, sender, raw = line.split(' ', 2)
+                self._append_new_message(time_str, sender, raw)
+            except ValueError:
+                print("1", line)
+                # pass
+            return True
+            
         else:
             return False
-        
-        # packaging message
-        self.current_message = Message()
-        self.current_message.sender = sender
-        self.current_message.time = self.current_date + ' ' + time_str
-        if match('^\[\S+\]$', raw):
-            self.current_message.others = raw.replace('[', '').replace(']', '')
-        else:
-            self.current_message.raw = encrpyt_raw_text(raw)
-        
-        self.result_list.append(self.current_message.dict())
-        return True
+    
             
             
-    def _check_cont_content(self, line):
-        if '[LINE] ' in line or 'Chat history' in line:
-            self.export_file_name = line
+    def _check_others(self, line):
+        if match('^\[LINE\] ', line) or match('^Chat history', line):
+            return
         elif match('^儲存日期：', line) or match('Saved on: ', line):
-            pass
+            return
         elif line == '':
-            pass
-        else:
+            return
+        else: # cont message
             try:
-                self.result_list[-1]['raw'] += '\n' + encrpyt_raw_text(line)
-            except:
-                print("ERROR:", line)
+                self._result_list[-1]['raw'] += '\n' + encrpyt_raw_text(line)
+            except Exception as e:
+                print("\t\tAPPEND MESSAGE ERROR:", line, e)
+    
+    
+    def _append_new_message(self, time_str, sender, raw):
+        new_message = Message()
+        new_message.sender = sender
+        new_message.time = self.current_date + ' ' + time_str
+        if match('^\[\S+\]$', raw):
+            new_message.others = raw.replace('[', '').replace(']', '')
+        elif self._special_case and raw in ('圖片', '貼圖'):
+            new_message.others = raw
+        else:
+            new_message.raw = encrpyt_raw_text(raw)
+        self._result_list.append(new_message.dict())
     
     
     def export(self):
-        return dumps(self.result_list)
+        return dumps(self._result_list)
+    
+
+if __name__ == '__main__':
+    parser = LineLogParser('/Users/alex/Desktop/LINE TEXT/[LINE]江姿燕.txt')
+    with open('/Users/alex/Desktop/testlinelog.json', 'w') as file:
+        file.write(parser.export())

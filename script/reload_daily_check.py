@@ -64,5 +64,6 @@ if __name__ == '__main__':
         end_date   = [ int(i) for i in argv[4].split('/') ]
         commit = False if len(argv) == 6 and argv[5] == 'nocommit' else True
         one_user(int(argv[2]), tuple(start_date), tuple(end_date), commit=commit)
-
+    elif len(argv) == 2 and argv[1] == 'help':
+        print("USAGE: python3 reload_daily_check.py oneuser 5(user_id) 5/12(start_date) 5/20(end_date)")
 

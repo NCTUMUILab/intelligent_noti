@@ -184,3 +184,30 @@ def check_user_daily(user_id):
          if b[1] > 5:
              blacklist.append(b[0])
     return render_template("admin/each_user_daily.html", blacklist=str(blacklist), checks=user_daily, username=User.query.filter_by(id=user_id).first().username, mean=esm_done_mean, contacts_count=contacts_count, completed_count=completed_count)
+
+@admin.route('/balance')
+@admin_only
+def balance_participant():
+    users = User.query.filter_by(is_valid=True)
+    stat = {}
+    stat['total_count'] = 0
+    stat['student'] = { 'male': 0, 'female': 0 }
+    stat['worker']  = { 'male': 0, 'female': 0 }
+    stat['age'] = [0, 0, 0, 0, 0]
+    stat['noti_contact'] = [ [0, 0, 0, 0] , [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    
+    for user in users:
+        stat['total_count'] += 1
+        stat['student' if user.is_student else 'worker']['male' if user.is_male else 'female'] += 1
+        stat['noti_contact'][user.num_of_noti][user.num_of_contacts] += 1
+        if user.age <= 25:
+            stat['age'][0] += 1
+        elif 25 < user.age <= 30:
+            stat['age'][1] += 1
+        elif 30 < user.age <= 35:
+            stat['age'][2] += 1
+        elif 35 < user.age <= 40:
+            stat['age'][3] += 1
+        else:
+            stat['age'][4] += 1
+    return render_template("admin/balance.html", stat=stat)

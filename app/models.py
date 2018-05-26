@@ -13,6 +13,12 @@ class User(UserMixin, db.Model):
     self_q_completed = db.Column(db.Boolean)
     created_at = db.Column(db.DateTime, default=datetime.now)
     in_progress = db.Column(db.Boolean)
+    is_student = db.Column(db.Boolean)
+    is_male = db.Column(db.Boolean)
+    num_of_noti = db.Column(db.SmallInteger)
+    num_of_contacts = db.Column(db.SmallInteger)
+    age = db.Column(db.SmallInteger)
+    is_valid = db.Column(db.Boolean)
 
 
 class Result(db.Model):
@@ -21,8 +27,8 @@ class Result(db.Model):
     user = db.Column(db.String(256)) # device_id
     r_id = db.Column(db.Integer)
     raw = db.Column(db.Text)
-    date = db.Column(db.DateTime) # time of get sensor data
-    created_at = db.Column(db.DateTime, default=datetime.now) # time of upload data
+    date = db.Column(db.DateTime) # time of getting sensor data in cellphone
+    created_at = db.Column(db.DateTime, default=datetime.now) # time of uploading data to server
 
     def __init__(self, r):
         self.r_type = r['type']

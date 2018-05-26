@@ -130,12 +130,12 @@ class Check:
         self.im_notification_count = self._count_im_noti(noti_day_query)
         print("\tSEND: {}, DONE: {}, NOTI: {}".format(self.send_esm_count, self.esm_done_count, self.im_notification_count))
         
-        tmp = self._check_sensor_data()
-        self.accessibility = tmp['acc']
-        self.noti_alive = tmp['noti_alive']
-        self.no_result_lost = tmp['no_result_lost']
-        self.result_incomplete = tmp['result_incomplete']
-        self.time_list = tmp['time_list']
+        check_sensor_dict = self._check_sensor_data()
+        self.accessibility = check_sensor_dict['acc']
+        self.noti_alive = check_sensor_dict['noti_alive']
+        self.no_result_lost = check_sensor_dict['no_result_lost']
+        self.result_incomplete = check_sensor_dict['result_incomplete']
+        self.time_list = check_sensor_dict['time_list']
         print('\t{}'.format(self.time_list))
         
         self._check_valid()

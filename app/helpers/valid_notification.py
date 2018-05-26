@@ -1,5 +1,5 @@
 def valid_notification(app, ticker, title, text, sub_text):
-	if app == 'com.facebook.orca':
+	if app in ('com.facebook.orca', 'com.facebook.mlite'):
 		is_valid = True
 		## if the notification is not what we want
 		if "對話中有新訊息" in ticker or \
@@ -23,7 +23,7 @@ def valid_notification(app, ticker, title, text, sub_text):
 				is_valid = True
 		return is_valid
 	
-	elif app == 'jp.naver.line.android':
+	elif app in ('jp.naver.line.android', 'com.linecorp.linelite'):
 		is_valid = True
 		## if the notification is not what we want
 		if "You have a new message" in ticker or \
