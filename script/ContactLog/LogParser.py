@@ -108,10 +108,13 @@ class FacebookLogParser:
         with open(json_path) as file:
             ori_dict = load(file)
         self.sender_name = to_unicode(ori_dict['title'])
-        print("\tPARSING {}'S LOG ... ".format(self.sender_name), end='')
+        print("\tPARSING {}'S LOG ... ".format(self.sender_name))
+        if not ori_dict.get('messages'):
+            print("\n\t\tERROR: on messages in JSON")
+            return
         for msg_dict in ori_dict['messages']:
             self._result_list.append( self._convert_msg_dict(msg_dict) )
-        print("COMPLETE")
+        print("\tCOMPLETE")
     
     def _convert_msg_dict(self, msg_dict):
         message = Message()
@@ -135,10 +138,12 @@ class FacebookLogParser:
             message.others = "plan"
         elif 'audio_files' in msg_dict:
             message.others = "audio"
+        elif 'reactions' in msg_dict:
+            message.others = "reaction"
         elif len(msg_dict) == 3:
             message.others = "empty"
         else:
-            print("Attention:", msg_dict)
+            print("OTHER TYPE OF MESSAGE:", msg_dict)
         
         return message.dict()
     

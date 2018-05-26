@@ -13,6 +13,12 @@ class User(UserMixin, db.Model):
     self_q_completed = db.Column(db.Boolean)
     created_at = db.Column(db.DateTime, default=datetime.now)
     in_progress = db.Column(db.Boolean)
+    is_student = db.Column(db.Boolean)
+    is_male = db.Column(db.Boolean)
+    num_of_noti = db.Column(db.SmallInteger)
+    num_of_contacts = db.Column(db.SmallInteger)
+    age = db.Column(db.SmallInteger)
+    is_valid = db.Column(db.Boolean)
 
 
 class Result(db.Model):
