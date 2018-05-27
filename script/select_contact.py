@@ -332,5 +332,96 @@ with open(mobileID+".csv", 'w', newline='') as f:
     final_data = [["Total",final_notification_count,"",final_self_closeness/questionniare_count,float(final_self_inter)/questionniare_count,float(final_self_response)/questionniare_count,final_closeness/final_ESM_count,final_inter/final_percept,final_resp/final_motivation_count,float(final_importance)/final_ESM_count,float(final_urgence)/final_ESM_count,int(final_ESM_count), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
     writer.writerows(final_data)
 
+    writer.writerows(blank)
+    writer.writerows(blank)
+    writer.writerows(blank)
+
+    contact_title = [["name","IOS(1-7)","URCS(1-7)","Depandance(1-5)","Mobile Maintainace(1-5)","Interruptibility(1-5)","Obligation To Answer(1-5)","Ansering Expectation(1-5)"]]
+    writer.writerows(contact_title)
+
+    final_IOS = 0
+    final_URCS = 0
+    final_depandance = 0
+    final_mobile_maintainace = 0
+    final_obligation_to_answer = 0
+    final_answering_expectation = 0
+    final_interruptibility = 0
+    contact_count = 0
+
+    cursor.execute("SELECT * FROM contact WHERE uid ="+uid)  #26:IOS    #27~38: URCS       #39~45:depandance      #46~54:mobile mantainace      #55~60: obligation to answer       #61~66: expection to answer
+    contact_list = cursor.fetchall()
+
+    for contact in contact_list:
+        contact_count+=1
+        name = contact[67]
+        print(name)
+        depandance = 0
+        for i in range(39, 46):
+            if(i == 41 or i==45):
+                depandance += float((int(contact[i])-6)*(-1))
+            else:
+                depandance += float(contact[i])
+
+        depandance /= 7
+        final_depandance += depandance
+
+        mobile_maintainace = 0
+        for i in range(46,55):
+            mobile_maintainace += float(contact[i])
+
+        mobile_maintainace /= 9
+        final_mobile_maintainace += mobile_maintainace
+
+        answering_expectation = 0
+        for i in range(61,67):
+            answering_expectation += float(contact[i])
+
+        answering_expectation /= 6
+        final_answering_expectation += answering_expectation
+
+
+        obligation_to_answer = 0
+        for i in range(55,61):
+            obligation_to_answer += float(contact[i])
+
+        obligation_to_answer /= 6
+        final_obligation_to_answer += obligation_to_answer
+
+        IOS = int(contact[26])
+        final_IOS += IOS
+        URCS = 0
+        for i in range(27,39):
+            URCS += float(contact[i])
+        URCS /= 12
+        final_URCS += URCS
+
+        interruptibility = int(contact[18])
+        final_interruptibility += interruptibility
+
+        #print(interruptibility)
+        contact_data = [[name,IOS,URCS,depandance,mobile_maintainace,interruptibility,obligation_to_answer,answering_expectation]]
+        writer.writerows(contact_data)
+
+        """
+        Interruptibility_list.append(interruptibility)
+        Obligation_to_answer_list.append(obligation_to_answer)
+        Answering_expectation_list.append(answering_expectation)
+        Mobile_maintainace_list.append(mobile_maintainace)
+        Depandance_list.append(depandance)
+        IOS_list.append(IOS)
+        URCS_list.append(URCS)
+        """
+
+
+
+    final_IOS = float(final_IOS)/contact_count
+    final_URCS = float(final_URCS)/contact_count
+    final_depandance = float(final_depandance)/contact_count
+    final_mobile_maintainace = float(final_mobile_maintainace)/contact_count
+    final_obligation_to_answer = float(final_obligation_to_answer)/contact_count
+    final_answering_expectation = float(final_answering_expectation)/contact_count
+    final_interruptibility = float(final_interruptibility)/contact_count
+    total_contact_data = [["Total",final_IOS,final_URCS,final_depandance,final_mobile_maintainace,final_interruptibility,final_obligation_to_answer,final_answering_expectation]]
+    writer.writerows(total_contact_data)
 
 db.close()
