@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template
 from app.models import Result, User, ContactQuestionnaire, Notification, ESMCount, APPState
-from app.helpers.valid_notification import valid_notification
+from helpers.valid_notification import valid_notification
 from app import db
 from app import app as flask_app
 from datetime import datetime, timedelta, timezone

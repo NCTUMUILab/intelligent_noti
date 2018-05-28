@@ -4,7 +4,7 @@ import sys, os
 sys.path.append(os.path.abspath(os.path.join('..')))
 from app import db
 from app.models import DailyCheck, User, DeviceID, Notification, Result, DailyCheck
-from app.helpers.daily_check import Check
+from helpers.daily_check import Check
 from sys import argv
 
 def get_new_dailycheck(check):

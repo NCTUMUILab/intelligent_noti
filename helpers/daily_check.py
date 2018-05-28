@@ -1,5 +1,5 @@
 from app.models import DailyCheck, ESMCount, DeviceID, Notification, Result
-from app.helpers.valid_notification import valid_notification
+from helpers.valid_notification import valid_notification
 from datetime import datetime, timedelta
 from json import dumps, loads
 
