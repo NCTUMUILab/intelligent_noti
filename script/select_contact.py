@@ -5,7 +5,7 @@ import requests
 import secrete as secrete
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..')))
-from app.helpers.valid_notification import valid_notification
+from helpers.valid_notification import valid_notification
 
 def ESM_amount(ele):
     return int(ele[4])

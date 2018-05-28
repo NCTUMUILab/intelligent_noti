@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, make_response
 from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, User
-# from app.helpers import find_questionnaire
 from app import db
 from json import dumps, loads, load
 from functools import wraps

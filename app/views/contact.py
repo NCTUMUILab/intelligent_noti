@@ -3,7 +3,6 @@ from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, User
 from app.forms import FacebookLoginForm, FacebookResultForm
 from app.get_facebook import fbMessenger, ThreadInfo
-# from app.helpers import find_questionnaire
 from app import db, on_local
 from json import loads, dumps
 
