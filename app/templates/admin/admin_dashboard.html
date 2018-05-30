@@ -19,7 +19,7 @@
 					<th>ID</th>
 					<th>name</th>
 					<th>device ID</th>
-					<th>in progress</th>
+					<th>email</th>
 					<th>state</th>
 				</thead>
 				<tbody>
@@ -28,7 +28,7 @@
 						<td>{{ user.id }}</td>
 						<td><a href="/admin/daily/user/{{user.id}}">{{ user.name }}</a></td>
 						<td>{{ user.device_id }}</td>
-						<td>{{ user.in_progress }}</td>
+						<td>{{ user.email }}</td>
 						<td>
 							{% for s in user.state %}
 								{{ s.key}}: {{ s.date }}

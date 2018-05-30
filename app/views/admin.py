@@ -23,7 +23,7 @@ def admin_dashboard():
         current = {}
         current['id'] = user.id
         current['name'] = user.username
-        current['in_progress'] = user.in_progress
+        current['email'] = user.email
         d = DeviceID.query.filter_by(user_id=user.id).first()
         if d:
             current['device_id'] = d.device_id
