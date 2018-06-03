@@ -47,6 +47,10 @@ with open(filename, 'r') as f:
             if(row[42]==mobileID):
                 data=(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15],row[16],row[17],row[18],row[19],row[20],row[21],row[22],row[23],row[24],row[25],row[26],row[27],row[28],row[29],row[30],row[31],row[32],row[33],row[34],row[35],row[36],row[37],row[38],html.unescape(row[39]),html.unescape(row[40]),row[41],row[42],row[43],row[44],row[45],row[46])
                 # print(data)
+                time = row[43]
+                sql = "UPDATE notification SET esm_done = True WHERE device_id ="+mobileID+" and " #this sql need to be completed
+                cursor.execute(sql)
+                db.commit()
                 """
                 data = {
                 'StartDate': row[0],
