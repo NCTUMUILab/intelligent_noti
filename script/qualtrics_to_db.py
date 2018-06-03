@@ -3,12 +3,13 @@ import MySQLdb
 import csv, sys
 import html
 import secrete as secrete
+from datetime import datetime
 from tkinter import filedialog
 from tkinter import *
 
 root = Tk().withdraw()
 filename =  filedialog.askopenfilename(initialdir = "/",title = "Select ESM file",filetypes = (("csv files","*.csv"),("all files","*.*")))
-
+# filename = sys.argv[2]
 
 db = MySQLdb.connect(secrete.db_url,secrete.user_name,secrete.password,secrete.db)
 
@@ -37,6 +38,12 @@ add_data2 = ("INSERT INTO esm_data"
                "VALUES (%s,%s)")
 
 count = 0
+match = [0, 0]
+
+sql = "UPDATE notification SET esm_done = False WHERE device_id=\"{0}\" ;".format(mobileID) #this sql need to be completed
+cursor.execute(sql)
+db.commit()
+
 with open(filename, 'r') as f:
     reader = csv.reader(f)
     try:
@@ -46,10 +53,17 @@ with open(filename, 'r') as f:
                 continue
             if(row[42]==mobileID):
                 data=(row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],row[9],row[10],row[11],row[12],row[13],row[14],row[15],row[16],row[17],row[18],row[19],row[20],row[21],row[22],row[23],row[24],row[25],row[26],row[27],row[28],row[29],row[30],row[31],row[32],row[33],row[34],row[35],row[36],row[37],row[38],html.unescape(row[39]),html.unescape(row[40]),row[41],row[42],row[43],row[44],row[45],row[46])
-                # print(data)
                 time = row[43]
-                sql = "UPDATE notification SET esm_done = True WHERE device_id ="+mobileID+" and " #this sql need to be completed
-                cursor.execute(sql)
+                cursor = db.cursor()
+                cursor.execute("SELECT count(*) From notification WHERE device_id=\"{0}\" and datetime=\"{1}\";".format(mobileID, time)) #Q4: relationship, Q9: closeness, Q2_1: interruptibility, Q3: response,
+                cnt= cursor.fetchall()
+                if cnt[0][0]:
+                    match[0] += 1
+                else:
+                    match[1] ++ 1
+
+                sql = "UPDATE notification SET esm_done = True WHERE device_id =\"{0}\" and datetime=\"{1}\";".format(mobileID, time) #this sql need to be completed
+                affected_rows = cursor.execute(sql)
                 db.commit()
                 """
                 data = {
@@ -111,3 +125,4 @@ db.commit()
 cursor.close()
 # disconnect from server
 db.close()
+print(match)

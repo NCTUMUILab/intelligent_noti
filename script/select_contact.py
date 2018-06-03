@@ -6,7 +6,6 @@ import secrete as secrete
 import sys, os
 sys.path.append(os.path.abspath(os.path.join('..')))
 from helpers.valid_notification import valid_notification
-
 def ESM_amount(ele):
     return int(ele[4])
 
@@ -22,7 +21,7 @@ db = MySQLdb.connect(secrete.db_url,secrete.user_name,secrete.password,secrete.d
 cursor = db.cursor()
 
 mobileID = sys.argv[1]
-#mobileID = "869124021392335"
+# mobileID = "869124021392335"
 
 cursor.execute("SELECT user_id FROM deviceID WHERE device_id ="+mobileID)
 uid = str(cursor.fetchall()[0][0])
@@ -204,6 +203,23 @@ with open(mobileID+".csv", 'w', newline='') as f:
     writer.writerows(blank)
     writer.writerows(blank)
 
+
+    result = [["時間", "經緯度", "App", "title", "sub_text", "text", "ticker_text"]]
+    writer.writerows(result)
+
+    cursor.execute("SELECT * From notification WHERE device_id=\"{0}\" and send_esm=1 and esm_done=0;".format(mobileID)) #Q4: relationship, Q9: closeness, Q2_1: interruptibility, Q3: response,
+
+
+    esm_not_done_list = cursor.fetchall()
+
+    for e in esm_not_done_list:
+        map_url = "https://www.google.com.tw/maps/@{0},{1},16.32z".format(e[6], e[5])
+        writer.writerows( [[e[4], map_url] + list(e[7:12])]  )
+
+    writer.writerows(blank)
+    writer.writerows(blank)
+    writer.writerows(blank)
+
     final_self_closeness = 0
     final_self_response = 0
     final_self_inter = 0
@@ -238,12 +254,12 @@ with open(mobileID+".csv", 'w', newline='') as f:
     contact_list.sort(reverse=True, key=ESM_amount)
     for contact in contact_list:
         if(float(contact[3]) != 0):
-            avg_intr = str(float(contact[1])/float(contact[3]))
+            avg_intr = str(round(float(contact[1])/float(contact[3]),2))
             final_closeness += float(contact[13])
             final_percept += float(contact[3])
         else:
             avg_intr = "no data"
-        avg_closeness = str(float(contact[13])/float(contact[4]))
+        avg_closeness = str(round(float(contact[13])/float(contact[4]),2))
         motivation_sum = contact[5]+ contact[6]+contact[7]+contact[8]+contact[9]+contact[10]+contact[11]
         contact_5 = str(contact[5])+" ("+str(float(contact[5])/float(contact[4])*100)+"%)"
         contact_6 = str(contact[6])+" ("+str(float(contact[6])/float(contact[4])*100)+"%)"
@@ -254,14 +270,14 @@ with open(mobileID+".csv", 'w', newline='') as f:
         contact_11 = str(contact[11])+" ("+str(float(contact[11])/float(contact[4])*100)+"%)"
         contact_12 = str(contact[12])+" ("+str(float(contact[12])/float(contact[4])*100)+"%)"
 
-        avg_importance = float(contact[14])/float(contact[4])
-        avg_urgence = float(contact[15])/float(contact[4])
+        avg_importance = round(float(contact[14])/float(contact[4]),2)
+        avg_urgence = round(float(contact[15])/float(contact[4]),2)
 
 
         if(motivation_sum == 0):
             response_motivation = "no data"
         else:
-            response_motivation = str(7 * float(contact[5])/float(motivation_sum) + 6 * float(contact[6])/float(motivation_sum) + 5 * float(contact[7])/float(motivation_sum) + 4 * float(contact[8])/float(motivation_sum) + 3 * float(contact[9])/float(motivation_sum) + 2 * float(contact[10])/float(motivation_sum) + 1 * float(contact[11])/float(motivation_sum))
+            response_motivation = round(7 * float(contact[5])/float(motivation_sum) + 6 * float(contact[6])/float(motivation_sum) + 5 * float(contact[7])/float(motivation_sum) + 4 * float(contact[8])/float(motivation_sum) + 3 * float(contact[9])/float(motivation_sum) + 2 * float(contact[10])/float(motivation_sum) + 1 * float(contact[11])/float(motivation_sum), 2)
             final_resp += 7 * float(contact[5]) + 6 * float(contact[6])+ 5 * float(contact[7])+ 4 * float(contact[8]) + 3 * float(contact[9])+ 2 * float(contact[10]) + 1 * float(contact[11])
             final_motivation_count += motivation_sum
 
@@ -329,7 +345,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
     print("questionnarie conact: ",str(questionniare_count))
     if(questionniare_count==0):
         questionniare_count = 1
-    final_data = [["Total",final_notification_count,"",final_self_closeness/questionniare_count,float(final_self_inter)/questionniare_count,float(final_self_response)/questionniare_count,final_closeness/final_ESM_count,final_inter/final_percept,final_resp/final_motivation_count,float(final_importance)/final_ESM_count,float(final_urgence)/final_ESM_count,int(final_ESM_count), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
+    final_data = [["Total",round(final_notification_count, 2),"",round(final_self_closeness/questionniare_count, 2),round(float(final_self_inter)/questionniare_count,2),round(float(final_self_response)/questionniare_count,2),round(final_closeness/final_ESM_count,2),round(final_inter/final_percept,2),round(final_resp/final_motivation_count,2),round(float(final_importance)/final_ESM_count,2),round(float(final_urgence)/final_ESM_count,2),int(final_ESM_count), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
     writer.writerows(final_data)
 
     writer.writerows(blank)
@@ -399,7 +415,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
         final_interruptibility += interruptibility
 
         #print(interruptibility)
-        contact_data = [[name,IOS,URCS,depandance,mobile_maintainace,interruptibility,obligation_to_answer,answering_expectation]]
+        contact_data = [[name,round(IOS, 2),round(URCS, 2),round(depandance, 2),round(mobile_maintainace, 2),round(interruptibility, 2),round(obligation_to_answer, 2),round(answering_expectation, 2)]]
         writer.writerows(contact_data)
 
         """
@@ -414,13 +430,13 @@ with open(mobileID+".csv", 'w', newline='') as f:
 
 
 
-    final_IOS = float(final_IOS)/contact_count
-    final_URCS = float(final_URCS)/contact_count
-    final_depandance = float(final_depandance)/contact_count
-    final_mobile_maintainace = float(final_mobile_maintainace)/contact_count
-    final_obligation_to_answer = float(final_obligation_to_answer)/contact_count
-    final_answering_expectation = float(final_answering_expectation)/contact_count
-    final_interruptibility = float(final_interruptibility)/contact_count
+    final_IOS = round(float(final_IOS)/contact_count, 2)
+    final_URCS = round(float(final_URCS)/contact_count, 3)
+    final_depandance = round(float(final_depandance)/contact_count, 2)
+    final_mobile_maintainace = round(float(final_mobile_maintainace)/contact_count, 2)
+    final_obligation_to_answer = round(float(final_obligation_to_answer)/contact_count, 2)
+    final_answering_expectation = round(float(final_answering_expectation)/contact_count, 2)
+    final_interruptibility = round(float(final_interruptibility)/contact_count, 2)
     total_contact_data = [["Total",final_IOS,final_URCS,final_depandance,final_mobile_maintainace,final_interruptibility,final_obligation_to_answer,final_answering_expectation]]
     writer.writerows(total_contact_data)
 
