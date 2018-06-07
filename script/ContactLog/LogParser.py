@@ -50,14 +50,18 @@ class FacebookJSONFilesFinder:
     def _get_name_path_dict(self):
         for subdir in self._msg_dir_list:
             json_path = "{}/{}/message.json".format(self._homedir_path, subdir)
-            if path.exists(json_path):
+            if path.isdir("{}/{}".format(self._homedir_path, subdir)) and path.exists(json_path):
                 with open(json_path) as file:
-                    file_content_dict = load(file)
+                    try:
+                        file_content_dict = load(file)
+                    except UnicodeDecodeError:
+                        print("\t\tJSON_LOAD_ERR:", json_path)
+                        continue
                 try:
                     contact_name = to_unicode(file_content_dict['title'])
                     self._name_path_dict[contact_name] = json_path
                 except KeyError:
-                    pass
+                    continue
     
     def _find_dirs(self, contact_list):
         remain_contact_set = set(contact_list)
