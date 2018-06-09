@@ -60,7 +60,7 @@ with open(filename, 'r') as f:
                 if cnt[0][0]:
                     match[0] += 1
                 else:
-                    match[1] ++ 1
+                    match[1] += 1
 
                 sql = "UPDATE notification SET esm_done = True WHERE device_id =\"{0}\" and datetime=\"{1}\";".format(mobileID, time) #this sql need to be completed
                 affected_rows = cursor.execute(sql)
