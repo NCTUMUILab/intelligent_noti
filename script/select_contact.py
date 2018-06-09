@@ -246,7 +246,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
     final_notification_count = 0
 
 
-    result = [["name","notification 總量","關係","自評 Closeness","自評 Interruptibility","自評 回覆動機","Closeness","Interruptibility","回覆動機","重要程度","緊急程度", "total ESM", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
+    result = [["name","notification 總量","關係","Contact Questionnaire 自評資料( Closeness, Interruptibility, 回覆動機)","ESM 資料( Closeness, Interruptibility, 回覆動機, 重要程度, 緊急程度)","自評 Closeness","自評 Interruptibility","自評 回覆動機","Closeness","Interruptibility","回覆動機","重要程度","緊急程度", "total ESM", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
     writer.writerows(result)
 
     #contact = ["name",interruptibility, respond, percept_count, total ESM, 立即回覆, 在數分鐘之內,在半小時以內,一小時以內,隔數小時之後，但會在當天回覆,不會在當天回覆,不會回覆,沒有預計,closeness, importance, urgence]
@@ -331,8 +331,10 @@ with open(mobileID+".csv", 'w', newline='') as f:
                 noti_count = data["count"]
                 break
 
+        self_report_data = str(self_closeness).ljust(15) +str(self_interr).ljust(15) +str(self_response).ljust(15)
+        esm_data = str(avg_closeness).ljust(15)+str(avg_intr).ljust(15)+str(response_motivation).ljust(15)+"      "+str(avg_importance).ljust(15)+str(avg_urgence).ljust(15)
         final_notification_count += noti_count
-        result_data = [[contact[0],noti_count,relationship,self_closeness,self_interr,self_response,avg_closeness,avg_intr,response_motivation,avg_importance,avg_urgence, contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
+        result_data = [[contact[0],noti_count,relationship,self_report_data,esm_data,self_closeness,self_interr,self_response,avg_closeness,avg_intr,response_motivation,avg_importance,avg_urgence, contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
         writer.writerows(result_data)
 
     notification_list.sort(reverse=True, key=Noti_amount)
@@ -345,7 +347,11 @@ with open(mobileID+".csv", 'w', newline='') as f:
     print("questionnarie conact: ",str(questionniare_count))
     if(questionniare_count==0):
         questionniare_count = 1
-    final_data = [["Total",round(final_notification_count, 2),"",round(final_self_closeness/questionniare_count, 2),round(float(final_self_inter)/questionniare_count,2),round(float(final_self_response)/questionniare_count,2),round(final_closeness/final_ESM_count,2),round(final_inter/final_percept,2),round(final_resp/final_motivation_count,2),round(float(final_importance)/final_ESM_count,2),round(float(final_urgence)/final_ESM_count,2),int(final_ESM_count), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
+    final_self_report_data = str(round(final_self_closeness/questionniare_count, 2)).ljust(15)+str(round(float(final_self_inter)/questionniare_count,2)).ljust(15)+str(round(float(final_self_response)/questionniare_count,2))
+    final_esm_data = str(round(final_closeness/final_ESM_count,2)).ljust(15)+str(round(final_inter/final_percept,2)).ljust(15)+str(round(final_resp/final_motivation_count,2)).ljust(15)+"            "+str(round(float(final_importance)/final_ESM_count,2)).ljust(15)+str(round(float(final_urgence)/final_ESM_count,2)).ljust(15)
+
+
+    final_data = [["Total",round(final_notification_count, 2),"",final_self_report_data,final_esm_data,round(final_self_closeness/questionniare_count, 2),round(float(final_self_inter)/questionniare_count,2),round(float(final_self_response)/questionniare_count,2),round(final_closeness/final_ESM_count,2),round(final_inter/final_percept,2),round(final_resp/final_motivation_count,2),round(float(final_importance)/final_ESM_count,2),round(float(final_urgence)/final_ESM_count,2),int(final_ESM_count), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
     writer.writerows(final_data)
 
     writer.writerows(blank)
