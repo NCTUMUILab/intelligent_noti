@@ -246,7 +246,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
     final_notification_count = 0
 
 
-    result = [["name","notification 總量","關係","Contact Questionnaire 自評資料( Closeness, Interruptibility, 回覆動機)","ESM 資料( Closeness, Interruptibility, 回覆動機, 重要程度, 緊急程度)","自評 Closeness","自評 Interruptibility","自評 回覆動機","Closeness","Interruptibility","回覆動機","重要程度","緊急程度", "total ESM", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
+    result = [["name","notification 總量","關係","Contact Questionnaire 自評資料( Closeness, Interruptibility, 回覆動機)", "total ESM","ESM 資料( Closeness, Interruptibility, 回覆動機, 重要程度, 緊急程度)","自評 Closeness","自評 Interruptibility","自評 回覆動機","Closeness","Interruptibility","回覆動機","重要程度","緊急程度", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
     writer.writerows(result)
 
     #contact = ["name",interruptibility, respond, percept_count, total ESM, 立即回覆, 在數分鐘之內,在半小時以內,一小時以內,隔數小時之後，但會在當天回覆,不會在當天回覆,不會回覆,沒有預計,closeness, importance, urgence]
@@ -309,18 +309,25 @@ with open(mobileID+".csv", 'w', newline='') as f:
                 final_self_inter += float(questionniare[3])
 
                 if(self_response=="通常立即回覆"):
+                    self_response="7-通常立即回覆"
                     final_self_response += 7
                 elif(self_response=="通常間隔數分鐘"):
+                    self_response="6-通常間隔數分鐘"
                     final_self_response += 6
                 elif(self_response=="通常半小時以內"):
+                    self_response="5-通常半小時以內"
                     final_self_response += 5
                 elif(self_response=="通常一小時以內"):
+                    self_response="4-通常一小時以內"
                     final_self_response += 4
                 elif(self_response=="通常幾小時內（當天）"):
+                    self_response="3-通常幾小時內（當天）"
                     final_self_response += 3
                 elif(self_response=="通常沒有在當天回覆"):
+                    self_response="2-通常沒有在當天回覆"
                     final_self_response += 2
                 elif(self_response=="通常不回覆"):
+                    self_response="1-通常不回覆"
                     final_self_response += 1
                 final_self_closeness += float(questionniare[2])
                 questionniare_count += 1
@@ -334,7 +341,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
         self_report_data = str(self_closeness).ljust(15) +str(self_interr).ljust(15) +str(self_response).ljust(15)
         esm_data = str(avg_closeness).ljust(15)+str(avg_intr).ljust(15)+str(response_motivation).ljust(15)+"      "+str(avg_importance).ljust(15)+str(avg_urgence).ljust(15)
         final_notification_count += noti_count
-        result_data = [[contact[0],noti_count,relationship,self_report_data,esm_data,self_closeness,self_interr,self_response,avg_closeness,avg_intr,response_motivation,avg_importance,avg_urgence, contact[4],contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
+        result_data = [[contact[0],noti_count,relationship,self_report_data, contact[4], esm_data,self_closeness,self_interr,self_response,avg_closeness,avg_intr,response_motivation,avg_importance,avg_urgence,contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
         writer.writerows(result_data)
 
     notification_list.sort(reverse=True, key=Noti_amount)
