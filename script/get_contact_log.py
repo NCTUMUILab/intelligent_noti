@@ -34,6 +34,7 @@ def get_userinfo_from_server():
 def get_facebook_log(username, fb_list):
     print("FB CONTACT:", fb_list)
     fb_homedir_path = gui_get_path('d')
+    print("START FINDING FILE")
     finder = FacebookJSONFilesFinder(fb_list, fb_homedir_path)
     file_path_list = finder.export()
     for file_path in file_path_list:

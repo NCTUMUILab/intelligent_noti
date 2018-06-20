@@ -50,14 +50,18 @@ class FacebookJSONFilesFinder:
     def _get_name_path_dict(self):
         for subdir in self._msg_dir_list:
             json_path = "{}/{}/message.json".format(self._homedir_path, subdir)
-            if path.exists(json_path):
+            if path.isdir("{}/{}".format(self._homedir_path, subdir)) and path.exists(json_path):
                 with open(json_path) as file:
-                    file_content_dict = load(file)
+                    try:
+                        file_content_dict = load(file)
+                    except UnicodeDecodeError:
+                        print("\t\tJSON_LOAD_ERR:", json_path)
+                        continue
                 try:
                     contact_name = to_unicode(file_content_dict['title'])
                     self._name_path_dict[contact_name] = json_path
                 except KeyError:
-                    pass
+                    continue
     
     def _find_dirs(self, contact_list):
         remain_contact_set = set(contact_list)
@@ -78,7 +82,7 @@ class FacebookJSONFilesFinder:
                 else:
                     print("\t{} NOT FOUND".format(name))
         else:
-            print("\tFOUND ALL CONTACTS:", self._target_dir_list)
+            print("\tFOUND ALL CONTACTS")
         
     def search(self, pinyin):
         search_result = []
@@ -200,9 +204,15 @@ class LineLogParser:
     
     
     def _check_new_message(self, line):
-        if match('^\d{1,2}:\d{2}\t', line):
-            time_str, sender, raw = line.split('\t')
-            self._append_new_message(time_str, sender, raw)
+        if match('^\d{1,2}:\d{2}\t', line): # 3:12  sender  text
+            try:
+                tab_split_list = line.split('\t')
+                time_str = tab_split_list[0]
+                sender   = tab_split_list[1]
+                raw = tab_split_list[2]
+                self._append_new_message(time_str, sender, raw)
+            except ValueError:
+                print("4", line)
             return True
         
         elif match('^\d{2}:\d{2} [AP]M\t', line): # 01:22 PM

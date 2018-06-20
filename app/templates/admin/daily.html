@@ -54,7 +54,7 @@
 		<form action="{{ url_for('admin.daily_check_post') }}" method="POST">
 			<div class="form-group">
 				<input type="hidden" name="check" value='{{ check_json|tojson|safe }}'>
-				<input type="hidden" name="yesterday" value='{{ yesterday }}'>
+				<input type="hidden" name="date" value='{{ date }}'>
 				<button type="submit" class="btn btn-primary" {{ 'disabled' if is_today_checked }}>Chectout</button>
 			</div>
 		</form>

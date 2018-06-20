@@ -14,11 +14,12 @@ admin = Blueprint('admin', __name__)
 def mean(l):
     return sum(l) / len(l) if len(l) else 0
 
+
 @admin.route('/')
 @admin_only
 def admin_dashboard():
     result_list = []
-    users = User.query.filter_by(in_progress=True)
+    users = User.query.filter_by(in_progress=True, is_valid=True)
     for user in users:
         current = {}
         current['id'] = user.id
@@ -130,29 +131,35 @@ def add_new_contact():
 @admin.route('/daily')
 @admin_only
 def daily_check_get():
-    yesterday_record = request.args.get('d') == 'y'
-    if yesterday_record:
-        start_time = datetime.combine(date.today() - timedelta(1), datetime.min.time())
+    date_str = request.args.get('date')
+    if date_str:
+        if date_str == 'y':
+            start_time = datetime.combine(date.today() - timedelta(1), datetime.min.time())
+        else:
+            month = int(date_str[0])
+            day = int(date_str[1:])
+            start_time = datetime.combine(date(2018, month, day), datetime.min.time())
     else:
         start_time = datetime.combine(date.today(), datetime.min.time())
     print("DAY START: {}\n".format(start_time))
 
-    users = User.query.filter_by(in_progress=True)
+    users = User.query.filter_by(is_valid=True, in_progress=True)
     check_list = [ Check(user.username, user.id, user.created_at, start_time) for user in users ]
     [ check.run() for check in check_list ]
 
-    return render_template("admin/daily.html", users=check_list, is_today_checked=False, check_json=[ c.__dict__ for c in check_list ], yesterday=yesterday_record, date=start_time )
+    return render_template("admin/daily.html", users=check_list, is_today_checked=False, check_json=[ c.__dict__ for c in check_list ], date=start_time )
 
 
 @admin.route('/daily/post', methods=['POST'])
 @admin_only
 def daily_check_post():
     data_list = loads(request.form['check'])
-    day = date.today() - timedelta(1) if request.form['yesterday'] == 'True' else date.today()
+    start_date = datetime.strptime(request.form['date'], "%Y-%m-%d %H:%M:%S").date()
+    
     for check in data_list:
         new_check = DailyCheck(
             user_id = check['user_id'],
-            date = day,
+            date = start_date,
             send_esm_count = check['send_esm_count'],
             esm_done_count = check['esm_done_count'],
             accessibility = check['accessibility'],
@@ -165,6 +172,7 @@ def daily_check_post():
         db.session.add(new_check)
     db.session.commit()
     return "checked!"
+
 
 @admin.route('/daily/user/<int:user_id>')
 @admin_only
@@ -184,6 +192,7 @@ def check_user_daily(user_id):
          if b[1] > 5:
              blacklist.append(b[0])
     return render_template("admin/each_user_daily.html", blacklist=str(blacklist), checks=user_daily, username=User.query.filter_by(id=user_id).first().username, mean=esm_done_mean, contacts_count=contacts_count, completed_count=completed_count)
+    
 
 @admin.route('/balance')
 @admin_only
