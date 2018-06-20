@@ -82,7 +82,7 @@ class FacebookJSONFilesFinder:
                 else:
                     print("\t{} NOT FOUND".format(name))
         else:
-            print("\tFOUND ALL CONTACTS:", self._target_dir_list)
+            print("\tFOUND ALL CONTACTS")
         
     def search(self, pinyin):
         search_result = []
@@ -204,9 +204,15 @@ class LineLogParser:
     
     
     def _check_new_message(self, line):
-        if match('^\d{1,2}:\d{2}\t', line):
-            time_str, sender, raw = line.split('\t')
-            self._append_new_message(time_str, sender, raw)
+        if match('^\d{1,2}:\d{2}\t', line): # 3:12  sender  text
+            try:
+                tab_split_list = line.split('\t')
+                time_str = tab_split_list[0]
+                sender   = tab_split_list[1]
+                raw = tab_split_list[2]
+                self._append_new_message(time_str, sender, raw)
+            except ValueError:
+                print("4", line)
             return True
         
         elif match('^\d{2}:\d{2} [AP]M\t', line): # 01:22 PM
