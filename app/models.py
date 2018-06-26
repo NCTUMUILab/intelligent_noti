@@ -266,4 +266,5 @@ class APPState(db.Model):
     state_notification_sent_esm = db.Column(db.DateTime)
     state_wifi_upload = db.Column(db.DateTime)
     state_stream = db.Column(db.DateTime)
+    state_gps = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, default=datetime.now)
