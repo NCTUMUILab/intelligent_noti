@@ -19,6 +19,7 @@ class User(UserMixin, db.Model):
     num_of_contacts = db.Column(db.SmallInteger)
     age = db.Column(db.SmallInteger)
     is_valid = db.Column(db.Boolean)
+    test = db.Column(db.Boolean)
 
 
 class Result(db.Model):
