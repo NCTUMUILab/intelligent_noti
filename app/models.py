@@ -19,6 +19,7 @@ class User(UserMixin, db.Model):
     num_of_contacts = db.Column(db.SmallInteger)
     age = db.Column(db.SmallInteger)
     is_valid = db.Column(db.Boolean)
+    test = db.Column(db.Boolean)
 
 
 class Result(db.Model):
@@ -265,4 +266,5 @@ class APPState(db.Model):
     state_notification_sent_esm = db.Column(db.DateTime)
     state_wifi_upload = db.Column(db.DateTime)
     state_stream = db.Column(db.DateTime)
+    state_gps = db.Column(db.DateTime)
     created_at = db.Column(db.DateTime, default=datetime.now)
