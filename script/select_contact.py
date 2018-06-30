@@ -377,6 +377,22 @@ with open(mobileID+".csv", 'w', newline='') as f:
     final_interruptibility = 0
     contact_count = 0
 
+
+    cursor.execute("SELECT DISTINCT contact_name FROM contact_questionnaire WHERE user_id ="+uid)
+    selected_contact_list = cursor.fetchall()
+
+    cursor.execute("SELECT DISTINCT contact_name_line FROM contact_questionnaire WHERE user_id ="+uid)
+    selected_contact_list += cursor.fetchall()
+
+    selected_contact_list = []
+
+    for contact_item in selected_contact_list:
+        contact_item = contact_item[0]
+
+    print("selected contact:")
+    for contact_item in selected_contact_list:
+        print(contact_item)
+
     cursor.execute("SELECT * FROM contact WHERE uid ="+uid)  #26:IOS    #27~38: URCS       #39~45:depandance      #46~54:mobile mantainace      #55~60: obligation to answer       #61~66: expection to answer
     contact_list = cursor.fetchall()
 
@@ -384,6 +400,9 @@ with open(mobileID+".csv", 'w', newline='') as f:
         contact_count+=1
         name = contact[67]
         print(name)
+        if(name in selected_contact_list):
+            selected_contact_list.remove(name)
+            print("name exist: ",name)
         depandance = 0
         for i in range(39, 46):
             if(i == 41 or i==45):
@@ -441,7 +460,8 @@ with open(mobileID+".csv", 'w', newline='') as f:
         URCS_list.append(URCS)
         """
 
-
+    for selected_contact_name in selected_contact_list:
+        writer.writerows([selected_contact_name])
 
     final_IOS = round(float(final_IOS)/contact_count, 2)
     final_URCS = round(float(final_URCS)/contact_count, 3)
