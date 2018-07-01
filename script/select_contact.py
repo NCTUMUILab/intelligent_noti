@@ -378,18 +378,21 @@ with open(mobileID+".csv", 'w', newline='') as f:
     contact_count = 0
 
 
+    selected_contact_list_data = []
+
     cursor.execute("SELECT DISTINCT contact_name FROM contact_questionnaire WHERE user_id ="+uid)
-    selected_contact_list = cursor.fetchall()
+    selected_contact_list_data = cursor.fetchall()
 
     cursor.execute("SELECT DISTINCT contact_name_line FROM contact_questionnaire WHERE user_id ="+uid)
-    selected_contact_list += cursor.fetchall()
+    selected_contact_list_data += cursor.fetchall()
 
-    selected_contact_list = []
-
-    for contact_item in selected_contact_list:
-        contact_item = contact_item[0]
+    selected_contact_list = [0]*len(selected_contact_list_data)
 
     print("selected contact:")
+    for i in range(len(selected_contact_list_data)):
+        selected_contact_list[i] = selected_contact_list_data[i][0]
+
+    print("after:")
     for contact_item in selected_contact_list:
         print(contact_item)
 
@@ -461,7 +464,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
         """
 
     for selected_contact_name in selected_contact_list:
-        writer.writerows([selected_contact_name])
+        writer.writerows([[selected_contact_name]])
 
     final_IOS = round(float(final_IOS)/contact_count, 2)
     final_URCS = round(float(final_URCS)/contact_count, 3)
