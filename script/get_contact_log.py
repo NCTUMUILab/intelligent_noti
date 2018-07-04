@@ -41,7 +41,7 @@ def get_facebook_log(username, fb_list):
         parser = FacebookLogParser(file_path)
         with open("../userdata/{}/fb-{}.json".format(username, parser.sender_name), 'w') as export_file:
             export_file.write(parser.export())
-    print("{:=^40}\n".format(" FACEBOOK STAGE COMPLETED "))
+    print("{:=^60}\n".format(" FACEBOOK STAGE COMPLETED "))
     
 
 
