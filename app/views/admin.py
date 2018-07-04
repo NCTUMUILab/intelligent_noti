@@ -92,8 +92,7 @@ def get_esm():
         result_esm_list = []
         for device_id_user in device_id_list:
             print("DeviceID:", device_id_user.device_id)
-            esms = ESMCount.query.filter_by(device_id=device_id_user.device_id).all()
-            for esm in esms:
+            for esm in ESMCount.query.filter_by(device_id=device_id_user.device_id):
                 esm_name = esm.name or "None"
                 for entry in result_esm_list:
                     if esm_name == entry["name"] and esm.app == entry["app"]:
@@ -132,19 +131,25 @@ def add_new_contact():
 @admin_only
 def daily_check_get():
     date_str = request.args.get('date')
+    userid_str = request.args.get('user')
     if date_str:
         if date_str == 'y':
             start_time = datetime.combine(date.today() - timedelta(1), datetime.min.time())
         else:
-            month = int(date_str[0])
-            day = int(date_str[1:])
+            month = int(date_str[0:2])
+            day = int(date_str[2:])
             start_time = datetime.combine(date(2018, month, day), datetime.min.time())
     else:
         start_time = datetime.combine(date.today(), datetime.min.time())
     print("DAY START: {}\n".format(start_time))
-
-    users = User.query.filter_by(is_valid=True, in_progress=True)
-    check_list = [ Check(user.username, user.id, user.created_at, start_time) for user in users ]
+    
+    if not userid_str:
+        users = User.query.filter_by(is_valid=True, in_progress=True)
+        check_list = [ Check(user.username, user.id, user.created_at, start_time) for user in users ]
+    else:
+        user = User.query.filter_by(id=int(userid_str)).first()
+        check_list = [ Check(user.username, user.id, user.created_at, start_time) ]
+    
     [ check.run() for check in check_list ]
 
     return render_template("admin/daily.html", users=check_list, is_today_checked=False, check_json=[ c.__dict__ for c in check_list ], date=start_time )
