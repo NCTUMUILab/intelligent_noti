@@ -465,6 +465,8 @@ with open(mobileID+".csv", 'w', newline='') as f:
 
     for selected_contact_name in selected_contact_list:
         writer.writerows([[selected_contact_name]])
+    if(contact_count == 0):
+        contact_count = 1
 
     final_IOS = round(float(final_IOS)/contact_count, 2)
     final_URCS = round(float(final_URCS)/contact_count, 3)
