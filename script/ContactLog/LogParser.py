@@ -116,13 +116,17 @@ class FacebookLogParser:
         if not ori_dict.get('messages'):
             print("\n\t\tERROR: on messages in JSON")
             return
+        # iterate each messages in original json file from facebook
         for msg_dict in ori_dict['messages']:
             self._result_list.append( self._convert_msg_dict(msg_dict) )
         print("\tCOMPLETE")
     
     def _convert_msg_dict(self, msg_dict):
         message = Message()
-        message.time = msg_dict['timestamp']
+        try:
+            message.time = msg_dict['timestamp']
+        except KeyError:
+            message.time = msg_dict['timestamp_ms']
         message.sender = to_unicode(msg_dict['sender_name'])
         if 'content' in msg_dict:
             message.raw = encrpyt_raw_text(to_unicode(msg_dict['content']))
