@@ -73,16 +73,16 @@ class FacebookJSONFilesFinder:
         if len(remain_contact_set):
             print("\tSOME CONTACTS CAN NOT BE FOUND:\n\tREMAINS: {}".format(remain_contact_set))
             while True:
-                name = input("ADD MORE CONTACT?: ")
+                name = input("\tADD MORE CONTACT?: ")
                 if not name:
                     break
                 if name in self._name_path_dict:
                     self._target_dir_list.append(self._name_path_dict[name])
-                    print("\tFOUND AND ADDED:", self._name_path_dict[name])
+                    print("\t\tFOUND AND ADDED:", self._name_path_dict[name])
                 else:
-                    print("\t{} NOT FOUND".format(name))
+                    print("\t\t{} NOT FOUND".format(name))
         else:
-            print("\tFOUND ALL CONTACTS")
+            print("\tFound all contacts")
         
     def search(self, pinyin):
         search_result = []
@@ -112,17 +112,21 @@ class FacebookLogParser:
         with open(json_path) as file:
             ori_dict = load(file)
         self.sender_name = to_unicode(ori_dict['title'])
-        print("\tPARSING {}'S LOG ... ".format(self.sender_name))
+        print("\tParsing {}'s log ... ".format(self.sender_name))
         if not ori_dict.get('messages'):
             print("\n\t\tERROR: on messages in JSON")
             return
+        # iterate each messages in original json file from facebook
         for msg_dict in ori_dict['messages']:
             self._result_list.append( self._convert_msg_dict(msg_dict) )
         print("\tCOMPLETE")
     
     def _convert_msg_dict(self, msg_dict):
         message = Message()
-        message.time = msg_dict['timestamp']
+        try:
+            message.time = msg_dict['timestamp']
+        except KeyError:
+            message.time = msg_dict['timestamp_ms']
         message.sender = to_unicode(msg_dict['sender_name'])
         if 'content' in msg_dict:
             message.raw = encrpyt_raw_text(to_unicode(msg_dict['content']))
@@ -156,16 +160,37 @@ class FacebookLogParser:
 
 
 class LineLogParser:
-    def __init__(self, file_path):
+    def __init__(self, contact_parsed_list, file_path):
         self.file_path = file_path
         self.import_file_name = file_path.split('/')[-1]
-        self.contact_name = input("File: {}, Name: ".format(self.import_file_name))
         self.current_date = "2000/1/1"
         self._result_list = []
         self._special_case = False
-        print("\tPARSING {}'S LOG ... ".format(self.contact_name))
+        
+        got_id, value = self._print_list_and_select_contact(self.import_file_name, contact_parsed_list)
+        self.contact_name = contact_parsed_list[value][0] if got_id else value
+        print("\t\tPARSING {}'S LOG ... ".format(self.contact_name))
         self._parse()
-        print("COMPLETE")    
+        print("\t\tCOMPLETE")    
+    
+    
+    def _print_list_and_select_contact(self, file_name, contact_parsed_list):
+        print("\n\tLine contacts:")
+        for index, contact_parsed in enumerate(contact_parsed_list):
+            print("\t\t[{:2d}] [{}]  {}".format(index, "COMPLETE" if contact_parsed[1] else " NOT YET", contact_parsed[0]))
+        print("\tFile to parse: {}".format(file_name))
+        contact_id_str = input("\tWhich contact is he/she?(enter the contact id, leave a blank if no match): ")
+        if contact_id_str:
+            try:
+                contact_id = int(contact_id_str)
+                contact_parsed_list[contact_id][1] = True
+                return True, contact_id
+            except ValueError:
+                print("Oops, You should enter his/her contact id, not the others.")
+        
+        contact_name = input("\tWhat is the contact's name?: ")
+        return False, contact_name
+            
     
     
     def _parse(self):
@@ -245,8 +270,7 @@ class LineLogParser:
         else:
             return False
     
-            
-            
+                
     def _check_others(self, line):
         if match('^\[LINE\] ', line) or match('^Chat history', line):
             return

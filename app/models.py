@@ -267,4 +267,5 @@ class APPState(db.Model):
     state_wifi_upload = db.Column(db.DateTime)
     state_stream = db.Column(db.DateTime)
     state_gps = db.Column(db.DateTime)
+    state_version = db.Column(db.String(30))
     created_at = db.Column(db.DateTime, default=datetime.now)
