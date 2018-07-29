@@ -10,7 +10,7 @@ notifications = Notification.query.all()
 
 for notification in notifications:
     print(notification.datetime)
-    notification.datetime = datetime.fromtimestamp(int(notification.timestamp)/1000)
+    notification.datetime = datetime.fromtimestamp(int(int(notification.timestamp)/1000))
 
     print(notification.datetime)
 db.session.commit()
