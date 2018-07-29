@@ -194,7 +194,7 @@ def set_state():
         'state_wifi_upload' : state_wifi_upload,
         'state_stream' : state_stream,
         'state_gps': state_gps,
-        'state_version': state_version
+        'state_version': state_version,
         'device_id' : deviceId
     })
     db.session.add(result)
