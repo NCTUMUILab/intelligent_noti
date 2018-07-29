@@ -180,6 +180,7 @@ def set_state():
     state_notification_sent_esm = datetime.fromtimestamp(int(request.args.get('state_notification_sent_esm')))
     state_wifi_upload = datetime.fromtimestamp(int(request.args.get('state_wifi_upload')))
     state_stream = datetime.fromtimestamp(int(request.args.get('state_stream')))
+    state_version = request.args.get('state_version')
     deviceId = request.args.get('deviceId')
     result = APPState(**{
         'state_accessibility': state_accessibility,
@@ -191,6 +192,7 @@ def set_state():
         'state_notification_sent_esm' : state_notification_sent_esm,
         'state_wifi_upload' : state_wifi_upload,
         'state_stream' : state_stream,
+        'state_version': state_version
         'device_id' : deviceId
     })
     db.session.add(result)
