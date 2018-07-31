@@ -51,3 +51,16 @@ def valid_notification(app, ticker, title, text, sub_text):
     else:
         return False
             
+            
+def get_device_id(user_id):
+    print("start get_device_id")
+    from app.models import User, DeviceID
+    user = User.query.filter_by(id=user_id).first()
+    if not user:
+        raise Exception("Invalid user id")
+    device_id = DeviceID.query.filter_by(user_id=user.id).first()
+    if device_id:
+        print("end get_device_id")
+        return device_id.device_id
+    else:
+        raise Exception("User {} don't have a device".format(user.username))

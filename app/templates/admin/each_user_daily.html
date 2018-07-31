@@ -12,7 +12,15 @@
 <div class="container">
 	<div class="row">
 		<h2>{{username}}</h2>
-		<div>{{email}}</div>
+		<div id="emailBlock">
+			<input type="text" value="{{email}}" id="email-input">
+			<button id="email-btn" class="btn btn-primary">Copy Email</button>
+		</div>
+		
+		<div id="deviceIdBlock" style="margin-top: 15px">
+			<input type="text" value="{{device_id}}" id="deviceId-input">
+			<button id="deviceId-btn" class="btn btn-primary">Copy Device ID</button>
+		</div>
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
@@ -47,4 +55,32 @@
 		contact questionnaire: {{ completed_count ~ '/' ~ contacts_count }}
 	</div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+	function toClipbloard(){
+		try{
+			var successful = document.execCommand("copy");
+			var msg = successful ? 'successful' : 'unsuccessful';
+			console.log('Copying text command was ' + msg);
+		} catch (err){
+			console.log('Oops, unable to copy');
+		}
+	};
+	
+	$('#email-btn').click(function(){
+		var emailText = document.getElementById("email-input");
+		emailText.select();
+		toClipbloard();
+		
+	});
+	
+	$('#deviceId-btn').click(function(){
+		var deviceIdText = document.getElementById("deviceId-input");
+		deviceIdText.select();
+		toClipbloard();
+	});
+</script>
 {% endblock %}

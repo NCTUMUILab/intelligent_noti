@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, jsonify, request, jsonify, redirec
 from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, User, ESMCount, DeviceID, Notification, Result, DailyCheck, APPState
 from helpers.daily_check import Check
-from helpers import valid_notification
+from helpers import valid_notification, get_device_id
 from app import admin_only, db
 from json import loads, dumps
 from datetime import date, timedelta, datetime
@@ -196,7 +196,7 @@ def check_user_daily(user_id):
         for b in blacklists:
          if b[1] > 5:
              blacklist.append(b[0])
-    return render_template("admin/each_user_daily.html", blacklist=str(blacklist), checks=user_daily, username=user.username, mean=esm_done_mean, contacts_count=contacts_count, completed_count=completed_count, email=user.email)
+    return render_template("admin/each_user_daily.html", blacklist=str(blacklist), checks=user_daily, username=user.username, mean=esm_done_mean, contacts_count=contacts_count, completed_count=completed_count, email=user.email, device_id=get_device_id(user.id))
     
 
 @admin.route('/balance')
