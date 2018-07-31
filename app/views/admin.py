@@ -182,13 +182,13 @@ def daily_check_post():
 @admin.route('/daily/user/<int:user_id>')
 @admin_only
 def check_user_daily(user_id):
-    if not User.query.filter_by(id=user_id).first():
+    user = User.query.filter_by(id=user_id).first()
+    if not user:
         return "invalid user id"
     user_daily = DailyCheck.query.filter_by(user_id=user_id).order_by(DailyCheck.date.asc()).all()
     esm_done_mean = mean([ i.esm_done_count for i in user_daily ])
-    contacts_query = ContactQuestionnaire.query.filter_by(user_id=user_id)
-    contacts_count = contacts_query.count()
-    completed_count = contacts_query.filter_by(completed=True).count()
+    contacts_count = ContactQuestionnaire.query.filter_by(user_id=user_id).count()
+    completed_count = ContactQuestionnaire.query.filter_by(user_id=user_id).filter_by(completed=True).count()
     d = DeviceID.query.filter_by(user_id=user_id).first()
     if d:
         blacklists = db.session.query(ESMCount.name, func.count(ESMCount.name)).filter(ESMCount.device_id==d.device_id).group_by(ESMCount.name). order_by(desc(func.count(ESMCount.name))).limit(2).all()
@@ -196,7 +196,7 @@ def check_user_daily(user_id):
         for b in blacklists:
          if b[1] > 5:
              blacklist.append(b[0])
-    return render_template("admin/each_user_daily.html", blacklist=str(blacklist), checks=user_daily, username=User.query.filter_by(id=user_id).first().username, mean=esm_done_mean, contacts_count=contacts_count, completed_count=completed_count)
+    return render_template("admin/each_user_daily.html", blacklist=str(blacklist), checks=user_daily, username=user.username, mean=esm_done_mean, contacts_count=contacts_count, completed_count=completed_count, email=user.email)
     
 
 @admin.route('/balance')

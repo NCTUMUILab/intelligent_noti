@@ -15,6 +15,7 @@ class Check:
         self.name = name
         self.user_id = user_id
         self.device_id = self._get_device_id()
+        self.user_created_at = user_created_at
         self.day = (datetime.now().date() - user_created_at.date()).days + 1
         self.send_esm_count = 0
         self.esm_done_count = 0
