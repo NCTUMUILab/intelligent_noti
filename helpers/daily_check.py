@@ -1,13 +1,11 @@
 from app.models import DailyCheck, ESMCount, DeviceID, Notification, Result
-from helpers.valid_notification import valid_notification
+from helpers import valid_notification
 from datetime import datetime, timedelta
 from json import dumps, loads
 
 
 class Check:
-    """
-    check record for each day of each user
-    """
+    """check record for each day of each user"""
     def __init__(self, name, user_id, user_created_at, start_time):
         self.start_time = start_time
         self.end_time = start_time + timedelta(1)
