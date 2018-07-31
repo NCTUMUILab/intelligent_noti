@@ -110,14 +110,14 @@ class FacebookLogParser:
     def __init__(self, json_path):
         self._result_list = []
         with open(json_path) as file:
-            ori_dict = load(file)
-        self.sender_name = to_unicode(ori_dict['title'])
+            meta_dict = load(file)
+        self.sender_name = to_unicode(meta_dict['title'])
         print("\tParsing {}'s log ... ".format(self.sender_name))
-        if not ori_dict.get('messages'):
+        if not meta_dict.get('messages'):
             print("\n\t\tERROR: on messages in JSON")
             return
         # iterate each messages in original json file from facebook
-        for msg_dict in ori_dict['messages']:
+        for msg_dict in meta_dict['messages']:
             self._result_list.append( self._convert_msg_dict(msg_dict) )
         print("\tCOMPLETE")
     

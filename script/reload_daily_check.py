@@ -21,6 +21,7 @@ def get_new_dailycheck(check):
         result_incomplete = check.result_incomplete,
         fail_list = check.fail_list)
 
+
 def iterate_all_user():   
     user_list = User.query.filter(User.id >= 5).filter(User.id <= 10).filter_by(in_progress=True)
     for user in user_list:
@@ -36,7 +37,19 @@ def iterate_all_user():
             start_time += timedelta(days=1)
         db.session.commit()
 
-def one_user(user_id, start_date, end_date, commit=True):
+
+def check_one_day(date_tuple):
+    date = datetime(2018, *date_tuple)
+    users = User.query.filter_by(in_progress=True, is_valid=True, test=False)
+    for user in users:
+        check = Check(user.username, user.id, user.created_at, date)
+        check.run()
+        new_daily = get_new_dailycheck(check)
+        db.session.add(new_daily)
+    db.session.commit()
+
+
+def check_one_user(user_id, start_date, end_date, commit=True):
     date = datetime(2018, *start_date)
     while date != datetime(2018, *end_date):
         user = User.query.filter_by(id=user_id).first()
@@ -59,11 +72,16 @@ def one_user(user_id, start_date, end_date, commit=True):
 
 if __name__ == '__main__':
     input("Check that db get all result packages\nPRESS ENTER TO CONT...")
-    if len(argv) >= 5 and argv[1] == 'oneuser':
-        start_date = [ int(i) for i in argv[3].split('/') ]
-        end_date   = [ int(i) for i in argv[4].split('/') ]
-        commit = False if len(argv) == 6 and argv[5] == 'nocommit' else True
-        one_user(int(argv[2]), tuple(start_date), tuple(end_date), commit=commit)
+    if len(argv) >= 5 and argv[1] == 'oneuser': # python3 reload_daily_check.py oneuser 13 5/3 5/6
+        start_date = tuple( int(i) for i in argv[3].split('/') )
+        end_date   = tuple( int(i) for i in argv[4].split('/') )
+        commit = False if (len(argv) == 6 and argv[5] == 'nocommit') else True
+        check_one_user(int(argv[2]), start_date, end_date, commit=commit)
+    
+    elif len(argv) == 3 and argv[1] == 'oneday': # python3 reload_daily_check.py oneday 5/6
+        date = [ int(i) for i in argv[2].split('/') ]
+        check_one_day(date)
+    
     elif len(argv) == 2 and argv[1] == 'help':
         print("USAGE: python3 reload_daily_check.py oneuser 5(user_id) 5/12(start_date) 5/20(end_date)")
 
