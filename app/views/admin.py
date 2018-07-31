@@ -30,6 +30,7 @@ def admin_dashboard():
             current['device_id'] = d.device_id
         s = APPState.query.filter_by(device_id=d.device_id).order_by(APPState.created_at.desc()).first()
         if s:
+            current['version'] = s.state_version
             current['state'] = [
                 {
                     'key': 'accessibility',
@@ -142,14 +143,14 @@ def daily_check_get():
     else:
         start_time = datetime.combine(date.today(), datetime.min.time())
     print("DAY START: {}\n".format(start_time))
-    
+
     if not userid_str:
         users = User.query.filter_by(is_valid=True, in_progress=True)
         check_list = [ Check(user.username, user.id, user.created_at, start_time) for user in users ]
     else:
         user = User.query.filter_by(id=int(userid_str)).first()
         check_list = [ Check(user.username, user.id, user.created_at, start_time) ]
-    
+
     [ check.run() for check in check_list ]
 
     return render_template("admin/daily.html", users=check_list, is_today_checked=False, check_json=[ c.__dict__ for c in check_list ], date=start_time )
@@ -160,7 +161,7 @@ def daily_check_get():
 def daily_check_post():
     data_list = loads(request.form['check'])
     start_date = datetime.strptime(request.form['date'], "%Y-%m-%d %H:%M:%S").date()
-    
+
     for check in data_list:
         new_check = DailyCheck(
             user_id = check['user_id'],
@@ -197,7 +198,7 @@ def check_user_daily(user_id):
          if b[1] > 5:
              blacklist.append(b[0])
     return render_template("admin/each_user_daily.html", blacklist=str(blacklist), checks=user_daily, username=user.username, mean=esm_done_mean, contacts_count=contacts_count, completed_count=completed_count, email=user.email, device_id=get_device_id(user.id))
-    
+
 
 @admin.route('/balance')
 @admin_only
@@ -209,7 +210,7 @@ def balance_participant():
     stat['worker']  = { 'male': 0, 'female': 0 }
     stat['age'] = [0, 0, 0, 0, 0]
     stat['noti_contact'] = [ [0, 0, 0, 0] , [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-    
+
     for user in users:
         stat['total_count'] += 1
         stat['student' if user.is_student else 'worker']['male' if user.is_male else 'female'] += 1
