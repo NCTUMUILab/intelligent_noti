@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.forms import LoginForm, RegisterForm, ForgotPassword
 from app.models import User, ContactQuestionnaire, DeviceID
 from app import db, on_local, load_user, admin_only
+from urllib.parse import urlencode
 
 user = Blueprint('user', __name__)
 
@@ -67,6 +68,18 @@ def logout():
 @login_required
 def dashboard():
     questionnaires = ContactQuestionnaire.query.filter_by(user_id=current_user.id).all()
+    questionnaires_new = []
+    for questionnaire in questionnaires:    
+        if not questionnaire.contact_name == '':
+            questionnaire.name = questionnaire.contact_name
+            name = questionnaire.contact_name
+        else:
+            questionnaire.name = questionnaire.contact_name_line
+            name = questionnaire.contact_name_line
+        params = urlencode({"name": name, "uid": current_user.id, "cid": questionnaire.id})
+        questionnaire.url="https://nctucommunication.qualtrics.com/jfe/form/SV_eVYvF9g8aHWmhud?"+ params
+        # https://nctucommunication.qualtrics.com/jfe/form/SV_eVYvF9g8aHWmhud?name=&uid={{current_user.id}}&cid={{questionnaire.id}}&name={{questionnaire.name}}
+    
     return render_template('dashboard.html', current_user=current_user, questionnaires=questionnaires)
 
 
