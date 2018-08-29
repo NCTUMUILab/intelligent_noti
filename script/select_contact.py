@@ -1,4 +1,4 @@
-import MySQLdb
+import pymysql
 import csv, sys
 import html
 import requests
@@ -15,7 +15,7 @@ def Noti_amount(ele):
 contact_list = []
 notification_list = []
 
-db = MySQLdb.connect(secrete.db_url,secrete.user_name,secrete.password,secrete.db)
+db = pymysql.connect(secrete.db_url,secrete.user_name,secrete.password,secrete.db)
 
 
 cursor = db.cursor()
@@ -86,7 +86,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
         in_list = False
 
         """
-        contact = ["name",interruptibility, respond, percept_count, total ESM, 立即回覆, 在數分鐘之內,在半小時以內,一小時以內,隔數小時之後，但會在當天回覆,不會在當天回覆,不會回覆,沒有預計,closeness, importance, urgence]
+        contact = ["name",interruptibility, respond, percept_count, total ESM, 立即回覆, 在數分鐘之內,在半小時以內,一小時以內,隔數小時之後，但會在當天回覆,不會在當天回覆,不會回覆,沒有預計,closeness, importance, urgence, timing]
 
         """
 
@@ -148,10 +148,21 @@ with open(mobileID+".csv", 'w', newline='') as f:
                 elif(Q10=="沒有預計"):
                     contact[12]+=1
 
+                if(Q8 == "現在是個非常好的時機"):
+                    contact[16] += 5
+                elif(Q8 == "現在是個好時機"):
+                    contact[16] += 4
+                elif(Q8 == "現在的時機還好"):
+                    contact[16] += 3
+                elif(Q8 == "現在時機不好"):
+                    contact[16] += 2
+                elif(Q8 == "現在時機非常不好"):
+                    contact[16] += 1
+
                 in_list = True
         if(in_list == False):
             #print("add contact: ",contact_name)
-            data = [contact_name,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+            data = [contact_name,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
             if(Q7 != ''):
                 data[1] += int(Q7)
                 data[3] += 1
@@ -196,6 +207,17 @@ with open(mobileID+".csv", 'w', newline='') as f:
             elif(Q10=="沒有預計"):
                 data[12]+=1
                 #print(data)
+            if(Q8 == "現在是個非常好的時機"):
+                data[16] += 5
+            elif(Q8 == "現在是個好時機"):
+                data[16] += 4
+            elif(Q8 == "現在的時機還好"):
+                data[16] += 3
+            elif(Q8 == "現在時機不好"):
+                data[16] += 2
+            elif(Q8 == "現在時機非常不好"):
+                data[16] += 1
+
             contact_list.append(data)
 
     blank = [[]]
@@ -229,6 +251,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
     final_closeness = 0
     final_inter = 0
     final_resp = 0
+    final_timing = 0
     final_percept = 0
     final_ESM_count = 0
     final_contact_5 = 0
@@ -246,19 +269,22 @@ with open(mobileID+".csv", 'w', newline='') as f:
     final_notification_count = 0
 
 
-    result = [["name","notification 總量","關係","Contact Questionnaire 自評資料( Closeness, Interruptibility, 回覆動機)", "total ESM","ESM 資料( Closeness, Interruptibility, 回覆動機, 重要程度, 緊急程度)","自評 Closeness","自評 Interruptibility","自評 回覆動機","Closeness","Interruptibility","回覆動機","重要程度","緊急程度", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
+    result = [["name","notification 總量","關係","Contact Questionnaire 自評資料( Closeness, Interruptibility, 回覆動機)", "total ESM","ESM 資料( Closeness, Interruptibility, 回覆動機, 重要程度, 緊急程度)","自評 Closeness","自評 Interruptibility","自評 回覆動機","Closeness","Interruptibility","Timing","回覆動機","重要程度","緊急程度", "立即回覆", "在數分鐘之內","在半小時以內","一小時以內","隔數小時之後，但會在當天回覆","不會在當天回覆","不會回覆","沒有預計"]]
     writer.writerows(result)
 
-    #contact = ["name",interruptibility, respond, percept_count, total ESM, 立即回覆, 在數分鐘之內,在半小時以內,一小時以內,隔數小時之後，但會在當天回覆,不會在當天回覆,不會回覆,沒有預計,closeness, importance, urgence]
+    #contact = ["name",interruptibility, respond, percept_count, total ESM, 立即回覆, 在數分鐘之內,在半小時以內,一小時以內,隔數小時之後，但會在當天回覆,不會在當天回覆,不會回覆,沒有預計,closeness, importance, urgence, timing]
 
     contact_list.sort(reverse=True, key=ESM_amount)
     for contact in contact_list:
         if(float(contact[3]) != 0):
             avg_intr = str(round(float(contact[1])/float(contact[3]),2))
+            avg_timing = str(round(float(contact[16])/float(contact[3]),2))
             final_closeness += float(contact[13])
             final_percept += float(contact[3])
+
         else:
             avg_intr = "no data"
+            avg_timing = "no data"
         avg_closeness = str(round(float(contact[13])/float(contact[4]),2))
         motivation_sum = contact[5]+ contact[6]+contact[7]+contact[8]+contact[9]+contact[10]+contact[11]
         contact_5 = str(contact[5])+" ("+str(float(contact[5])/float(contact[4])*100)+"%)"
@@ -282,6 +308,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
             final_motivation_count += motivation_sum
 
         final_inter += float(contact[1])
+        final_timing += float(contact[16])
         final_ESM_count += float(contact[4])
         final_contact_5 += int(contact[5])
         final_contact_6 += int(contact[6])
@@ -341,7 +368,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
         self_report_data = str(self_closeness).ljust(15) +str(self_interr).ljust(15) +str(self_response).ljust(15)
         esm_data = str(avg_closeness).ljust(15)+str(avg_intr).ljust(15)+str(response_motivation).ljust(15)+"      "+str(avg_importance).ljust(15)+str(avg_urgence).ljust(15)
         final_notification_count += noti_count
-        result_data = [[contact[0],noti_count,relationship,self_report_data, contact[4], esm_data,self_closeness,self_interr,self_response,avg_closeness,avg_intr,response_motivation,avg_importance,avg_urgence,contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
+        result_data = [[contact[0],noti_count,relationship,self_report_data, contact[4], esm_data,self_closeness,self_interr,self_response,avg_closeness, avg_intr, avg_timing,response_motivation,avg_importance,avg_urgence,contact_5,contact_6,contact_7,contact_8,contact_9,contact_10,contact_11,contact_12]]
         writer.writerows(result_data)
 
     notification_list.sort(reverse=True, key=Noti_amount)
@@ -358,7 +385,7 @@ with open(mobileID+".csv", 'w', newline='') as f:
     final_esm_data = str(round(final_closeness/final_ESM_count,2)).ljust(15)+str(round(final_inter/final_percept,2)).ljust(15)+str(round(final_resp/final_motivation_count,2)).ljust(15)+"            "+str(round(float(final_importance)/final_ESM_count,2)).ljust(15)+str(round(float(final_urgence)/final_ESM_count,2)).ljust(15)
 
 
-    final_data = [["Total",round(final_notification_count, 2),"",final_self_report_data,int(final_ESM_count),final_esm_data,round(final_self_closeness/questionniare_count, 2),round(float(final_self_inter)/questionniare_count,2),round(float(final_self_response)/questionniare_count,2),round(final_closeness/final_ESM_count,2),round(final_inter/final_percept,2),round(final_resp/final_motivation_count,2),round(float(final_importance)/final_ESM_count,2),round(float(final_urgence)/final_ESM_count,2), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
+    final_data = [["Total",round(final_notification_count, 2),"",final_self_report_data,int(final_ESM_count),final_esm_data,round(final_self_closeness/questionniare_count, 2),round(float(final_self_inter)/questionniare_count,2),round(float(final_self_response)/questionniare_count,2),round(final_closeness/final_ESM_count,2),round(final_inter/final_percept,2),round(final_timing/final_percept,2),round(final_resp/final_motivation_count,2),round(float(final_importance)/final_ESM_count,2),round(float(final_urgence)/final_ESM_count,2), str(final_contact_5)+" ("+str(float(final_contact_5)/float(final_ESM_count)*100)+"%)",str(final_contact_6)+" ("+str(float(final_contact_6)/float(final_ESM_count)*100)+"%)",str(final_contact_7)+" ("+str(float(final_contact_7)/float(final_ESM_count)*100)+"%)",str(final_contact_8)+" ("+str(float(final_contact_8)/float(final_ESM_count)*100)+"%)",str(final_contact_9)+" ("+str(float(final_contact_9)/float(final_ESM_count)*100)+"%)",str(final_contact_10)+" ("+str(float(final_contact_10)/float(final_ESM_count)*100)+"%)",str(final_contact_11)+" ("+str(float(final_contact_11)/float(final_ESM_count)*100)+"%)",str(final_contact_12)+" ("+str(float(final_contact_12)/float(final_ESM_count)*100)+"%)" ]]
     writer.writerows(final_data)
 
     writer.writerows(blank)
