@@ -18,19 +18,23 @@ def index():
 def signup():
     form = RegisterForm()
     if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data, method='sha256')
-        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password, self_q_completed=False, in_progress=True, is_valid=True, test=False)
+        print('test')
+        hashed_password = generate_password_hash(
+            form.password.data, method='sha256')
+        new_user = User(username=form.username.data, email=form.email.data, password=hashed_password,
+                        self_q_completed=False, in_progress=True, is_valid=True, test=False)
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
-        
-        new_device = DeviceID(user_id=current_user.id, device_id=form.device_id.data, is_active=False)
-        db.session.add(new_device)
+
+        # new_device = DeviceID(user_id=current_user.id, device_id=form.device_id.data, is_active=False)
+        # db.session.add(new_device)
+        print(new_user)
         db.session.commit()
         return redirect(url_for('contact.addContact'))
     return render_template('signup.html', form=form)
 
-    
+
 @user.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -49,7 +53,8 @@ def forgot_password():
     form = ForgotPassword()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        hashed_password = generate_password_hash(form.password.data, method='sha256')
+        hashed_password = generate_password_hash(
+            form.password.data, method='sha256')
         user.password = hashed_password
         db.session.commit()
         login_user(user)
@@ -62,24 +67,26 @@ def forgot_password():
 def logout():
     logout_user()
     return redirect(url_for('user.index'))
-    
+
 
 @user.route('/dashboard')
 @login_required
 def dashboard():
-    questionnaires = ContactQuestionnaire.query.filter_by(user_id=current_user.id).all()
+    questionnaires = ContactQuestionnaire.query.filter_by(
+        user_id=current_user.id).all()
     questionnaires_new = []
-    for questionnaire in questionnaires:    
+    for questionnaire in questionnaires:
         if not questionnaire.contact_name == '':
             questionnaire.name = questionnaire.contact_name
             name = questionnaire.contact_name
         else:
             questionnaire.name = questionnaire.contact_name_line
             name = questionnaire.contact_name_line
-        params = urlencode({"name": name, "uid": current_user.id, "cid": questionnaire.id})
-        questionnaire.url="https://nctucommunication.qualtrics.com/jfe/form/SV_eVYvF9g8aHWmhud?"+ params
+        params = urlencode(
+            {"name": name, "uid": current_user.id, "cid": questionnaire.id})
+        questionnaire.url = "https://nctucommunication.qualtrics.com/jfe/form/SV_eVYvF9g8aHWmhud?" + params
         # https://nctucommunication.qualtrics.com/jfe/form/SV_eVYvF9g8aHWmhud?name=&uid={{current_user.id}}&cid={{questionnaire.id}}&name={{questionnaire.name}}
-    
+
     return render_template('dashboard.html', current_user=current_user, questionnaires=questionnaires)
 
 
