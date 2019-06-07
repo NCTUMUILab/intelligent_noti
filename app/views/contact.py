@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from app.models import ContactQuestionnaire, User
 from app.forms import FacebookLoginForm, FacebookResultForm
 from app.get_facebook import fbMessenger, ThreadInfo
-from app import db, on_local
+from app import db, on_local, admin_only
 from json import loads, dumps
 
 contact = Blueprint('contact', __name__)
@@ -29,7 +29,7 @@ def facebook_login():
         
 
 @contact.route('/confirm', methods=['POST'])
-@login_required
+@admin_only
 def confirmContacts():
     is_summited = ContactQuestionnaire.query.filter_by(user_id=current_user.id).first()
     if is_summited:
@@ -78,30 +78,33 @@ def uploadFacebookResult():
     return render_template('upload_result.html', form=form)
 
 
-@contact.route('/add', methods=['GET', 'POST'])
-@login_required
-def addContact():
+@contact.route('/add/<int:uid>', methods=['GET', 'POST'])
+@admin_only
+def addContact(uid):
     if request.method == 'GET':
-        contact_list = ContactQuestionnaire.query.filter_by(user_id=current_user.id).all()
-        return render_template('add_new_contact.html', contact_list=contact_list)
+        contact_list = ContactQuestionnaire.query.filter_by(user_id=uid).all()
+        user = User.query.filter_by(id=uid).first()
+        if not user:
+            abort(403)
+        return render_template('add_new_contact.html', contact_list=contact_list, uid=uid, user=user)
     
     elif request.method == 'POST':
         new_contact = ContactQuestionnaire(
             contact_name = request.form['facebook'],
             contact_name_line = request.form['line'],
-            user_id = current_user.id,
+            user_id = uid,
             is_group = False,
             completed = False)
         db.session.add(new_contact)
         db.session.commit()
-        return redirect(url_for('contact.addContact'))
+        return redirect(url_for('contact.addContact', uid=uid))
 
 
 @contact.route('/remove/<int:qid>', methods=['POST'])
-@login_required
+@admin_only
 def remove_contact(qid):
     contact = ContactQuestionnaire.query.filter_by(id=qid).first()
-    if contact and contact.user_id == current_user.id:
+    if contact:
         db.session.delete(contact)
         try:
             db.session.commit()

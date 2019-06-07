@@ -18,39 +18,24 @@
 				<thead>
 					<th>ID</th>
 					<th>name</th>
-					<th>device ID</th>
 					<th>email</th>
-					<th>state</th>
+					<th>聯絡人</th>
+					<th>問卷完成</th>
 				</thead>
 				<tbody>
 				{% for user in users %}
 					<tr>
 						<td>{{ user.id }}</td>
-						<td><a href="/admin/daily/user/{{user.id}}">{{ user.name }}</a></td>
-						<td>{{ user.device_id }}</td>
+						<td>{{ user.name }}</td>
 						<td>{{ user.email }}</td>
-						<td>
-							{% for s in user.state %}
-								{{ s.key}}: {{ s.date }}
-								{% if s.alert %}
-									<span class="label label-danger">{{s.label}}</span>
-								{% else %}
-									<span class="label label-primary">{{s.label}}</span>
-								{% endif %}
-								<br>
-							{% endfor %}
-                            Version : {{ user.version }}
-						</td>
+						<td><a href="/contact/add/{{user.id}}">Contacts</a></td>
+						<td>{{ user.done_questionnaire }}/{{ user.total_questionnaire }}</td>
+						
 					</tr>
 				{% endfor %}
 				</tbody>
 			</table>
 		</div>
-	</div>
-	<div class="row">
-		all esm done mean: {{all_mean}}
-		<br>
-		week esm done mean: {{week_mean}}
 	</div>
 </div>
 {% endblock %}

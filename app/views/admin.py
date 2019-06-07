@@ -20,61 +20,18 @@ def mean(l):
 def admin_dashboard():
     result_list = []
     users = User.query.filter((User.in_progress==True) & (User.is_valid==True) | (User.test==True))
+    result_list = []
     for user in users:
+        
         current = {}
         current['id'] = user.id
         current['name'] = user.username
         current['email'] = user.email
-        d = DeviceID.query.filter_by(user_id=user.id).first()
-        if d:
-            current['device_id'] = d.device_id
-        s = APPState.query.filter_by(device_id=d.device_id).order_by(APPState.created_at.desc()).first()
-        if s:
-            current['version'] = s.state_version
-            current['state'] = [
-                {
-                    'key': 'accessibility',
-                    'date': s.state_accessibility,
-                    'label': '1hr',
-                    'alert': (datetime.now() - s.state_accessibility) > timedelta(hours=1)
-                },
-                {
-                    'key': 'stream',
-                    'date': s.state_stream,
-                    'label': '1hr',
-                    'alert': (datetime.now() - s.state_stream) > timedelta(hours=1)
-                },
-                {
-                    'key': 'notification_listen',
-                    'date': s.state_notification_listen,
-                    'label': '1hr',
-                    'alert': (datetime.now() - s.state_notification_listen) > timedelta(hours=1)
-                },
-                {
-                    'key': 'notification_sent_esm',
-                    'date': s.state_notification_sent_esm,
-                    'label': '12hr',
-                    'alert': (datetime.now() - s.state_notification_sent_esm) > timedelta(hours=12)
-                },
-                {
-                    'key': 'esm_done',
-                    'date': s.state_esm_done,
-                    'label': '24hr',
-                    'alert': (datetime.now() - s.state_esm_done) > timedelta(hours=24)
-                },
-                {
-                    'key': 'wifi_upload',
-                    'date': s.state_wifi_upload,
-                    'label': '24hr',
-                    'alert': (datetime.now() - s.state_wifi_upload) > timedelta(hours=24)
-                }
-            ]
-
+        current['done_questionnaire'] = ContactQuestionnaire.query.filter(ContactQuestionnaire.user_id==user.id, ContactQuestionnaire.completed==True).count()
+        current['total_questionnaire'] = ContactQuestionnaire.query.filter(ContactQuestionnaire.user_id==user.id).count()
         result_list.append(current)
 
-    all_esm_done_mean = mean([ i.esm_done_count for i in DailyCheck.query.all() ])
-    week_esm_done_mean = mean([ i.esm_done_count for i in DailyCheck.query.filter(DailyCheck.date >= date.today() - timedelta(7)).all() ])
-    return render_template("admin/admin_dashboard.html", users=result_list, all_mean=all_esm_done_mean, week_mean=week_esm_done_mean)
+    return render_template("admin/admin_dashboard.html", users=result_list)
 
 
 @admin.route('/esm')
@@ -87,7 +44,7 @@ def view_esm():
 
 @admin.route('/esm/get')
 def get_esm():
-    user_id = request.args.get('uid');
+    user_id = request.args.get('uid')
     if user_id:
         device_id_list = DeviceID.query.filter_by(user_id=user_id).all()
         result_esm_list = []

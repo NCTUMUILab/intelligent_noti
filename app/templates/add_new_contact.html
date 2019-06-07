@@ -25,14 +25,14 @@ Add Contacts
 
 <div class="container">
 	<div class="row" style="margin-top: 20px">
-		<h1>初次見面！{{ current_user.username }}<br><small>現在需要新增一些聯絡人</small></h1>
+		<h1>{{ uid }} {{ user.username }}的聯絡人<br><small> </small></h1>
 	</div>
 	
 	<div class="row">
 		<div class="panel panel-default" style="margin-top: 20px">
 			<div class="panel-heading"><b>新增聯絡人</b></div>
 			<div class="panel-body">
-				<form method="POST" action="{{url_for('contact.addContact')}}">
+				<form method="POST" action="{{url_for('contact.addContact', uid=uid)}}">
 					<div class="col-xs-4">
 						<input type="text" class="form-control" name="facebook" placeholder="Facebook Name">
 					</div>
@@ -60,6 +60,7 @@ Add Contacts
 									<th>#</th>
 									<th>Facebook</th>
 									<th>Line</th>
+									<th>Done</th>
 								</tr>
 							</thead>
 							<tbody class="list" id="result">
@@ -68,6 +69,7 @@ Add Contacts
 									<td>{{loop.index}}</td>
 									<td>{{contact.contact_name}}</td>
 									<td>{{contact.contact_name_line}}</td>
+									<td>{{contact.completed}}</td>
 									<td>
 										<form method="POST" action="{{url_for('contact.remove_contact', qid=contact.id)}}">
 											<button class="remove-btn btn btn-danger btn-sm">刪除</button>
