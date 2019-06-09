@@ -16,7 +16,7 @@
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
-					<th>ID</th>
+					<th>User ID</th>
 					<th>name</th>
 					<th>email</th>
 					<th>聯絡人</th>
@@ -28,7 +28,7 @@
 						<td>{{ user.id }}</td>
 						<td>{{ user.name }}</td>
 						<td>{{ user.email }}</td>
-						<td><a href="/contact/add/{{user.id}}">Contacts</a></td>
+						<td><a href="/contact/add/{{user.id}}">連絡人管理</a></td>
 						<td>{{ user.done_questionnaire }}/{{ user.total_questionnaire }}</td>
 						
 					</tr>

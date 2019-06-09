@@ -11,7 +11,7 @@ user = Blueprint('user', __name__)
 
 @user.route('/')
 def index():
-    return render_template('index.html', current_user=current_user)
+    return redirect(url_for('user.dashboard'))
 
 
 @user.route('/signup', methods=['GET', 'POST'])
@@ -26,12 +26,8 @@ def signup():
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
-
-        # new_device = DeviceID(user_id=current_user.id, device_id=form.device_id.data, is_active=False)
-        # db.session.add(new_device)
-        print(new_user)
         db.session.commit()
-        return redirect(url_for('contact.addContact'))
+        return redirect(url_for('user.dashboard'))
     return render_template('signup.html', form=form)
 
 
@@ -84,7 +80,7 @@ def dashboard():
             name = questionnaire.contact_name_line
         params = urlencode(
             {"name": name, "uid": current_user.id, "cid": questionnaire.id})
-        questionnaire.url = "https://nctucommunication.qualtrics.com/jfe/form/SV_eVYvF9g8aHWmhud?" + params
+        questionnaire.url = "https://nctucommunication.qualtrics.com/jfe/form/SV_2nUBsWaWRyNrAoJ?" + params
         # https://nctucommunication.qualtrics.com/jfe/form/SV_eVYvF9g8aHWmhud?name=&uid={{current_user.id}}&cid={{questionnaire.id}}&name={{questionnaire.name}}
 
     return render_template('dashboard.html', current_user=current_user, questionnaires=questionnaires)

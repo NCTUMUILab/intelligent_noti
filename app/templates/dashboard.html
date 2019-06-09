@@ -32,21 +32,25 @@
         <h1 class="page-header">嗨！{{ current_user.username }}</h1>
     </div>
 
-    {% if not current_user.self_q_completed %} {% set self_q_url = "'" ~ 'https://nctucommunication.qualtrics.com/jfe/form/SV_3eM0RppZc5sctZH?name=' ~ current_user.username ~ '&uid=' ~ current_user.id ~ "'" %}
+    {% set self_q_url = "'" ~ 'https://nctucommunication.qualtrics.com/jfe/form/SV_cBWuoSEt3EU3LyB?name=' ~ current_user.username ~ '&uid=' ~ current_user.id ~ "'" %}
     <div class="row">
-        <h2 class="sub-header">開始您的第一步<small style="margin-left: 5px;">填寫個人問卷</small></h2>
+        <h2 class="sub-header">填寫個人問卷<small style="margin-left: 5px;"></small></h2>
+        {% if not current_user.self_q_completed %} 
         <button class="btn btn-primary btn-md" onclick="location.href={{self_q_url}};">填寫</button>
+        {% else %}
+        <button class="btn btn-success disabled">完成</button>
+        {% endif %}
+        
         <hr>
     </div>
-    {% endif %}
 
     <div class="row">
-        <h2 class="sub-header">聯絡人清單</h2>
+        <h2 class="sub-header">填寫聯絡人問卷</h2>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>問卷</th>
+                        <th>問卷連結</th>
                         <th>Facebook 名稱</th>
                         <th>Line 名稱</th>
                     </tr>

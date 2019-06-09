@@ -8,11 +8,12 @@ from json import loads, dumps
 
 contact = Blueprint('contact', __name__)
 
-    
+
 @contact.route('/facebook/login', methods=['GET', 'POST'])
 @login_required
 def facebook_login():
-    is_summited = ContactQuestionnaire.query.filter_by(user_id=current_user.id).first()
+    is_summited = ContactQuestionnaire.query.filter_by(
+        user_id=current_user.id).first()
     if is_summited:
         return make_response(render_template('403_forbidden.html', current_user=current_user, message="You can't re-summit your facebook account!"), 403)
 
@@ -26,20 +27,22 @@ def facebook_login():
         return render_template('contact_list.html', current_user=current_user, contacts=contacts, limit=20)
     else:
         return render_template('facebook_login.html', form=form)
-        
+
 
 @contact.route('/confirm', methods=['POST'])
 @admin_only
 def confirmContacts():
-    is_summited = ContactQuestionnaire.query.filter_by(user_id=current_user.id).first()
+    is_summited = ContactQuestionnaire.query.filter_by(
+        user_id=current_user.id).first()
     if is_summited:
-        template = render_template('403_forbidden.html', current_user=current_user, message="You can't re-summit your facebook account!")
+        template = render_template('403_forbidden.html', current_user=current_user,
+                                   message="You can't re-summit your facebook account!")
         return make_response(template, 403)
-        
+
     contact_name_list = request.form.getlist('select')
     for name in contact_name_list:
         facebook_name = name.split('||')[0] if '||' in name else name
-        line_name     = name.split('||')[1] if '||' in name else ""
+        line_name = name.split('||')[1] if '||' in name else ""
 
         new_questionnaire = ContactQuestionnaire(
             contact_name=facebook_name,
@@ -50,15 +53,16 @@ def confirmContacts():
         db.session.add(new_questionnaire)
         db.session.commit()
     return redirect(url_for('user.dashboard'))
-    
+
 
 @contact.route('/upload', methods=['GET', 'POST'])
 @login_required
 def uploadFacebookResult():
-    is_summited = ContactQuestionnaire.query.filter_by(user_id=current_user.id).first()
+    is_summited = ContactQuestionnaire.query.filter_by(
+        user_id=current_user.id).first()
     if is_summited:
         return make_response(render_template('403_forbidden.html', current_user=current_user, message="You can't re-summit your facebook account"), 403)
-    
+
     form = FacebookResultForm()
     if form.validate_on_submit():
         result_facebook_str = form.file_facebook.data.read().decode('utf-8')
@@ -66,15 +70,16 @@ def uploadFacebookResult():
         if form.file_line.data:
             result_line_str = form.file_line.data.read().decode('utf-8')
             result_list.extend(loads(result_line_str))
-            
-        result_list = sorted(result_list, reverse=True, key=lambda c: c['msg_count'])
+
+        result_list = sorted(result_list, reverse=True,
+                             key=lambda c: c['msg_count'])
         return render_template(
-            'contact_list.html', 
-            current_user=current_user, 
-            contacts=result_list, 
+            'contact_list.html',
+            current_user=current_user,
+            contacts=result_list,
             limit=20,
             pre_selected=20)
-        
+
     return render_template('upload_result.html', form=form)
 
 
@@ -87,14 +92,14 @@ def addContact(uid):
         if not user:
             abort(403)
         return render_template('add_new_contact.html', contact_list=contact_list, uid=uid, user=user)
-    
+
     elif request.method == 'POST':
         new_contact = ContactQuestionnaire(
-            contact_name = request.form['facebook'],
-            contact_name_line = request.form['line'],
-            user_id = uid,
-            is_group = False,
-            completed = False)
+            contact_name=request.form['facebook'],
+            contact_name_line=request.form['line'],
+            user_id=uid,
+            is_group=False,
+            completed=False)
         db.session.add(new_contact)
         db.session.commit()
         return redirect(url_for('contact.addContact', uid=uid))
@@ -113,7 +118,7 @@ def remove_contact(qid):
             db.session.rollback()
     else:
         abort(403)
-    return redirect(url_for('contact.addContact'))
+    return redirect(url_for('contact.addContact', uid=contact.user_id))
 
 
 @contact.route('/getJson')
@@ -124,10 +129,10 @@ def get_contact_json():
         abort(403)
     user_name = user.username
     contacts = ContactQuestionnaire.query.join(User).filter(User.id == user_id)
-    fb_list, line_list = [], []
+    fb_data, line_data = {}, {}
     for contact in contacts:
         if contact.contact_name:
-            fb_list.append(contact.contact_name)
+            fb_data[contact.contact_name] = contact.id
         if contact.contact_name_line:
-            line_list.append(contact.contact_name_line)
-    return jsonify({'name': user_name, 'fb_list': fb_list, 'line_list': line_list})
+            line_data[contact.contact_name_line] = contact.id
+    return jsonify({'name': user_name, 'fb_data': fb_data, 'line_data': line_data})

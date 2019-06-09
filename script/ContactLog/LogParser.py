@@ -51,7 +51,8 @@ class FacebookJSONFilesFinder:
 
     def _get_name_path_dict(self):
         for subdir in self._msg_dir_list:
-            json_path = "{}/{}/message.json".format(self._homedir_path, subdir)
+            json_path = "{}/{}/message_1.json".format(
+                self._homedir_path, subdir)
             if path.isdir("{}/{}".format(self._homedir_path, subdir)) and path.exists(json_path):
                 with open(json_path) as file:
                     try:
@@ -62,7 +63,8 @@ class FacebookJSONFilesFinder:
                 try:
                     contact_name = to_unicode(file_content_dict['title'])
                     self._name_path_dict[contact_name] = json_path
-                except KeyError:
+                except KeyError as e:
+                    print(e)
                     continue
 
     def _find_dirs(self, contact_list):
@@ -173,7 +175,6 @@ class LineLogParser:
         got_id, value = self._print_list_and_select_contact(
             self.import_file_name, contact_parsed_list)
         self.contact_name = contact_parsed_list[value][0] if got_id else value
-        self.cid = value
         print("\t\tPARSING {}'S LOG ... ".format(self.contact_name))
         self._parse()
         print("\t\tCOMPLETE")
