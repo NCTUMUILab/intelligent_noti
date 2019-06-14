@@ -22,7 +22,7 @@ def gui_get_path(choose_type):
 
 def get_userinfo_from_server():
     user_id = input("Enter user id: ")
-    request = get("http://127.0.0.1:5000/contact/getJson?user_id=" + user_id)
+    request = get("http://who.nctu.me:8081/contact/getJson?user_id=" + user_id)
     name = request.json()['name']
     fb_data = request.json()['fb_data']
     line_data = request.json()['line_data']
