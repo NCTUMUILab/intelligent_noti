@@ -68,10 +68,13 @@ Add Contacts
 								{% for contact in contact_list %}
 								<tr>
 									<td>{{loop.index}}</td>
-									<td>{{ contact.id }}</td>
-									<td>{{contact.contact_name}}</td>
-									<td>{{contact.contact_name_line}}</td>
+									<td>{{contact.id}}</td>
+									<td><input id="{{contact.id}}_contact_name" value="{{contact.contact_name}}"></td>
+									<td><input id="{{contact.id}}_contact_name_line" value="{{contact.contact_name_line}}"></td>
 									<td>{{contact.completed}}</td>
+									<td>										
+										<button class="btn btn-primary btn-sm" onclick="update_contact({{contact.id}})">更新</button>
+									</td>
 									<td>
 										<form method="POST" action="{{url_for('contact.remove_contact', qid=contact.id)}}">
 											<button class="remove-btn btn btn-danger btn-sm">刪除</button>
@@ -94,6 +97,20 @@ Add Contacts
 
 {% block scripts %}
 {{ super() }}
+<script>
+
+function update_contact(contact_id){
+	var data = {}
+	data["contact_name"] = document.getElementById(contact_id+"_contact_name")['value']
+	data["contact_name_line"] = document.getElementById(contact_id+"_contact_name_line")['value']
+	if (confirm('確定要修改 Contact Id:' + contact_id + '的資料?')) {
+		$.post('/contact/edit/'+contact_id, data, function(){
+			location.reload()
+		})
+	} 
+}
+
+</script>
 <!-- <script>
 	var options = { valueNames: ['id', 'facebookName', 'lineName'] };
 	var total = 0;

@@ -121,6 +121,24 @@ def remove_contact(qid):
     return redirect(url_for('contact.addContact', uid=contact.user_id))
 
 
+@contact.route('/edit/<int:qid>', methods=['POST'])
+@admin_only
+def edit_contact(qid):
+    contact = ContactQuestionnaire.query.filter_by(id=qid).first()
+
+    if contact:
+        contact.contact_name = request.form['contact_name']
+        contact.contact_name_line = request.form['contact_name_line']
+        try:
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+    else:
+        abort(403)
+    return redirect(url_for('contact.addContact', uid=contact.user_id))
+
+
 @contact.route('/getJson')
 def get_contact_json():
     user_id = request.args.get('user_id')
