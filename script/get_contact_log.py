@@ -45,7 +45,7 @@ def get_facebook_log(username, fb_data):
             contact_id = fb_data[parser.sender_name]
         else:
             contact_id = '?'
-        with open("../userdata/{}/fb-{}-{}.json".format(username, contact_id, parser.sender_name), 'w') as export_file:
+        with open("../userdata/{}/fb-{}-{}.json".format(username, contact_id, parser.sender_name).replace(" ", "_"), 'w') as export_file:
             export_file.write(parser.export())
     print("{:=^60}\n".format(" FACEBOOK STAGE COMPLETED "))
 
@@ -64,12 +64,12 @@ def get_line_log(username, line_data):
             contact_id = line_data[parser.contact_name]
         else:
             contact_id = '?'
-        with open("../userdata/{}/line-{}-{}.json".format(username, contact_id, name), 'w') as file:
+        with open("../userdata/{}/line-{}-{}.json".format(username, contact_id, name).replace(" ", "_"), 'w') as file:
             file.write(parser.export())
     print("{:=^60}".format(" LINE STAGE COMPLETED "))
 
 
 if __name__ == '__main__':
     username, fb_data, line_data = get_userinfo_from_server()
-    # get_facebook_log(username, fb_data)
+    get_facebook_log(username, fb_data)
     get_line_log(username, line_data)

@@ -54,7 +54,7 @@ class FacebookJSONFilesFinder:
             json_path = "{}/{}/message_1.json".format(
                 self._homedir_path, subdir)
             if path.isdir("{}/{}".format(self._homedir_path, subdir)) and path.exists(json_path):
-                with open(json_path) as file:
+                with open(json_path, encoding="utf-8") as file:
                     try:
                         file_content_dict = load(file)
                     except UnicodeDecodeError:
@@ -199,7 +199,7 @@ class LineLogParser:
         return False, contact_name
 
     def _parse(self):
-        with open(self.file_path) as file:
+        with open(self.file_path, encoding="utf-8") as file:
             for line in file:
                 line = line.replace('\n', '').replace(
                     '\ufeff', '')  # Zero Width No-Break Space
