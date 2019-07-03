@@ -8,7 +8,7 @@ from urllib.parse import unquote
 def encrpyt_raw_text(raw_text):
     encrypt_str = ""
     for char in raw_text:
-        if '\u4e00' <= char <= '\u9fff':
+        if ('\u4e00' <= char <= '\u9fff') or ('\u3100' <= char <= '\u312f'):
             encrypt_str += 'C'
         elif ('\u0041' <= char <= '\u005a') or ('\u0061' <= char <= '\u007a'):
             encrypt_str += 'E'
