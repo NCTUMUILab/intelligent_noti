@@ -242,26 +242,27 @@ class LineLogParser:
                 sender = tab_split_list[1]
                 raw = tab_split_list[2]
                 self._append_new_message(time_str, sender, raw)
-            except ValueError:
-                print("4", line)
+            except Exception:
+                pass
+                # print("4", line)
             return True
 
         elif match('^\d{2}:\d{2} [AP]M\t', line):  # 01:22 PM
             try:
                 time_str, sender, raw = line.split('\t')
                 self._append_new_message(time_str, sender, raw)
-            except ValueError:
-                print("3", line)
-                # pass
+            except Exception:
+                # print("3", line)
+                pass
             return True
 
         elif match('^\S{2}\d{2}:\d{2}\t', line):  # 下午02:04    sender CCCCC
             try:
                 time_str, sender, raw = line.split('\t')
                 self._append_new_message(time_str, sender, raw)
-            except ValueError:  # 下午02:09    您已收回訊息
-                print("2", line)
-                # pass
+            except Exception:  # 下午02:09    您已收回訊息
+                # print("2", line)
+                pass
             return True
 
         # 01:22 Kevin Goodbye
