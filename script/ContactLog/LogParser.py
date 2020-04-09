@@ -240,7 +240,7 @@ class LineLogParser:
                 tab_split_list = line.split('\t')
                 time_str = tab_split_list[0]
                 sender = tab_split_list[1]
-                raw = tab_split_list[2]
+                raw = tab_split_list[2] # will encounter error if anyone leave the chat room in LINE
                 self._append_new_message(time_str, sender, raw)
             except Exception:
                 pass
